@@ -87,26 +87,14 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
     }
 
-    public String getIMEI(Activity activity) {
-        TelephonyManager telephonyManager = (TelephonyManager) activity
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
 
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-        } else {
-            return telephonyManager.getDeviceId();
-        }
-        return telephonyManager.getDeviceId();
-
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1:
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    getIMEI(this);
+//                    getIMEI(this);
                 }
                 break;
 
