@@ -25,7 +25,6 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.zxing.WriterException;
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.databinding.ActivityCallBinding;
@@ -36,7 +35,6 @@ import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCClient.Signali
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.PeerConnectionClient;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.PeerConnectionClient.PeerConnectionParameters;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.WebSocketRTCClient;
-
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.Camera2Enumerator;
 import org.webrtc.CameraEnumerator;
@@ -47,14 +45,11 @@ import org.webrtc.SessionDescription;
 import org.webrtc.StatsReport;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.CAPTURE_PERMISSION_REQUEST_CODE;
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.EXTRA_ROOMID;
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.LOCAL_HEIGHT_CONNECTED;
@@ -94,7 +89,7 @@ public class CallActivity extends AppCompatActivity
     private boolean iceConnected;
     private boolean isError;
     private long callStartedTimeMs;
-    private boolean micEnabled = true;
+    private boolean micEnabled = false;
 
     private ActivityCallBinding binding;
     Dialog dialog;
@@ -107,6 +102,7 @@ public class CallActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         getWindow().addFlags(LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_call);
@@ -328,7 +324,7 @@ public class CallActivity extends AppCompatActivity
 
     // Should be called from UI thread
     private void callConnected() {
-        dialog.dismiss();
+//        dialog.dismiss();
         Log.e("room==>", roomId);
         final long delta = System.currentTimeMillis() - callStartedTimeMs;
         Log.i(LOG_TAG, "Call connected: delay=" + delta + "ms");
@@ -590,7 +586,6 @@ public class CallActivity extends AppCompatActivity
     void showQR(){
         if (roomId.length() > 0) {
             Log.e(LOG_TAG, "Room ID: " + roomId);
-
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
             Display display = manager.getDefaultDisplay();
             Point point = new Point();
@@ -608,11 +603,13 @@ public class CallActivity extends AppCompatActivity
                 bitmap = qrgEncoder.encodeAsBitmap();
                 dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 dialog.setContentView(R.layout.custom_record_timer);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
                 ImageView QR_img = dialog.findViewById(R.id.QR_img);
                 QR_img.setImageBitmap(bitmap);
                 dialog.show();
             } catch (WriterException e) {
-                Log.v(this+"", e.toString());
+                Log.e(this+"", e.toString());
             }
         }
 

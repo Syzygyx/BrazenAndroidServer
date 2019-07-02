@@ -4,7 +4,8 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:keepScreenOn="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <com.myhexaville.androidwebrtc.app_rtc_sample.view.PercentFrameLayout
             android:id="@+id/remote_video_layout"
@@ -47,6 +48,7 @@
                     android:textSize="24sp" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/buttons_call_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -82,6 +84,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/capture_format_text_call"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
