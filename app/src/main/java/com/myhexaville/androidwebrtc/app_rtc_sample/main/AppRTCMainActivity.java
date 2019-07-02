@@ -87,22 +87,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-//                    getIMEI(this);
-                }
-                break;
-
-            default:
-                break;
-        }
-    }
-
     private void connectToRoom(String roomId) {
         Log.e("IMEI ID :-", roomId);
 
