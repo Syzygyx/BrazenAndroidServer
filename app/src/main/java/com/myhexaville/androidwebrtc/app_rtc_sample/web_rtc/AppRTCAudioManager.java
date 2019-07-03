@@ -343,7 +343,7 @@ public class AppRTCAudioManager {
 
         switch (device) {
             case SPEAKER_PHONE:
-                setSpeakerphoneOn(true);
+                setSpeakerphoneOn(false);
                 break;
             case EARPIECE:
                 setSpeakerphoneOn(false);

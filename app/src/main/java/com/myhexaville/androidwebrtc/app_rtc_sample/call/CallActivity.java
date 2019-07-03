@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,6 +27,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.google.zxing.WriterException;
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.databinding.ActivityCallBinding;
@@ -35,6 +38,7 @@ import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCClient.Signali
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.PeerConnectionClient;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.PeerConnectionClient.PeerConnectionParameters;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.WebSocketRTCClient;
+
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.Camera2Enumerator;
 import org.webrtc.CameraEnumerator;
@@ -45,11 +49,14 @@ import org.webrtc.SessionDescription;
 import org.webrtc.StatsReport;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.CAPTURE_PERMISSION_REQUEST_CODE;
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.EXTRA_ROOMID;
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.LOCAL_HEIGHT_CONNECTED;
@@ -112,7 +119,6 @@ public class CallActivity extends AppCompatActivity
         roomId = intent.getStringExtra(EXTRA_ROOMID);
 
 
-
         remoteRenderers.add(binding.remoteVideoView);
 
         // Create video renderers.
@@ -152,6 +158,7 @@ public class CallActivity extends AppCompatActivity
         startCall();
         showQR();
     }
+
 
     private void setupListeners() {
         binding.buttonCallDisconnect.setOnClickListener(view -> onCallHangUp());
@@ -280,9 +287,10 @@ public class CallActivity extends AppCompatActivity
     public boolean onToggleMic() {
         if (peerConnectionClient != null) {
             micEnabled = !micEnabled;
-            peerConnectionClient.setAudioEnabled(micEnabled);
+            peerConnectionClient.setAudioEnabled(true);
+
         }
-        return micEnabled;
+        return true;
     }
 
     private void updateVideoView() {
@@ -316,16 +324,20 @@ public class CallActivity extends AppCompatActivity
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
         audioManager = AppRTCAudioManager.create(this);
+
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(LOG_TAG, "Starting the audio manager...");
         audioManager.start(this::onAudioManagerDevicesChanged);
+
     }
 
     // Should be called from UI thread
     private void callConnected() {
 //        dialog.dismiss();
         Log.e("room==>", roomId);
+        onToggleMic();
+
         final long delta = System.currentTimeMillis() - callStartedTimeMs;
         Log.i(LOG_TAG, "Call connected: delay=" + delta + "ms");
         if (peerConnectionClient == null || isError) {
@@ -392,7 +404,6 @@ public class CallActivity extends AppCompatActivity
                     .show();
         }
     }
-
 
 
     private void reportError(final String description) {
@@ -556,6 +567,7 @@ public class CallActivity extends AppCompatActivity
         runOnUiThread(() -> {
             iceConnected = true;
             callConnected();
+
         });
     }
 
@@ -583,7 +595,7 @@ public class CallActivity extends AppCompatActivity
     }
 
 
-    void showQR(){
+    void showQR() {
         if (roomId.length() > 0) {
             Log.e(LOG_TAG, "Room ID: " + roomId);
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -609,11 +621,9 @@ public class CallActivity extends AppCompatActivity
                 QR_img.setImageBitmap(bitmap);
                 dialog.show();
             } catch (WriterException e) {
-                Log.e(this+"", e.toString());
+                Log.e(this + "", e.toString());
             }
         }
-
-
 
 
     }
