@@ -329,7 +329,6 @@ public class CallActivity extends AppCompatActivity
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(LOG_TAG, "Starting the audio manager...");
         audioManager.start(this::onAudioManagerDevicesChanged);
-
     }
 
     // Should be called from UI thread
@@ -337,7 +336,6 @@ public class CallActivity extends AppCompatActivity
 //        dialog.dismiss();
         Log.e("room==>", roomId);
         onToggleMic();
-
         final long delta = System.currentTimeMillis() - callStartedTimeMs;
         Log.i(LOG_TAG, "Call connected: delay=" + delta + "ms");
         if (peerConnectionClient == null || isError) {
