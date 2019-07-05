@@ -16,6 +16,10 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xxxhdpi-v4/abc_text_select_handle_right_mtrl_light.png"
     },
     {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_btn_radio_to_on_mtrl_015.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-hdpi-v4/abc_btn_radio_to_on_mtrl_015.png"
     },
@@ -24,12 +28,12 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-hdpi-v4/abc_list_divider_mtrl_alpha.9.png"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_text_select_handle_right_mtrl_dark.png.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xhdpi-v4/abc_text_select_handle_right_mtrl_dark.png"
-    },
-    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_ic_star_half_black_36dp.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_ic_star_half_black_36dp.png"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_text_select_handle_right_mtrl_dark.png.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xhdpi-v4/abc_text_select_handle_right_mtrl_dark.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-v21_abc_dialog_material_background.xml.flat",
@@ -72,12 +76,12 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_ic_menu_paste_mtrl_am_alpha.png"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/832688887291c07934a2c3e72025183b/res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png"
-    },
-    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_ic_commit_search_api_mtrl_alpha.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_low_pressed.9.png.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/832688887291c07934a2c3e72025183b/res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_normal.9.png.flat",
@@ -92,12 +96,12 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable/abc_vector_test.xml"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_switch_track_mtrl_alpha.9.png"
-    },
-    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable_abc_btn_default_mtrl_shape.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable/abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_switch_track_mtrl_alpha.9.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable_abc_btn_radio_material.xml.flat",
@@ -204,6 +208,10 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/anim/abc_popup_exit.xml"
     },
     {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable_abc_tab_indicator_material.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable/abc_tab_indicator_material.xml"
     },
@@ -236,12 +244,12 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/drawable-anydpi-v21/design_ic_visibility_off.xml"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_menu_hardkey_panel_mtrl_mult.9.png.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png"
-    },
-    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable_abc_text_cursor_material.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable/abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_menu_hardkey_panel_mtrl_mult.9.png.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/layout-v26_abc_screen_toolbar.xml.flat",
@@ -272,12 +280,12 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_000.png"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/anim_design_snackbar_out.xml.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/anim/design_snackbar_out.xml"
-    },
-    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_list_divider_mtrl_alpha.9.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_list_divider_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/anim_design_snackbar_out.xml.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/anim/design_snackbar_out.xml"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/anim_abc_popup_enter.xml.flat",
@@ -342,6 +350,10 @@
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/xml_preferences.xml.flat",
         "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/xml/preferences.xml"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable_abc_seekbar_track_material.xml.flat",
@@ -456,16 +468,16 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_textfield_default_mtrl_alpha.9.png"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_menu_hardkey_panel_mtrl_mult.9.png.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xhdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png"
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_text_select_handle_right_mtrl_dark.png.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xxhdpi-v4/abc_text_select_handle_right_mtrl_dark.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/animator_mtrl_fab_hide_motion_spec.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/animator/mtrl_fab_hide_motion_spec.xml"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_text_select_handle_right_mtrl_dark.png.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xxhdpi-v4/abc_text_select_handle_right_mtrl_dark.png"
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_menu_hardkey_panel_mtrl_mult.9.png.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xhdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/color_design_tint_password_toggle.xml.flat",
@@ -524,12 +536,12 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_ic_menu_copy_mtrl_am_alpha.png"
     },
     {
-        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_ic_star_half_black_48dp.png.flat",
-        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-hdpi-v4/abc_ic_star_half_black_48dp.png"
-    },
-    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-v21_avd_show_password.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/drawable-v21/avd_show_password.xml"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_ic_star_half_black_48dp.png.flat",
+        "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-hdpi-v4/abc_ic_star_half_black_48dp.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_popup_background_mtrl_mult.9.png.flat",
@@ -618,6 +630,10 @@
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-v21_design_bottom_navigation_item_background.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/drawable-v21/design_bottom_navigation_item_background.xml"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-v21_design_password_eye.xml.flat",
@@ -764,6 +780,10 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/layout/abc_popup_menu_header_item_layout.xml"
     },
     {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable_app_icon_client.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/drawable/app_icon_client.png"
+    },
+    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_ab_share_pack_mtrl_alpha.9.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xxhdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png"
     },
@@ -792,6 +812,10 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_text_select_handle_middle_mtrl_light.png"
     },
     {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xxhdpi-v4/abc_ic_menu_cut_mtrl_alpha.png"
     },
@@ -810,6 +834,10 @@
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_design_ic_visibility_off.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/drawable-xxxhdpi-v4/design_ic_visibility_off.png"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_ic_star_black_16dp.png.flat",
@@ -962,6 +990,14 @@
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/color_mtrl_btn_bg_color_selector.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/color/mtrl_btn_bg_color_selector.xml"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/layout_design_layout_tab_text.xml.flat",
@@ -1138,6 +1174,10 @@
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/color_mtrl_tabs_icon_color_selector_colored.xml.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/color/mtrl_tabs_icon_color_selector_colored.xml"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/layout_abc_action_menu_item_layout.xml.flat",
@@ -1408,6 +1448,10 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/e7230dadf90b010a6d684bf49ee02105/res/color/design_error.xml"
     },
     {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable_ic_launcher_background.xml.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/drawable/ic_launcher_background.xml"
+    },
+    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_abc_spinner_mtrl_am_alpha.9.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xxxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png"
     },
@@ -1572,6 +1616,10 @@
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-ldrtl-xxxhdpi-v17/abc_spinner_mtrl_am_alpha.9.png"
     },
     {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_spinner_mtrl_am_alpha.9.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-xhdpi-v4/abc_spinner_mtrl_am_alpha.9.png"
     },
@@ -1598,6 +1646,10 @@
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-mdpi-v4/abc_ic_menu_cut_mtrl_alpha.png"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_btn_check_to_on_mtrl_015.png.flat",
@@ -2006,6 +2058,10 @@
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_scrubber_track_mtrl_alpha.9.png.flat",
         "source": "/home/doozy/.gradle/caches/transforms-2/files-2.1/1a1d5fdfb69a478ed21c0d15a300a860/res/drawable-hdpi-v4/abc_scrubber_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/src/main/res/mipmap-mdpi/ic_launcher_round.png"
     },
     {
         "merged": "/home/doozy/Documents/AndroidProjects/WebRtc-ShowQR_Code-master/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_ic_menu_paste_mtrl_am_alpha.png.flat",

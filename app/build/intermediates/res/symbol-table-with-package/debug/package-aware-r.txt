@@ -1071,6 +1071,7 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable app_icon_client
 drawable avd_hide_password
 drawable avd_show_password
 drawable call
@@ -1084,6 +1085,7 @@ drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
 drawable disconnect
+drawable ic_launcher_background
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
@@ -1472,6 +1474,8 @@ layout zxing_barcode_scanner
 layout zxing_capture
 menu crop_image_menu
 mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_round
 raw zxing_beep
 string abc_action_bar_home_description
 string abc_action_bar_up_description

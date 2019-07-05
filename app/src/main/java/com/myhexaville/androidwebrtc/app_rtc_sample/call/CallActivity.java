@@ -12,6 +12,7 @@ package com.myhexaville.androidwebrtc.app_rtc_sample.call;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -329,6 +330,11 @@ public class CallActivity extends AppCompatActivity
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(LOG_TAG, "Starting the audio manager...");
         audioManager.start(this::onAudioManagerDevicesChanged);
+        AudioManager audioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            audioManager.setMode(AudioManager.ADJUST_MUTE);
+        }
+        audioManager.setSpeakerphoneOn(false);
     }
 
     // Should be called from UI thread
@@ -336,6 +342,9 @@ public class CallActivity extends AppCompatActivity
 //        dialog.dismiss();
         Log.e("room==>", roomId);
         onToggleMic();
+        AudioManager audioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setMode(AudioManager.MODE_IN_CALL);
+        audioManager.setSpeakerphoneOn(false);
         final long delta = System.currentTimeMillis() - callStartedTimeMs;
         Log.i(LOG_TAG, "Call connected: delay=" + delta + "ms");
         if (peerConnectionClient == null || isError) {
