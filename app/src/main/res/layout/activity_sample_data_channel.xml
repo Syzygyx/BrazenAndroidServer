@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:enabled="false"
-                    android:onClick="sendMessage"
                     android:text="Send"
                     android:id="@+id/send_button"
                     android:textColor="@color/colorPrimary" />

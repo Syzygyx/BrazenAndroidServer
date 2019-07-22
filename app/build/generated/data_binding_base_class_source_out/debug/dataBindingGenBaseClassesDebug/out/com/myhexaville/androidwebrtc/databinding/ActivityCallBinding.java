@@ -1,5 +1,6 @@
 package com.myhexaville.androidwebrtc.databinding;
 
+import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
@@ -13,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.myhexaville.androidwebrtc.app_rtc_sample.view.PercentFrameLayout;
-import java.lang.Deprecated;
-import java.lang.Object;
 import org.webrtc.SurfaceViewRenderer;
 
 public abstract class ActivityCallBinding extends ViewDataBinding {
@@ -54,8 +53,8 @@ public abstract class ActivityCallBinding extends ViewDataBinding {
   @NonNull
   public final SurfaceViewRenderer remoteVideoView;
 
-  protected ActivityCallBinding(Object _bindingComponent, View _root, int _localFieldCount,
-      ImageButton buttonCallDisconnect, ImageButton buttonCallSwitchCamera,
+  protected ActivityCallBinding(DataBindingComponent _bindingComponent, View _root,
+      int _localFieldCount, ImageButton buttonCallDisconnect, ImageButton buttonCallSwitchCamera,
       ImageButton buttonCallToggleMic, LinearLayout buttonsCallContainer,
       FrameLayout callFragmentContainer, SeekBar captureFormatSliderCall,
       TextView captureFormatTextCall, TextView contactNameCall, PercentFrameLayout localVideoLayout,
@@ -82,18 +81,10 @@ public abstract class ActivityCallBinding extends ViewDataBinding {
     return inflate(inflater, root, attachToRoot, DataBindingUtil.getDefaultComponent());
   }
 
-  /**
-   * This method receives DataBindingComponent instance as type Object instead of
-   * type DataBindingComponent to avoid causing too many compilation errors if
-   * compilation fails for another reason.
-   * https://issuetracker.google.com/issues/116541301
-   * @Deprecated Use DataBindingUtil.inflate(inflater, R.layout.activity_call, root, attachToRoot, component)
-   */
   @NonNull
-  @Deprecated
   public static ActivityCallBinding inflate(@NonNull LayoutInflater inflater,
-      @Nullable ViewGroup root, boolean attachToRoot, @Nullable Object component) {
-    return ViewDataBinding.<ActivityCallBinding>inflateInternal(inflater, com.myhexaville.androidwebrtc.R.layout.activity_call, root, attachToRoot, component);
+      @Nullable ViewGroup root, boolean attachToRoot, @Nullable DataBindingComponent component) {
+    return DataBindingUtil.<ActivityCallBinding>inflate(inflater, com.myhexaville.androidwebrtc.R.layout.activity_call, root, attachToRoot, component);
   }
 
   @NonNull
@@ -101,33 +92,18 @@ public abstract class ActivityCallBinding extends ViewDataBinding {
     return inflate(inflater, DataBindingUtil.getDefaultComponent());
   }
 
-  /**
-   * This method receives DataBindingComponent instance as type Object instead of
-   * type DataBindingComponent to avoid causing too many compilation errors if
-   * compilation fails for another reason.
-   * https://issuetracker.google.com/issues/116541301
-   * @Deprecated Use DataBindingUtil.inflate(inflater, R.layout.activity_call, null, false, component)
-   */
   @NonNull
-  @Deprecated
   public static ActivityCallBinding inflate(@NonNull LayoutInflater inflater,
-      @Nullable Object component) {
-    return ViewDataBinding.<ActivityCallBinding>inflateInternal(inflater, com.myhexaville.androidwebrtc.R.layout.activity_call, null, false, component);
+      @Nullable DataBindingComponent component) {
+    return DataBindingUtil.<ActivityCallBinding>inflate(inflater, com.myhexaville.androidwebrtc.R.layout.activity_call, null, false, component);
   }
 
   public static ActivityCallBinding bind(@NonNull View view) {
     return bind(view, DataBindingUtil.getDefaultComponent());
   }
 
-  /**
-   * This method receives DataBindingComponent instance as type Object instead of
-   * type DataBindingComponent to avoid causing too many compilation errors if
-   * compilation fails for another reason.
-   * https://issuetracker.google.com/issues/116541301
-   * @Deprecated Use DataBindingUtil.bind(view, component)
-   */
-  @Deprecated
-  public static ActivityCallBinding bind(@NonNull View view, @Nullable Object component) {
+  public static ActivityCallBinding bind(@NonNull View view,
+      @Nullable DataBindingComponent component) {
     return (ActivityCallBinding)bind(component, view, com.myhexaville.androidwebrtc.R.layout.activity_call);
   }
 }
