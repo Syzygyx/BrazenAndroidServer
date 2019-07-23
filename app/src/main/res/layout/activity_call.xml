@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:keepScreenOn="true"
         android:layout_height="match_parent"
-        >
+        android:orientation="vertical">
 
         <com.myhexaville.androidwebrtc.app_rtc_sample.view.PercentFrameLayout
             android:id="@+id/remote_video_layout"
