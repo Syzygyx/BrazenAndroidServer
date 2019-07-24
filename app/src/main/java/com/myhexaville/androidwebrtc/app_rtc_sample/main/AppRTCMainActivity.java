@@ -73,8 +73,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         connect();
 
     }
-    private static String getRandomString(final int sizeOfRandomString)
-    {
+    private static String getRandomString(final int sizeOfRandomString) {
         final Random random=new Random();
         final StringBuilder sb=new StringBuilder(sizeOfRandomString);
         for(int i=0;i<sizeOfRandomString;++i)

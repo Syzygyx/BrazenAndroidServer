@@ -1154,6 +1154,7 @@ public class CallActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public void onLocationChanged(Location location) {
         String loc = location.getLatitude() + " " + location.getLongitude();
