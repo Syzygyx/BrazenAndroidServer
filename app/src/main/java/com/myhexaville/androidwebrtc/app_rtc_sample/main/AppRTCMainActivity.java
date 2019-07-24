@@ -57,10 +57,10 @@ public class AppRTCMainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "AppRTCMainActivity";
     private static final int CONNECTION_REQUEST = 1;
     private static final int RC_CALL = 111;
-    final int min = 10000;
-    final int max = 999999;
+    final int min = 1100000;
+    final int max = 99999999;
     int random;
-
+    private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,14 +73,21 @@ public class AppRTCMainActivity extends AppCompatActivity {
         connect();
 
     }
-
+    private static String getRandomString(final int sizeOfRandomString)
+    {
+        final Random random=new Random();
+        final StringBuilder sb=new StringBuilder(sizeOfRandomString);
+        for(int i=0;i<sizeOfRandomString;++i)
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+        return sb.toString();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @AfterPermissionGranted(RC_CALL)
     private void connect() {
-        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            connectToRoom(random+"");
+            connectToRoom(random + "");
 
         } else {
             EasyPermissions.requestPermissions(this, "Need some permissions", RC_CALL, perms);

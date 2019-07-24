@@ -10,6 +10,7 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -42,7 +43,7 @@
             android:theme="@style/AppTheme.Call" />
         <activity
             android:name=".app_rtc_sample.main.AppRTCMainActivity"
-            android:label="Video call"
+            android:label="Brazen Monitor"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
