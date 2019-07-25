@@ -34,6 +34,7 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -98,6 +99,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -126,7 +129,8 @@ public class CallActivity extends AppCompatActivity
         implements AppRTCClient.SignalingEvents, PeerConnectionClient.PeerConnectionEvents, OnCallEvents, LocationListener {
 
     private static final String LOG_TAG = "CallActivity";
-
+    String lastLat = "";
+    String lastLong = "";
     private PeerConnectionClient peerConnectionClient;
     private AppRTCClient appRtcClient;
     private SignalingParameters signalingParameters;
@@ -158,6 +162,8 @@ public class CallActivity extends AppCompatActivity
     private TelephonyManager telephonyManager;
     private final static String LTE_TAG = "LTE_Tag";
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
+    private final int interval = 1000 * 60; // 60 Seconds
+    Timer timer = new Timer();
 
     {
         try {
@@ -369,11 +375,20 @@ public class CallActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-
+        timer.schedule(hourlyTask, 0l, 1000 * 60);
     }
 
-    public void sendMessage(String lati, String longi, String batteryTemp, String batterylevel, String networksignal, String wifiSignalLevel) {
-        Log.e("sendMessage", "Data to send: " + lati + " \n" + longi + " \n" + batteryTemp + " \n" + batterylevel + " \n" + networksignal + " \n" + wifiSignalLevel);
+
+    TimerTask hourlyTask = new TimerTask() {
+        @Override
+        public void run() {
+            Log.e(TAG, "sendMessage: " + "TimeTask started! ");
+            sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+        }
+    };
+
+    public void sendMessage(String lati, String longi, String batteryTemp, String batterylevel, String networksignal, String wifiSignalLvl) {
+        Log.e("jsondata", "Data to send: " + lati + " \n" + longi + " \n" + batteryTemp + " \n" + batterylevel + " \n" + networksignal + " \n" + wifiSignalLvl);
 //        String message = textField.getText().toString().trim();
         if (TextUtils.isEmpty(lati)) {
             Log.e("sendMessage2", "sendMessage:2 " + lati);
@@ -388,7 +403,7 @@ public class CallActivity extends AppCompatActivity
             jsonObject.put("batteryTemp", batteryTemp);
             jsonObject.put("batteryLevel", batterylevel);
             jsonObject.put("networkSignal", networksignal);
-            jsonObject.put("wifiSignal", wifiSignalLevel);
+            jsonObject.put("wifiSignal", wifiSignalLvl);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -424,6 +439,7 @@ public class CallActivity extends AppCompatActivity
         @Override
         public void call(final Object... args) {
             runOnUiThread(new Runnable() {
+                @SuppressLint("MissingPermission")
                 @Override
                 public void run() {
                     int length = args.length;
@@ -544,6 +560,7 @@ public class CallActivity extends AppCompatActivity
         if (isFinishing()) {
             Log.i("Destroying", "onDestroy: ");
 
+
             JSONObject userId = new JSONObject();
             try {
                 userId.put("username", Username + " DisConnected");
@@ -568,7 +585,6 @@ public class CallActivity extends AppCompatActivity
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             batLevel = level + "%";
             getWifiSignal();
-            int signal = 0;
 
         }
     };
@@ -592,7 +608,7 @@ public class CallActivity extends AppCompatActivity
 
             int LTESingalStrength = 0;
 
-            List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
+            @SuppressLint("MissingPermission") List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
             for (CellInfo cellInfo : cellInfoList) {
                 if (cellInfo instanceof CellInfoLte) {
                     // cast to CellInfoLte and call all the CellInfoLte methods you need
@@ -636,7 +652,6 @@ public class CallActivity extends AppCompatActivity
     @Override
     public void onCallHangUp() {
         if (isFinishing()) {
-            Log.i("Destroying", "onDestroy: ");
 
             JSONObject userId = new JSONObject();
             try {
@@ -745,8 +760,7 @@ public class CallActivity extends AppCompatActivity
         updateVideoView();
         // Enable statistics callback.
         peerConnectionClient.enableStatsEvents(true, STAT_CALLBACK_PERIOD);
-        String lastLat = "";
-        String lastLong = "";
+
 
         if (locationManager != null) {
             location = locationManager
@@ -757,8 +771,6 @@ public class CallActivity extends AppCompatActivity
             }
         }
         sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-
-
     }
 
     // This method is called when the audio manager reports audio device change,
@@ -776,7 +788,6 @@ public class CallActivity extends AppCompatActivity
         if (appRtcClient != null) {
             appRtcClient.disconnectFromRoom();
             appRtcClient = null;
-
         }
 
         if (peerConnectionClient != null) {
@@ -1159,10 +1170,10 @@ public class CallActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         String loc = location.getLatitude() + " " + location.getLongitude();
         Log.e(TAG, "onLocationChanged: " + loc);
-        String latitute = location.getLatitude() + "";
-        String longitude = location.getLongitude() + "";
+        lastLat = location.getLatitude() + "";
+        lastLong = location.getLongitude() + "";
         if (iceConnected) {
-            sendMessage(latitute, longitude, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+            sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
         }
     }
 
