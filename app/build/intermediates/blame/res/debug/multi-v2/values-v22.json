@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\Projects\\Android_server_webrtc_brezen\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v22\\values-v22.xml",
+            "outputFile": "E:\\Projects\\Android_server_webrtc\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v22\\values-v22.xml",
             "map": [
                 {
                     "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\0743bbd977659b014bb4aa59b9210b64\\res\\values-v22\\values-v22.xml",

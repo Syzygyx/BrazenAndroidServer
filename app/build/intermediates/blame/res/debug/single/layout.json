@@ -1,22 +1,22 @@
 [
     {
-        "merged": "E:\\Projects\\Android_server_webrtc_brezen\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_sample_peer_connection.xml",
-        "source": "E:\\Projects\\Android_server_webrtc_brezen\\app\\src\\main\\res\\layout\\activity_sample_peer_connection.xml"
+        "merged": "E:\\Projects\\Android_server_webrtc\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_main.xml",
+        "source": "E:\\Projects\\Android_server_webrtc\\app\\src\\main\\res\\layout\\activity_main.xml"
     },
     {
-        "merged": "E:\\Projects\\Android_server_webrtc_brezen\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_main.xml",
-        "source": "E:\\Projects\\Android_server_webrtc_brezen\\app\\src\\main\\res\\layout\\activity_main.xml"
+        "merged": "E:\\Projects\\Android_server_webrtc\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_sample_camera_render.xml",
+        "source": "E:\\Projects\\Android_server_webrtc\\app\\src\\main\\res\\layout\\activity_sample_camera_render.xml"
     },
     {
-        "merged": "E:\\Projects\\Android_server_webrtc_brezen\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_sample_data_channel.xml",
-        "source": "E:\\Projects\\Android_server_webrtc_brezen\\app\\src\\main\\res\\layout\\activity_sample_data_channel.xml"
+        "merged": "E:\\Projects\\Android_server_webrtc\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_sample_data_channel.xml",
+        "source": "E:\\Projects\\Android_server_webrtc\\app\\src\\main\\res\\layout\\activity_sample_data_channel.xml"
     },
     {
-        "merged": "E:\\Projects\\Android_server_webrtc_brezen\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_sample_camera_render.xml",
-        "source": "E:\\Projects\\Android_server_webrtc_brezen\\app\\src\\main\\res\\layout\\activity_sample_camera_render.xml"
+        "merged": "E:\\Projects\\Android_server_webrtc\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_call.xml",
+        "source": "E:\\Projects\\Android_server_webrtc\\app\\src\\main\\res\\layout\\activity_call.xml"
     },
     {
-        "merged": "E:\\Projects\\Android_server_webrtc_brezen\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_call.xml",
-        "source": "E:\\Projects\\Android_server_webrtc_brezen\\app\\src\\main\\res\\layout\\activity_call.xml"
+        "merged": "E:\\Projects\\Android_server_webrtc\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_sample_peer_connection.xml",
+        "source": "E:\\Projects\\Android_server_webrtc\\app\\src\\main\\res\\layout\\activity_sample_peer_connection.xml"
     }
 ]
