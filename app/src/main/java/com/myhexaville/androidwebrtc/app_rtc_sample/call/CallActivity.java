@@ -292,7 +292,7 @@ public class CallActivity extends AppCompatActivity
     void showStats() {
         statsDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         statsDialog.setContentView(R.layout.stats_dialog);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        statsDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         tv_bat_lvl = statsDialog.findViewById(R.id.batlvlsocket);
         tv_bat_temp = statsDialog.findViewById(R.id.batTempsocket);
         tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
