@@ -291,13 +291,10 @@ public class CallActivity extends AppCompatActivity
             //Very weak signal
             wifiSignalLevel = "Very Low";
             Log.d(TAG, "getWifiSignal: " + level + "");
-
-
         } else {
             // no signals
             wifiSignalLevel = "No Wifi Signal";
             Log.d(TAG, "getWifiSignal: " + level + "");
-
         }
     }
 
@@ -337,7 +334,6 @@ public class CallActivity extends AppCompatActivity
         PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
         factory = new PeerConnectionFactory(null);
     }
-
 
     private void setupListeners() {
         binding.buttonCallDisconnect.setOnClickListener(view -> onCallHangUp());
@@ -388,6 +384,14 @@ public class CallActivity extends AppCompatActivity
     };
 
     public void sendMessage(String lati, String longi, String batteryTemp, String batterylevel, String networksignal, String wifiSignalLvl) {
+        Log.e(TAG, "sendMessage: LTE" + LTESignal);
+        if (lati.equals("") && longi.equals("")) {
+            lati = "NA";
+            longi = "NA";
+        }
+        if (LTESignal == null) {
+            LTESignal = "No Signals";
+        }
         Log.e("jsondata", "Data to send: " + lati + " \n" + longi + " \n" + batteryTemp + " \n" + batterylevel + " \n" + networksignal + " \n" + wifiSignalLvl);
 //        String message = textField.getText().toString().trim();
         if (TextUtils.isEmpty(lati)) {
@@ -640,7 +644,6 @@ public class CallActivity extends AppCompatActivity
             } else {
                 LTESignal = "No Signal";
                 Log.e("OUT ", "LTE signal strength: " + LTESignal);
-
             }
 
         } catch (Exception e) {
@@ -776,6 +779,7 @@ public class CallActivity extends AppCompatActivity
     // This method is called when the audio manager reports audio device change,
     // e.g. from wired headset to speakerphone.
     private void onAudioManagerDevicesChanged(
+
             final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
         Log.d(LOG_TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", "
                 + "selected: " + device);
@@ -1172,9 +1176,9 @@ public class CallActivity extends AppCompatActivity
         Log.e(TAG, "onLocationChanged: " + loc);
         lastLat = location.getLatitude() + "";
         lastLong = location.getLongitude() + "";
-        if (iceConnected) {
+
             sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-        }
+
     }
 
     @SuppressLint("MissingPermission")
@@ -1183,9 +1187,9 @@ public class CallActivity extends AppCompatActivity
         if (locationManager != null) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
-                if (iceConnected) {
+
                     sendMessage(location.getLatitude() + "", location.getLongitude() + "", batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-                }
+
             }
         }
     }

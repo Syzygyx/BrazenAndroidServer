@@ -53,6 +53,7 @@ import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.EXTRA_
 /**
  * Handles the initial setup where the user selects which room to join.
  */
+
 public class AppRTCMainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "AppRTCMainActivity";
     private static final int CONNECTION_REQUEST = 1;
@@ -60,7 +61,8 @@ public class AppRTCMainActivity extends AppCompatActivity {
     final int min = 1100000;
     final int max = 99999999;
     int random;
-    private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
+    private static final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,10 +75,11 @@ public class AppRTCMainActivity extends AppCompatActivity {
         connect();
 
     }
+
     private static String getRandomString(final int sizeOfRandomString) {
-        final Random random=new Random();
-        final StringBuilder sb=new StringBuilder(sizeOfRandomString);
-        for(int i=0;i<sizeOfRandomString;++i)
+        final Random random = new Random();
+        final StringBuilder sb = new StringBuilder(sizeOfRandomString);
+        for (int i = 0; i < sizeOfRandomString; ++i)
             sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
         return sb.toString();
     }

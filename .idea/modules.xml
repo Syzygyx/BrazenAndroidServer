@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android_server_webrtc.iml" filepath="$PROJECT_DIR$/Android_server_webrtc.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Android_server_webrtc_brezen.iml" filepath="$PROJECT_DIR$/Android_server_webrtc_brezen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BrazenAndroidServer.iml" filepath="$PROJECT_DIR$/BrazenAndroidServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libwebrtc/libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/libwebrtc.iml" />
       <module fileurl="file://$PROJECT_DIR$/libwebrtc/libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/libwebrtc.iml" />
     </modules>
   </component>
