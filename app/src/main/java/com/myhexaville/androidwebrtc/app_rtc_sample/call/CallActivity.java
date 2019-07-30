@@ -13,7 +13,6 @@ package com.myhexaville.androidwebrtc.app_rtc_sample.call;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -34,15 +33,12 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.telecom.Call;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
-import android.telephony.CellSignalStrengthLte;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -54,6 +50,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
@@ -61,7 +58,6 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.zxing.WriterException;
 import com.myhexaville.androidwebrtc.R;
-import com.myhexaville.androidwebrtc.app_rtc_sample.main.AppRTCMainActivity;
 import com.myhexaville.androidwebrtc.databinding.ActivityCallBinding;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCAudioManager;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCClient;
@@ -70,8 +66,6 @@ import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCClient.Signali
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.PeerConnectionClient;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.PeerConnectionClient.PeerConnectionParameters;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.WebSocketRTCClient;
-
-import org.java_websocket.client.WebSocketClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,11 +85,7 @@ import org.webrtc.StatsReport;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
 
-import java.lang.reflect.Method;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -144,6 +134,7 @@ public class CallActivity extends AppCompatActivity
     private PeerConnectionFactory factory;
     private boolean iceConnected;
     private boolean isError;
+    Dialog statsDialog;
     private long callStartedTimeMs;
     private boolean micEnabled = false;
     protected LocationManager locationManager;
@@ -164,6 +155,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
+    TextView tv_bat_lvl, tv_bat_temp, tv_wifi_signal, tv_net_signal;
 
     {
         try {
@@ -189,6 +181,7 @@ public class CallActivity extends AppCompatActivity
         // Get Intent parameters.
         Intent intent = getIntent();
         roomId = intent.getStringExtra(EXTRA_ROOMID);
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -280,12 +273,10 @@ public class CallActivity extends AppCompatActivity
             wifiSignalLevel = "Good";
             Log.d(TAG, "getWifiSignal: " + level + "");
 
-
         } else if (level < 3 && level >= 2) {
             //Low signal
             wifiSignalLevel = "Low";
             Log.d(TAG, "getWifiSignal: " + level + "");
-
 
         } else if (level < 2 && level >= 1) {
             //Very weak signal
@@ -296,6 +287,21 @@ public class CallActivity extends AppCompatActivity
             wifiSignalLevel = "No Wifi Signal";
             Log.d(TAG, "getWifiSignal: " + level + "");
         }
+    }
+
+    void showStats() {
+        statsDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        statsDialog.setContentView(R.layout.stats_dialog);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        tv_bat_lvl = statsDialog.findViewById(R.id.batlvlsocket);
+        tv_bat_temp = statsDialog.findViewById(R.id.batTempsocket);
+        tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
+        tv_wifi_signal = statsDialog.findViewById(R.id.wifisignalsocket);
+        statsDialog.show();
+        tv_bat_lvl.setText(batLevel);
+        tv_bat_temp.setText(batteryTemperature);
+        tv_wifi_signal.setText(wifiSignalLevel);
+        tv_net_signal.setText(LTESignal);
     }
 
     private void initializePeerConnections() {
@@ -372,6 +378,7 @@ public class CallActivity extends AppCompatActivity
             }
         }
         timer.schedule(hourlyTask, 0l, 1000 * 60);
+
     }
 
 
@@ -759,11 +766,13 @@ public class CallActivity extends AppCompatActivity
             Log.w(LOG_TAG, "Call is connected in closed or error state");
             return;
         }
+        showStats();
+//        dialog.dismiss();
+
         // Update video view.
         updateVideoView();
         // Enable statistics callback.
         peerConnectionClient.enableStatsEvents(true, STAT_CALLBACK_PERIOD);
-
 
         if (locationManager != null) {
             location = locationManager
@@ -1096,8 +1105,9 @@ public class CallActivity extends AppCompatActivity
             iceConnected = false;
             disconnect();
         });
+        showQR();
 
-
+        statsDialog.dismiss();
         Log.i("Destroying", "onDestroy: ");
 
         JSONObject userId = new JSONObject();
@@ -1107,12 +1117,10 @@ public class CallActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         mSocket.disconnect();
         mSocket.off("jsondata", onNewMessage);
         mSocket.off("connect user", onNewUser);
         Username = "";
-
     }
 
     @Override
@@ -1129,7 +1137,6 @@ public class CallActivity extends AppCompatActivity
     public void onPeerConnectionError(final String description) {
         reportError(description);
     }
-
 
     void showQR() {
         if (roomId.length() > 0) {
@@ -1169,7 +1176,6 @@ public class CallActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
         String loc = location.getLatitude() + " " + location.getLongitude();
@@ -1177,7 +1183,7 @@ public class CallActivity extends AppCompatActivity
         lastLat = location.getLatitude() + "";
         lastLong = location.getLongitude() + "";
 
-            sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
 
     }
 
@@ -1187,9 +1193,7 @@ public class CallActivity extends AppCompatActivity
         if (locationManager != null) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
-
-                    sendMessage(location.getLatitude() + "", location.getLongitude() + "", batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-
+                sendMessage(location.getLatitude() + "", location.getLongitude() + "", batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
             }
         }
     }

@@ -1085,10 +1085,14 @@ drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
 drawable disconnect
+drawable hot
+drawable ic_battery_80_black_24dp
 drawable ic_launcher_background
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_network_wifi_black_24dp
+drawable ic_signal_cellular_3_bar_black_24dp
 drawable mtrl_snackbar_background
 drawable mtrl_tabs_default_indicator
 drawable navigation_empty_icon
@@ -1143,6 +1147,10 @@ id always
 id async
 id auto
 id barrier
+id batTemp
+id batTempsocket
+id batlvl
+id batlvlsocket
 id beginning
 id blocking
 id bottom
@@ -1247,6 +1255,8 @@ id mtrl_child_content_container
 id mtrl_internal_children_alpha_tag
 id multiply
 id navigation_header_container
+id networksignal
+id networksignalsocket
 id never
 id none
 id normal
@@ -1319,6 +1329,7 @@ id src_in
 id src_over
 id standard
 id start
+id stats
 id status_bar_latest_event_content
 id stretch
 id submenuarrow
@@ -1359,6 +1370,8 @@ id up
 id useLogo
 id view_offset_helper
 id visible
+id wifisignal
+id wifisignalsocket
 id withText
 id wrap
 id wrap_content
@@ -1430,7 +1443,6 @@ layout activity_main
 layout activity_sample_camera_render
 layout activity_sample_data_channel
 layout activity_sample_peer_connection
-layout activity_socket_io
 layout crop_image_activity
 layout crop_image_view
 layout custom_record_timer
@@ -1469,6 +1481,7 @@ layout notification_template_part_time
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
+layout stats_dialog
 layout support_simple_spinner_dropdown_item
 layout zxing_barcode_scanner
 layout zxing_capture
