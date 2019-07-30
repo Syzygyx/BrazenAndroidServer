@@ -397,7 +397,7 @@ public class CallActivity extends AppCompatActivity
             longi = "NA";
         }
         if (LTESignal == null) {
-            LTESignal = "No Signals";
+            LTESignal = "No Signal";
         }
         Log.e("jsondata", "Data to send: " + lati + " \n" + longi + " \n" + batteryTemp + " \n" + batterylevel + " \n" + networksignal + " \n" + wifiSignalLvl);
 //        String message = textField.getText().toString().trim();

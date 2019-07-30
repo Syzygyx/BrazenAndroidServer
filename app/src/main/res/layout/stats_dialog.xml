@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#fff">
+    android:background="#fff"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/stats"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="#67E1B6"
         android:gravity="center_horizontal"
-        android:padding="10dp"
+        android:padding="15dp"
         android:text="Stats"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#fff" />
@@ -24,34 +24,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="5dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:padding="8dp"
                     android:weightSum="4">
 
                     <ImageView
                         android:id="@+id/batTemp"
                         android:layout_width="0dp"
-                        android:layout_height="24dp"
+                        android:layout_height="32dp"
                         android:layout_below="@id/stats"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:src="@drawable/hot"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#000" />
 
                     <TextView
@@ -62,20 +63,21 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:text="-"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#000" />
 
                     <ImageView
                         android:id="@+id/batlvl"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:layout_below="@id/batTemp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="#000"
                         app:srcCompat="@drawable/ic_battery_80_black_24dp" />
 
@@ -85,25 +87,28 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:text="-"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#000" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:padding="10dp"
                     android:weightSum="4">
 
                     <ImageView
                         android:id="@+id/networksignal"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="#000"
                         app:srcCompat="@drawable/ic_signal_cellular_3_bar_black_24dp" />
 
@@ -116,14 +121,15 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:text="-"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#000" />
 
                     <ImageView
                         android:id="@+id/wifisignal"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:layout_below="@id/batlvl"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
@@ -135,14 +141,16 @@
                         android:id="@+id/wifisignalsocket"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:text="-"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#000" />
                 </LinearLayout>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
