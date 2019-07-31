@@ -87,6 +87,7 @@ import org.webrtc.VideoRenderer;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
@@ -298,11 +299,44 @@ public class CallActivity extends AppCompatActivity
         tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
         tv_wifi_signal = statsDialog.findViewById(R.id.wifisignalsocket);
         statsDialog.show();
+
         tv_bat_lvl.setText(batLevel);
         tv_bat_temp.setText(batteryTemperature);
         tv_wifi_signal.setText(wifiSignalLevel);
         tv_net_signal.setText(LTESignal);
+//        timer.schedule(hourlyTask, 0l, 1000 * 60);
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Log.e(TAG, "run: Thread" );
+                        tv_bat_lvl.setText(batLevel);
+                        tv_bat_temp.setText(batteryTemperature);
+                        tv_wifi_signal.setText(wifiSignalLevel);
+                        if (LTESignal == null) {
+                            LTESignal = "No Signal";
+                            tv_net_signal.setText(LTESignal);
+                        } else {
+                            tv_net_signal.setText(LTESignal);
+
+                        }
+                        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+                        // Stuff that updates the UI
+
+                    }
+                });
+
+            }
+
+        }, 0, interval);
+
     }
+
 
     private void initializePeerConnections() {
 
@@ -377,18 +411,57 @@ public class CallActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-        timer.schedule(hourlyTask, 0l, 1000 * 60);
 
     }
 
+    Thread thread = new Thread(new Runnable() {
+        int lastMinute;
+        int currentMinute;
 
-    TimerTask hourlyTask = new TimerTask() {
         @Override
         public void run() {
-            Log.e(TAG, "sendMessage: " + "TimeTask started! ");
-            sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+            lastMinute = currentMinute;
+            while (true) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                currentMinute = calendar.get(Calendar.MINUTE);
+                if (currentMinute != lastMinute) {
+                    lastMinute = currentMinute;
+                    tv_bat_lvl.setText(batLevel);
+                    tv_bat_temp.setText(batteryTemperature);
+                    tv_wifi_signal.setText(wifiSignalLevel);
+                    if (LTESignal == null) {
+                        LTESignal = "No Signal";
+                        tv_net_signal.setText(LTESignal);
+                    } else {
+                        tv_net_signal.setText(LTESignal);
+
+                    }
+                    sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+                }
+            }
         }
-    };
+    });
+//    TimerTask hourlyTask = new TimerTask() {
+//        @Override
+//        public void run() {
+//            Log.e(TAG, "sendMessage: " + "TimeTask started! ");
+//
+//                tv_bat_lvl.setText(batLevel);
+//                tv_bat_temp.setText(batteryTemperature);
+//                tv_wifi_signal.setText(wifiSignalLevel);
+//                if (LTESignal == null) {
+//                    LTESignal = "No Signal";
+//                    tv_net_signal.setText(LTESignal);
+//                } else {
+//                    tv_net_signal.setText(LTESignal);
+//
+//                }
+//
+//
+//            sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+//        }
+//    };
 
     public void sendMessage(String lati, String longi, String batteryTemp, String batterylevel, String networksignal, String wifiSignalLvl) {
         Log.e(TAG, "sendMessage: LTE" + LTESignal);
@@ -419,6 +492,7 @@ public class CallActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         Log.e("Socket Emit", "sendMessage: 1" + mSocket.emit("jsondata", jsonObject));
     }
 
@@ -562,7 +636,6 @@ public class CallActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         disconnect();
-
         activityRunning = false;
         rootEglBase.release();
         super.onDestroy();
@@ -757,6 +830,8 @@ public class CallActivity extends AppCompatActivity
 
         socketIO();
         onToggleMic();
+        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+
         AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setMode(AudioManager.MODE_IN_CALL);
         audioManager.setSpeakerphoneOn(false);
@@ -766,6 +841,7 @@ public class CallActivity extends AppCompatActivity
             Log.w(LOG_TAG, "Call is connected in closed or error state");
             return;
         }
+
         showStats();
 //        dialog.dismiss();
 
@@ -782,7 +858,6 @@ public class CallActivity extends AppCompatActivity
                 lastLong = location.getLongitude() + "";
             }
         }
-        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
     }
 
     // This method is called when the audio manager reports audio device change,
@@ -1183,7 +1258,7 @@ public class CallActivity extends AppCompatActivity
         lastLat = location.getLatitude() + "";
         lastLong = location.getLongitude() + "";
 
-        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+//        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
 
     }
 
@@ -1193,7 +1268,7 @@ public class CallActivity extends AppCompatActivity
         if (locationManager != null) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
-                sendMessage(location.getLatitude() + "", location.getLongitude() + "", batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+//                sendMessage(location.getLatitude() + "", location.getLongitude() + "", batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
             }
         }
     }
