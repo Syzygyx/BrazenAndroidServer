@@ -7,16 +7,31 @@
     android:background="#fff"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/stats"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#67E1B6"
-        android:gravity="center_horizontal"
-        android:padding="15dp"
-        android:text="Stats"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#fff" />
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Stats"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/versioncode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:text="ver.: 5"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#fff" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -61,9 +76,9 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/stats"
                         android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
-                        android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:text="-"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -85,9 +100,9 @@
                         android:id="@+id/batlvlsocket"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
-                        android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:text="-"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
