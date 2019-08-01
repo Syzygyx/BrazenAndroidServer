@@ -304,7 +304,9 @@ public class CallActivity extends AppCompatActivity
         tv_bat_temp.setText(batteryTemperature);
         tv_wifi_signal.setText(wifiSignalLevel);
         tv_net_signal.setText(LTESignal);
+
 //        timer.schedule(hourlyTask, 0l, 1000 * 60);
+
         timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
@@ -414,52 +416,31 @@ public class CallActivity extends AppCompatActivity
 
     }
 
-    Thread thread = new Thread(new Runnable() {
-        int lastMinute;
-        int currentMinute;
-
-        @Override
-        public void run() {
-            lastMinute = currentMinute;
-            while (true) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                currentMinute = calendar.get(Calendar.MINUTE);
-                if (currentMinute != lastMinute) {
-                    lastMinute = currentMinute;
-                    tv_bat_lvl.setText(batLevel);
-                    tv_bat_temp.setText(batteryTemperature);
-                    tv_wifi_signal.setText(wifiSignalLevel);
-                    if (LTESignal == null) {
-                        LTESignal = "No Signal";
-                        tv_net_signal.setText(LTESignal);
-                    } else {
-                        tv_net_signal.setText(LTESignal);
-
-                    }
-                    sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-                }
-            }
-        }
-    });
 //    TimerTask hourlyTask = new TimerTask() {
 //        @Override
 //        public void run() {
 //            Log.e(TAG, "sendMessage: " + "TimeTask started! ");
 //
-//                tv_bat_lvl.setText(batLevel);
-//                tv_bat_temp.setText(batteryTemperature);
-//                tv_wifi_signal.setText(wifiSignalLevel);
-//                if (LTESignal == null) {
-//                    LTESignal = "No Signal";
-//                    tv_net_signal.setText(LTESignal);
-//                } else {
-//                    tv_net_signal.setText(LTESignal);
+//            runOnUiThread(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//                    Log.e(TAG, "run: Thread");
+//                    tv_bat_lvl.setText(batLevel);
+//                    tv_bat_temp.setText(batteryTemperature);
+//                    tv_wifi_signal.setText(wifiSignalLevel);
+//                    if (LTESignal == null) {
+//                        LTESignal = "No Signal";
+//                        tv_net_signal.setText(LTESignal);
+//                    } else {
+//                        tv_net_signal.setText(LTESignal);
+//
+//                    }
+//                    sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+//                    // Stuff that updates the UI
 //
 //                }
-//
-//
-//            sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+//            });
 //        }
 //    };
 
