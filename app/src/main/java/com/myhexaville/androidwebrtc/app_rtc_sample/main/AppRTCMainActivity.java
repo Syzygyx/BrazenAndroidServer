@@ -97,10 +97,9 @@ public class AppRTCMainActivity extends AppCompatActivity {
     }
 
     private void connectToRoom(String roomId) {
-        Log.e("IMEI ID :-", roomId);
 
         Intent intent = new Intent(this, CallActivity.class);
-        intent.putExtra(EXTRA_ROOMID, roomId);
+        intent.putExtra(EXTRA_ROOMID, getRandomString(5));
         startActivityForResult(intent, CONNECTION_REQUEST);
     }
 
