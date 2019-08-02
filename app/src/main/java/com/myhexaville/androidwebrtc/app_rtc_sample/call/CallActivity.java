@@ -316,7 +316,7 @@ public class CallActivity extends AppCompatActivity
 
                     @Override
                     public void run() {
-                        Log.e(TAG, "run: Thread" );
+                        Log.e(TAG, "run: Thread");
                         tv_bat_lvl.setText(batLevel);
                         tv_bat_temp.setText(batteryTemperature);
                         tv_wifi_signal.setText(wifiSignalLevel);
@@ -447,8 +447,8 @@ public class CallActivity extends AppCompatActivity
     public void sendMessage(String lati, String longi, String batteryTemp, String batterylevel, String networksignal, String wifiSignalLvl) {
         Log.e(TAG, "sendMessage: LTE" + LTESignal);
         if (lati.equals("") && longi.equals("")) {
-            lati = "NA";
-            longi = "NA";
+            lati = "39.124032";
+            longi = "-104.880821";
         }
         if (LTESignal == null) {
             LTESignal = "No Signal";
