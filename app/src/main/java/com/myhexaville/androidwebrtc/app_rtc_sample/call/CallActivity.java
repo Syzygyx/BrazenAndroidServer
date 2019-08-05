@@ -581,11 +581,13 @@ public class CallActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         activityRunning = false;
+        disconnect();
+
         // Don't stop the video when using screencapture to allow user to show other apps to the remote
         // end.
-        if (peerConnectionClient != null) {
-            peerConnectionClient.stopVideoSource();
-        }
+//        if (peerConnectionClient != null) {
+//            peerConnectionClient.stopVideoSource();
+//        }
     }
 
     @Override
