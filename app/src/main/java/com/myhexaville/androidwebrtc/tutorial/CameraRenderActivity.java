@@ -40,6 +40,7 @@ public class CameraRenderActivity extends AppCompatActivity {
         binding.surfaceView.init(rootEglBase.getEglBaseContext(), null);
         binding.surfaceView.setEnableHardwareScaler(true);
         binding.surfaceView.setMirror(true);
+        ;
 
         PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
         PeerConnectionFactory factory = new PeerConnectionFactory(null);
@@ -101,6 +102,7 @@ public class CameraRenderActivity extends AppCompatActivity {
     * https://developer.android.com/reference/android/hardware/camera2/package-summary.html
     * */
     private boolean useCamera2() {
+
         return Camera2Enumerator.isSupported(this);
     }
 

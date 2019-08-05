@@ -36,7 +36,7 @@ public class MediaStreamActivity extends AppCompatActivity {
     private static final String TAG = "SamplePeerConnectionAct";
     public static final int VIDEO_RESOLUTION_WIDTH = 1280;
     public static final int VIDEO_RESOLUTION_HEIGHT = 720;
-    public static final int FPS = 30;
+    public static final int FPS = 15;
     private static final String DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT = "DtlsSrtpKeyAgreement";
 
     private ActivitySamplePeerConnectionBinding binding;

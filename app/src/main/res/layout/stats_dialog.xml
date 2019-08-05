@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:text="ver.: 5"
+            android:text="ver.: 6"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#fff" />
     </RelativeLayout>

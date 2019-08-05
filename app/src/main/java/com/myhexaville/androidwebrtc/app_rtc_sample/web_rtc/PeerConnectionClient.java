@@ -438,15 +438,15 @@ public class PeerConnectionClient {
 
     private void createMediaConstraintsInternal() {
         // Create peer connection constraints.
-            pcConstraints = new MediaConstraints();
-            // Enable DTLS for normal calls and disable for loopback calls.
-            if (peerConnectionParameters.loopback) {
-                pcConstraints.optional.add(
-                        new MediaConstraints.KeyValuePair(DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT, "false"));
-            } else {
-                pcConstraints.optional.add(
-                        new MediaConstraints.KeyValuePair(DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT, "true"));
-            }
+        pcConstraints = new MediaConstraints();
+        // Enable DTLS for normal calls and disable for loopback calls.
+        if (peerConnectionParameters.loopback) {
+            pcConstraints.optional.add(
+                    new MediaConstraints.KeyValuePair(DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT, "false"));
+        } else {
+            pcConstraints.optional.add(
+                    new MediaConstraints.KeyValuePair(DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT, "true"));
+        }
 
         // Check if there is a camera on device and disable video call if not.
         if (videoCapturer == null) {
@@ -467,7 +467,7 @@ public class PeerConnectionClient {
 
             // If fps is not specified, default to 30.
             if (videoFps == 0) {
-                videoFps = 30;
+                videoFps = 10;
             }
             Logging.d(TAG, "Capturing format: " + videoWidth + "x" + videoHeight + "@" + videoFps);
         }
