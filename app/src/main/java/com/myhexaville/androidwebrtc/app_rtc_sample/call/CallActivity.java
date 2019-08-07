@@ -152,6 +152,7 @@ public class CallActivity extends AppCompatActivity
     private Boolean hasConnection = false;
     private Socket mSocket;
     Location location;
+    boolean isNetworkEnabled = false;
     private SignalStrength signalStrength;
     private TelephonyManager telephonyManager;
     private final static String LTE_TAG = "LTE_Tag";
@@ -523,12 +524,23 @@ public class CallActivity extends AppCompatActivity
                         username = object.getString("connected");
                         Log.e("UserName", "run: " + username);
                         if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                            if (location != null) {
+                            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                            if (isNetworkEnabled) {
+                                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                                if (location != null) {
 //                                Toast.makeText(CallActivity.this, location.getLatitude() + location.getLongitude() + "", Toast.LENGTH_SHORT).show();
-                                Log.e(TAG, "onNewUser: " + location.getLatitude() + location.getLongitude());
+                                    Log.e(TAG, "onNewUser: " + location.getLatitude() + location.getLongitude());
 
+                                }
+                            } else {
+                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if (location != null) {
+//                                Toast.makeText(CallActivity.this, location.getLatitude() + location.getLongitude() + "", Toast.LENGTH_SHORT).show();
+                                    Log.e(TAG, "onNewUser: " + location.getLatitude() + location.getLongitude());
+
+                                }
                             }
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -836,11 +848,21 @@ public class CallActivity extends AppCompatActivity
         peerConnectionClient.enableStatsEvents(true, STAT_CALLBACK_PERIOD);
 
         if (locationManager != null) {
-            location = locationManager
-                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location != null) {
-                lastLat = location.getLatitude() + "";
-                lastLong = location.getLongitude() + "";
+//            location = locationManager
+//                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (isNetworkEnabled) {
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (location != null) {
+                    lastLat = location.getLatitude() + "";
+                    lastLong = location.getLongitude() + "";
+                }
+            } else {
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location != null) {
+                    lastLat = location.getLatitude() + "";
+                    lastLong = location.getLongitude() + "";
+                }
             }
         }
     }
@@ -849,7 +871,8 @@ public class CallActivity extends AppCompatActivity
     // e.g. from wired headset to speakerphone.
     private void onAudioManagerDevicesChanged(
 
-            final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
+            final AppRTCAudioManager.AudioDevice device,
+            final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
         Log.d(LOG_TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", "
                 + "selected: " + device);
         // TODO(henrika): add callback handler.

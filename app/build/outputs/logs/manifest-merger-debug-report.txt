@@ -189,7 +189,7 @@ ADDED from E:\Projects\BrazenAndroidServer\app\src\main\AndroidManifest.xml:34:9
 activity#com.myhexaville.androidwebrtc.app_rtc_sample.call.CallActivity
 ADDED from E:\Projects\BrazenAndroidServer\app\src\main\AndroidManifest.xml:38:9-43:52
 	android:screenOrientation
-		ADDED from E:\Projects\BrazenAndroidServer\app\src\main\AndroidManifest.xml:42:13-54
+		ADDED from E:\Projects\BrazenAndroidServer\app\src\main\AndroidManifest.xml:42:13-49
 	android:label
 		ADDED from E:\Projects\BrazenAndroidServer\app\src\main\AndroidManifest.xml:41:13-45
 	android:configChanges
