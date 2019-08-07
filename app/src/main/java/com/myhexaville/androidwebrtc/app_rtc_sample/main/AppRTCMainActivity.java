@@ -14,11 +14,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +35,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -72,8 +77,28 @@ public class AppRTCMainActivity extends AppCompatActivity {
 
         random = new Random().nextInt((max - min) + 1) + min;
 
-        connect();
 
+        if (haveNetworkConnection()) {
+            connect();
+        } else {
+            showConnectionError();
+        }
+
+
+    }
+
+    void showConnectionError() {
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
+        dialog.setContentView(R.layout.showerror_conenction);
+        RelativeLayout show_error = dialog.findViewById(R.id.show_error);
+        dialog.show();
+        show_error.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                startActivity(new Intent(AppRTCMainActivity.this, AppRTCMainActivity.class));
+            }
+        });
     }
 
     private static String getRandomString(final int sizeOfRandomString) {
@@ -96,6 +121,23 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
     }
 
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+    }
+
     private void connectToRoom(String roomId) {
 
         Intent intent = new Intent(this, CallActivity.class);
@@ -106,7 +148,12 @@ public class AppRTCMainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
-        connect();
+
+        if (haveNetworkConnection()) {
+            connect();
+        } else {
+            showConnectionError();
+        }
         super.onResume();
     }
 }

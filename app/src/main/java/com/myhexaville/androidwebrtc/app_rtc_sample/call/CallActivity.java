@@ -30,6 +30,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
@@ -52,6 +54,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1221,7 +1225,16 @@ public class CallActivity extends AppCompatActivity
         reportError(description);
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     void showQR() {
+
+
         if (roomId.length() > 0) {
             Log.e(LOG_TAG, "Room ID: " + roomId);
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -1246,6 +1259,7 @@ public class CallActivity extends AppCompatActivity
                 ImageView QR_img = dialog.findViewById(R.id.QR_img);
                 QR_img.setImageBitmap(bitmap);
                 dialog.show();
+
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
@@ -1257,6 +1271,7 @@ public class CallActivity extends AppCompatActivity
                 Log.e(this + "", e.toString());
             }
         }
+
     }
 
     @Override

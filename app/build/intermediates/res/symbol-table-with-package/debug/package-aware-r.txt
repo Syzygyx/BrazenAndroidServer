@@ -1110,6 +1110,7 @@ drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
+drawable triangle
 id ALT
 id CTRL
 id CropOverlayView
@@ -1315,6 +1316,7 @@ id shortcut
 id showCustom
 id showHome
 id showTitle
+id show_error
 id smallLabel
 id snackbar_action
 id snackbar_text
@@ -1351,6 +1353,7 @@ id text_input_password_toggle
 id textinput_counter
 id textinput_error
 id textinput_helper_text
+id textview
 id time
 id title
 id titleDividerNoCustom
@@ -1482,6 +1485,7 @@ layout notification_template_part_time
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
+layout showerror_conenction
 layout stats_dialog
 layout support_simple_spinner_dropdown_item
 layout zxing_barcode_scanner
