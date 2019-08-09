@@ -37,7 +37,7 @@ import java.util.Scanner;
  */
 public class RoomParametersFetcher {
     private static final String TAG = "RoomRTCClient";
-    private static final int TURN_HTTP_TIMEOUT_MS = 5000;
+    private static final int TURN_HTTP_TIMEOUT_MS = 1000;
     private final RoomParametersFetcherEvents events;
     private final String roomUrl;
     private final String roomMessage;

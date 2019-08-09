@@ -83,8 +83,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
         } else {
             showConnectionError();
         }
-
-
     }
 
     void showConnectionError() {
@@ -141,7 +139,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
     private void connectToRoom(String roomId) {
 
         Intent intent = new Intent(this, CallActivity.class);
-        intent.putExtra(EXTRA_ROOMID, getRandomString(5));
+        intent.putExtra(EXTRA_ROOMID, getRandomString(7));
         startActivityForResult(intent, CONNECTION_REQUEST);
     }
 

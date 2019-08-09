@@ -42,7 +42,7 @@ public class WebSocketRTCClient implements AppRTCClient, WebSocketChannelClient.
 
     private enum ConnectionState {NEW, CONNECTED, CLOSED, ERROR}
 
-    private enum MessageType {MESSAGE, LEAVE}
+    public enum MessageType {MESSAGE, LEAVE}
 
     private final Handler handler;
     private boolean initiator;
@@ -51,7 +51,7 @@ public class WebSocketRTCClient implements AppRTCClient, WebSocketChannelClient.
     private ConnectionState roomState;
     private RoomConnectionParameters connectionParameters;
     private String messageUrl;
-    private String leaveUrl;
+    public static String leaveUrl;
 
     public WebSocketRTCClient(SignalingEvents events) {
         this.events = events;
@@ -60,7 +60,12 @@ public class WebSocketRTCClient implements AppRTCClient, WebSocketChannelClient.
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
     }
-
+    public WebSocketRTCClient() {
+        roomState = ConnectionState.NEW;
+        final HandlerThread handlerThread = new HandlerThread(TAG);
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
+    }
     // --------------------------------------------------------------------
     // AppRTCClient interface implementation.
     // Asynchronously connect to an AppRTC room URL using supplied connection
@@ -127,8 +132,10 @@ public class WebSocketRTCClient implements AppRTCClient, WebSocketChannelClient.
 
     private String getLeaveUrl(
             RoomConnectionParameters connectionParameters, SignalingParameters signalingParameters) {
+        Log.e(TAG, "getLeaveUrl: "+signalingParameters.clientId );
         return connectionParameters.roomUrl + "/" + ROOM_LEAVE + "/" + connectionParameters.roomId + "/"
                 + signalingParameters.clientId;
+
     }
 
     // Callback issued when room parameters are extracted. Runs on local
@@ -340,7 +347,7 @@ public class WebSocketRTCClient implements AppRTCClient, WebSocketChannelClient.
     }
 
     // Send SDP or ICE candidate to a room server.
-    private void sendPostMessage(
+    public void sendPostMessage(
             final MessageType messageType, final String url, final String message) {
         String logInfo = url;
         if (message != null) {

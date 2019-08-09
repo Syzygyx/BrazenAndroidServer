@@ -118,6 +118,7 @@ import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.REMOTE
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.REMOTE_X;
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.REMOTE_Y;
 import static com.myhexaville.androidwebrtc.app_rtc_sample.util.Constants.STAT_CALLBACK_PERIOD;
+import static com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.WebSocketRTCClient.leaveUrl;
 import static org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FILL;
 import static org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FIT;
 
@@ -188,7 +189,8 @@ public class CallActivity extends AppCompatActivity
                 Settings.Secure.ANDROID_ID);
         // Get Intent parameters.
         Intent intent = getIntent();
-        roomId = intent.getStringExtra(EXTRA_ROOMID);
+        roomId = "brazen" + android_id;
+//        roomId = intent.getStringExtra(EXTRA_ROOMID);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -236,7 +238,6 @@ public class CallActivity extends AppCompatActivity
         // Create connection client. Use DirectRTCClient if room name is an IP otherwise use the
         // standard WebSocketRTCClient.
         appRtcClient = new WebSocketRTCClient(this);
-
         // Create connection parameters.
         roomConnectionParameters = new RoomConnectionParameters("https://appr.tc", roomId, false);
 
@@ -643,7 +644,7 @@ public class CallActivity extends AppCompatActivity
         unregisterReceiver(mBatInfoTemp);
         unregisterReceiver(mBatInfoReceiver);
         if (isFinishing()) {
-            Log.i("Destroying", "onDestroy: ");
+            Log.e("Destroying", "onDestroy: ");
 
 
             JSONObject userId = new JSONObject();
@@ -933,6 +934,14 @@ public class CallActivity extends AppCompatActivity
         runOnUiThread(() -> {
             if (!isError) {
                 isError = true;
+//                if(description.equals("Room response error: FULL")){
+//                    ((WebSocketRTCClient) appRtcClient).sendPostMessage(WebSocketRTCClient.MessageType.LEAVE, "https://appr.tc/leave/" + roomId + "/"+signalingParameters.clientId, null);
+//
+//                }
+//                WebSocketRTCClient wsrtc = new WebSocketRTCClient();
+//                wsrtc.sendPostMessage(WebSocketRTCClient.MessageType.LEAVE, leaveUrl, null);
+
+
                 disconnectWithErrorMessage(description);
             }
         });
@@ -1094,30 +1103,30 @@ public class CallActivity extends AppCompatActivity
             public void onDataChannel(DataChannel dataChannel) {
                 Log.d(TAG, "onDataChannel: is local: " + isLocal + " , state: " + dataChannel.state());
 
-                dataChannel.registerObserver(new DataChannel.Observer() {
-                    @Override
-                    public void onBufferedAmountChange(long l) {
-
-                    }
-
-                    @Override
-                    public void onStateChange() {
-                        Log.d(TAG, "onStateChange: remote data channel state: " + dataChannel.state().toString());
-                    }
-
-                    @Override
-                    public void onMessage(DataChannel.Buffer buffer) {
-                        Log.d(TAG, "onMessage: got message");
-                        Toast.makeText(CallActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-//                        String message = byteBufferToString(buffer.data, Charset.defaultCharset());
-//                        Log.d(TAG, "onMessage2: " + message);
-//                        runOnUiThread(() -> binding.text.setText(message));
-//                        Toast.makeText(CallActivity.this, "" + message, Toast.LENGTH_SHORT).show();
-//                        readIncomingMessage(buffer.data);
-                    }
-
-
-                });
+//                dataChannel.registerObserver(new DataChannel.Observer() {
+//                    @Override
+//                    public void onBufferedAmountChange(long l) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onStateChange() {
+//                        Log.d(TAG, "onStateChange: remote data channel state: " + dataChannel.state().toString());
+//                    }
+//
+//                    @Override
+//                    public void onMessage(DataChannel.Buffer buffer) {
+//                        Log.d(TAG, "onMessage: got message");
+//                        Toast.makeText(CallActivity.this, "Connected", Toast.LENGTH_SHORT).show();
+////                        String message = byteBufferToString(buffer.data, Charset.defaultCharset());
+////                        Log.d(TAG, "onMessage2: " + message);
+////                        runOnUiThread(() -> binding.text.setText(message));
+////                        Toast.makeText(CallActivity.this, "" + message, Toast.LENGTH_SHORT).show();
+////                        readIncomingMessage(buffer.data);
+//                    }
+//
+//
+//                });
             }
 
             @Override
