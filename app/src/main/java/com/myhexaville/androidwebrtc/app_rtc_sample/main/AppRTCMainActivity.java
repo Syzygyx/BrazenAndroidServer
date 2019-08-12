@@ -38,6 +38,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.Display;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -77,6 +80,14 @@ public class AppRTCMainActivity extends AppCompatActivity {
 
         random = new Random().nextInt((max - min) + 1) + min;
 
+        /*AppUpdater appUpdater = new AppUpdater(this).setCancelable(false)
+                .setUpdateFrom(UpdateFrom.GITHUB);
+        appUpdater.setDisplay(Display.DIALOG);
+        appUpdater.setGitHubUserAndRepo("Syzygyx", "AppUpdater");
+        appUpdater.setUpdateJSON("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update-changelog.json");
+        appUpdater.setTitleOnUpdateAvailable("Update available")
+                .setContentOnUpdateAvailable("Check out the latest version available of my app!")
+        appUpdater.start();*/
 
         if (haveNetworkConnection()) {
             connect();

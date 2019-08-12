@@ -70,10 +70,10 @@ public final class R {
     public static final class string {
         private string() {}
 
-        public static final int zxing_app_name = 0x7f1000f2;
-        public static final int zxing_button_ok = 0x7f1000f3;
-        public static final int zxing_msg_camera_framework_bug = 0x7f1000f4;
-        public static final int zxing_msg_default_status = 0x7f1000f5;
+        public static final int zxing_app_name = 0x7f100107;
+        public static final int zxing_button_ok = 0x7f100108;
+        public static final int zxing_msg_camera_framework_bug = 0x7f100109;
+        public static final int zxing_msg_default_status = 0x7f10010a;
     }
     public static final class style {
         private style() {}
