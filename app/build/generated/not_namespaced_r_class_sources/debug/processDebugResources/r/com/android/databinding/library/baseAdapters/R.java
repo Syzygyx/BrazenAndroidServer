@@ -95,18 +95,18 @@ public final class R {
         public static final int line1 = 0x7f090082;
         public static final int line3 = 0x7f090083;
         public static final int normal = 0x7f090095;
-        public static final int notification_background = 0x7f090096;
-        public static final int notification_main_column = 0x7f090097;
-        public static final int notification_main_column_container = 0x7f090098;
-        public static final int onAttachStateChangeListener = 0x7f09009b;
-        public static final int onDateChanged = 0x7f09009c;
-        public static final int right_icon = 0x7f0900af;
-        public static final int right_side = 0x7f0900b0;
-        public static final int text = 0x7f0900e7;
-        public static final int text2 = 0x7f0900e8;
-        public static final int textWatcher = 0x7f0900ec;
-        public static final int time = 0x7f0900f3;
-        public static final int title = 0x7f0900f4;
+        public static final int notification_background = 0x7f090097;
+        public static final int notification_main_column = 0x7f090098;
+        public static final int notification_main_column_container = 0x7f090099;
+        public static final int onAttachStateChangeListener = 0x7f09009c;
+        public static final int onDateChanged = 0x7f09009d;
+        public static final int right_icon = 0x7f0900b0;
+        public static final int right_side = 0x7f0900b1;
+        public static final int text = 0x7f0900e8;
+        public static final int text2 = 0x7f0900e9;
+        public static final int textWatcher = 0x7f0900ed;
+        public static final int time = 0x7f0900f4;
+        public static final int title = 0x7f0900f5;
     }
     public static final class integer {
         private integer() {}

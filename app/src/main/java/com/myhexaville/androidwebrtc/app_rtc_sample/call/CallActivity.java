@@ -15,11 +15,13 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
@@ -32,14 +34,18 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
@@ -53,6 +59,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -63,7 +70,9 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.zxing.WriterException;
+import com.myhexaville.androidwebrtc.BuildConfig;
 import com.myhexaville.androidwebrtc.R;
+import com.myhexaville.androidwebrtc.app_rtc_sample.main.AppRTCMainActivity;
 import com.myhexaville.androidwebrtc.databinding.ActivityCallBinding;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCAudioManager;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCClient;
@@ -91,6 +100,7 @@ import org.webrtc.StatsReport;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -164,7 +174,9 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    TextView tv_bat_lvl, tv_bat_temp, tv_wifi_signal, tv_net_signal;
+    int curVersion, vcode, vclient = 0;
+    File file;
+    TextView tv_bat_lvl, tv_bat_temp, tv_wifi_signal, tv_net_signal, versioncode, setversionCode;
 
     {
         try {
@@ -173,6 +185,7 @@ public class CallActivity extends AppCompatActivity
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,18 +202,30 @@ public class CallActivity extends AppCompatActivity
                 Settings.Secure.ANDROID_ID);
         // Get Intent parameters.
         Intent intent = getIntent();
-        roomId = "brazen" + android_id;
-//        roomId = intent.getStringExtra(EXTRA_ROOMID);
+//        roomId = "brazn" + android_id;
+        roomId = intent.getStringExtra(EXTRA_ROOMID);
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            curVersion = pInfo.versionCode;
+            vcode = Math.toIntExact(pInfo.getLongVersionCode());
+//            Toast.makeText(this, "version :" + vcode, Toast.LENGTH_LONG).show();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this, Manifest.permission.ACCESS_COARSE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(
-                    this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    this, Manifest.permission.ACCESS_FINE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             } else {
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         200);
             }
         }
@@ -266,6 +291,79 @@ public class CallActivity extends AppCompatActivity
 
     }
 
+    void UpdateDialogShow() {
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
+        dialog.setContentView(R.layout.update_dialog);
+        Button not_now = dialog.findViewById(R.id.not_now);
+        Button update_now = dialog.findViewById(R.id.update_now);
+        dialog.show();
+        not_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                showStats();
+            }
+        });
+        update_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateServerApk();
+                Toast.makeText(CallActivity.this, "Downloading Update...", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+                showStats();
+            }
+        });
+
+    }
+
+    public void updateServerApk() {
+        String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+        String fileName = "serverupdate.apk";
+        destination = destination + fileName;
+        final Uri uri = Uri.parse("file://" + destination);
+
+        //Delete update file if exists
+        file = new File(destination);
+        if (file.exists()) {
+            //file.delete() - test this, I think sometimes it doesnt work
+            file.delete();
+        }
+        //get url of app on server
+        String url = "http://www.doozycod.in/login_pass/server.apk";
+
+        //set downloadmanager
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setDescription("Update");
+        request.setTitle("Brazen Monitor");
+
+        //set destination
+        request.setDestinationUri(uri);
+
+        // get download service and enqueue file
+        final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        final long downloadId = manager.enqueue(request);
+
+        //set BroadcastReceiver to install app when .apk is downloaded
+
+        BroadcastReceiver onComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                Intent install = new Intent(Intent.ACTION_VIEW);
+                install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri newuri = FileProvider.getUriForFile(CallActivity.this, getPackageName() + ".fileprovider", file);
+                install.setDataAndType(newuri,
+                        manager.getMimeTypeForDownloadedFile(downloadId));
+                startActivity(install);
+
+                unregisterReceiver(this);
+                finish();
+            }
+        };
+
+        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+    }
+
     private void getWifiSignal() {
         WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int numberOfLevels = 5;
@@ -305,9 +403,10 @@ public class CallActivity extends AppCompatActivity
         tv_bat_lvl = statsDialog.findViewById(R.id.batlvlsocket);
         tv_bat_temp = statsDialog.findViewById(R.id.batTempsocket);
         tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
+        versioncode = statsDialog.findViewById(R.id.versioncode);
         tv_wifi_signal = statsDialog.findViewById(R.id.wifisignalsocket);
         statsDialog.show();
-
+        versioncode.setText("v" + BuildConfig.VERSION_CODE);
         tv_bat_lvl.setText(batLevel);
         tv_bat_temp.setText(batteryTemperature);
         tv_wifi_signal.setText(wifiSignalLevel);
@@ -392,6 +491,7 @@ public class CallActivity extends AppCompatActivity
 
         binding.buttonCallToggleMic.setOnClickListener(view -> {
             boolean enabled = onToggleMic();
+
             binding.buttonCallToggleMic.setAlpha(enabled ? 1.0f : 0.3f);
         });
     }
@@ -491,15 +591,20 @@ public class CallActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("new", "run: " + args.length);
+                    Log.e("Receive", "run: " + args.length);
                     JSONObject data = (JSONObject) args[0];
                     String username;
-                    String message;
+                    String versioncode;
                     String id;
                     try {
                         username = data.getString("username");
-                        message = data.getString("latitute");
-                        Log.e("Message", "run: " + username + message);
+                        versioncode = data.getString("versioncode");
+                        vclient = Integer.parseInt(versioncode);
+                        Log.e("Message", "run: " + username + "   version :  " + versioncode);
+                        if (curVersion < vclient) {
+                            UpdateDialogShow();
+
+                        }
 
 //                        Toast.makeText(CallActivity.this, message, Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
@@ -1243,7 +1348,6 @@ public class CallActivity extends AppCompatActivity
 
     void showQR() {
 
-
         if (roomId.length() > 0) {
             Log.e(LOG_TAG, "Room ID: " + roomId);
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -1263,11 +1367,13 @@ public class CallActivity extends AppCompatActivity
                 bitmap = qrgEncoder.encodeAsBitmap();
                 dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 dialog.setContentView(R.layout.custom_record_timer);
+                setversionCode = dialog.findViewById(R.id.vercode);
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
                 ImageView QR_img = dialog.findViewById(R.id.QR_img);
                 QR_img.setImageBitmap(bitmap);
                 dialog.show();
+
+                setversionCode.setText("v" + BuildConfig.VERSION_CODE);
 
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override

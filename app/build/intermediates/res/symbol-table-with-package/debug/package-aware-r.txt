@@ -1264,6 +1264,7 @@ id networksignalsocket
 id never
 id none
 id normal
+id not_now
 id notification_background
 id notification_main_column
 id notification_main_column_container
@@ -1373,7 +1374,10 @@ id transition_transform
 id uniform
 id unlabeled
 id up
+id update_now
 id useLogo
+id vercode
+id version
 id versioncode
 id view_offset_helper
 id visible
@@ -1491,6 +1495,7 @@ layout select_dialog_singlechoice_material
 layout showerror_conenction
 layout stats_dialog
 layout support_simple_spinner_dropdown_item
+layout update_dialog
 layout zxing_barcode_scanner
 layout zxing_capture
 menu crop_image_menu
@@ -2357,3 +2362,4 @@ styleable zxing_finder zxing_possible_result_points zxing_result_view zxing_view
 styleable zxing_view zxing_scanner_layout
 xml file_paths
 xml preferences
+xml provider_paths

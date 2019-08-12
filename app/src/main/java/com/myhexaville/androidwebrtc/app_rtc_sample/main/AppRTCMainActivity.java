@@ -15,9 +15,12 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
@@ -25,18 +28,22 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.enums.Display;
@@ -49,6 +56,12 @@ import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc_sample.call.CallActivity;
 import com.myhexaville.androidwebrtc.databinding.ActivityMainBinding;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -78,22 +91,64 @@ public class AppRTCMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        random = new Random().nextInt((max - min) + 1) + min;
 
-        /*AppUpdater appUpdater = new AppUpdater(this).setCancelable(false)
-                .setUpdateFrom(UpdateFrom.GITHUB);
-        appUpdater.setDisplay(Display.DIALOG);
-        appUpdater.setGitHubUserAndRepo("Syzygyx", "AppUpdater");
-        appUpdater.setUpdateJSON("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update-changelog.json");
-        appUpdater.setTitleOnUpdateAvailable("Update available")
-                .setContentOnUpdateAvailable("Check out the latest version available of my app!")
-        appUpdater.start();*/
+        random = new Random().nextInt((max - min) + 1) + min;
 
         if (haveNetworkConnection()) {
             connect();
+
         } else {
             showConnectionError();
         }
+
+
+    }
+
+    public void DownloadOnSDcard() {
+        String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+        String fileName = "update.apk";
+        destination = destination + fileName;
+        final Uri uri = Uri.parse("file://" + destination);
+
+        //Delete update file if exists
+        File file = new File(destination);
+        if (file.exists())
+            //file.delete() - test this, I think sometimes it doesnt work
+            file.delete();
+
+        //get url of app on server
+        String url = "http://www.doozycod.in/login_pass/server.apk";
+
+        //set downloadmanager
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setDescription("Update");
+        request.setTitle("Brazen Monitor");
+
+        //set destination
+        request.setDestinationUri(uri);
+
+        // get download service and enqueue file
+        final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        final long downloadId = manager.enqueue(request);
+
+        //set BroadcastReceiver to install app when .apk is downloaded
+
+        BroadcastReceiver onComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                Intent install = new Intent(Intent.ACTION_VIEW);
+                install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri newuri = FileProvider.getUriForFile(AppRTCMainActivity.this, getPackageName() + ".fileprovider", file);
+                install.setDataAndType(newuri,
+                        manager.getMimeTypeForDownloadedFile(downloadId));
+                startActivity(install);
+
+                unregisterReceiver(this);
+                finish();
+            }
+        };
+        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
     }
 
     void showConnectionError() {
@@ -121,7 +176,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @AfterPermissionGranted(RC_CALL)
     private void connect() {
-        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
             connectToRoom(random + "");
 
