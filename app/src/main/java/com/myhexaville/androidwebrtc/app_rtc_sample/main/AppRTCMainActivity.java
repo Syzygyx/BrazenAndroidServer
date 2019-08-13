@@ -83,6 +83,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
     final int max = 99999;
     int random;
     private static final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
+    String roomID;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -93,13 +94,12 @@ public class AppRTCMainActivity extends AppCompatActivity {
 
 
         random = new Random().nextInt((max - min) + 1) + min;
-
-        if (haveNetworkConnection()) {
-            connect();
-
-        } else {
-            showConnectionError();
-        }
+        roomID = getRandomString(7);
+//        if (haveNetworkConnection()) {
+//            connect();
+//        } else {
+//            showConnectionError();
+//        }
 
 
     }
@@ -178,7 +178,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
     private void connect() {
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            connectToRoom(random + "");
+            connectToRoom(roomID );
 
         } else {
             EasyPermissions.requestPermissions(this, "Need some permissions", RC_CALL, perms);
@@ -205,7 +205,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
     private void connectToRoom(String roomId) {
 
         Intent intent = new Intent(this, CallActivity.class);
-        intent.putExtra(EXTRA_ROOMID, getRandomString(7));
+        intent.putExtra(EXTRA_ROOMID, roomId);
         startActivityForResult(intent, CONNECTION_REQUEST);
     }
 

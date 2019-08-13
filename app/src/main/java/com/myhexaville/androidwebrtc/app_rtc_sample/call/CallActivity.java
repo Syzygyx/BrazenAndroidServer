@@ -175,6 +175,7 @@ public class CallActivity extends AppCompatActivity
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
     int curVersion, vcode, vclient = 0;
+    String app_link;
     File file;
     TextView tv_bat_lvl, tv_bat_temp, tv_wifi_signal, tv_net_signal, versioncode, setversionCode;
 
@@ -200,19 +201,21 @@ public class CallActivity extends AppCompatActivity
         }
         android_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        // Get Intent parameters.
-        Intent intent = getIntent();
-//        roomId = "brazn" + android_id;
-        roomId = intent.getStringExtra(EXTRA_ROOMID);
+
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
             curVersion = pInfo.versionCode;
-            vcode = Math.toIntExact(pInfo.getLongVersionCode());
-//            Toast.makeText(this, "version :" + vcode, Toast.LENGTH_LONG).show();
+            vcode = pInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+
+        // Get Intent parameters.
+        Intent intent = getIntent();
+        roomId = "brezn" + android_id ;
+//        roomId = intent.getStringExtra(EXTRA_ROOMID);
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -294,6 +297,7 @@ public class CallActivity extends AppCompatActivity
     void UpdateDialogShow() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
         dialog.setContentView(R.layout.update_dialog);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Button not_now = dialog.findViewById(R.id.not_now);
         Button update_now = dialog.findViewById(R.id.update_now);
         dialog.show();
@@ -329,7 +333,7 @@ public class CallActivity extends AppCompatActivity
             file.delete();
         }
         //get url of app on server
-        String url = "http://www.doozycod.in/login_pass/server.apk";
+        String url = app_link;
 
         //set downloadmanager
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
@@ -353,8 +357,9 @@ public class CallActivity extends AppCompatActivity
                 Uri newuri = FileProvider.getUriForFile(CallActivity.this, getPackageName() + ".fileprovider", file);
                 install.setDataAndType(newuri,
                         manager.getMimeTypeForDownloadedFile(downloadId));
-                startActivity(install);
+                disconnect();
 
+                startActivity(install);
                 unregisterReceiver(this);
                 finish();
             }
@@ -599,6 +604,7 @@ public class CallActivity extends AppCompatActivity
                     try {
                         username = data.getString("username");
                         versioncode = data.getString("versioncode");
+                        app_link = data.getString("app_link");
                         vclient = Integer.parseInt(versioncode);
                         Log.e("Message", "run: " + username + "   version :  " + versioncode);
                         if (curVersion < vclient) {
