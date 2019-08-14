@@ -73,6 +73,7 @@ import com.google.zxing.WriterException;
 import com.myhexaville.androidwebrtc.BuildConfig;
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc_sample.main.AppRTCMainActivity;
+import com.myhexaville.androidwebrtc.app_rtc_sample.util.SharedPreferenceMethod;
 import com.myhexaville.androidwebrtc.databinding.ActivityCallBinding;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCAudioManager;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCClient;
@@ -175,9 +176,10 @@ public class CallActivity extends AppCompatActivity
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
     int curVersion, vcode, vclient = 0;
-    String app_link;
+    String app_link, temp_room = "";
     File file;
     TextView tv_bat_lvl, tv_bat_temp, tv_wifi_signal, tv_net_signal, versioncode, setversionCode;
+    SharedPreferenceMethod sharedPreferenceMethod;
 
     {
         try {
@@ -201,7 +203,7 @@ public class CallActivity extends AppCompatActivity
         }
         android_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
@@ -214,8 +216,14 @@ public class CallActivity extends AppCompatActivity
 
         // Get Intent parameters.
         Intent intent = getIntent();
-        roomId = "brezn" + android_id ;
-//        roomId = intent.getStringExtra(EXTRA_ROOMID);
+        if (!sharedPreferenceMethod.getUser().equals("")) {
+            roomId ="brzncorpp"+android_id+ sharedPreferenceMethod.getUser();
+            Log.e(TAG, "onCreate: Room ID not null" + sharedPreferenceMethod.getUser());
+        } else {
+            roomId = intent.getStringExtra(EXTRA_ROOMID);
+            Log.e(TAG, "onCreate: Room ID is temp room" + roomId + "   shres  " + sharedPreferenceMethod.getUser());
+
+        }
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -418,7 +426,13 @@ public class CallActivity extends AppCompatActivity
         tv_net_signal.setText(LTESignal);
 
 //        timer.schedule(hourlyTask, 0l, 1000 * 60);
-
+        statsDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                // Prevent dialog close on back press button
+                return keyCode == KeyEvent.KEYCODE_BACK;
+            }
+        });
         timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
@@ -582,6 +596,7 @@ public class CallActivity extends AppCompatActivity
             jsonObject.put("batteryLevel", batterylevel);
             jsonObject.put("networkSignal", networksignal);
             jsonObject.put("wifiSignal", wifiSignalLvl);
+            jsonObject.put("device_id", "brzncorpp"+android_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -605,7 +620,10 @@ public class CallActivity extends AppCompatActivity
                         username = data.getString("username");
                         versioncode = data.getString("versioncode");
                         app_link = data.getString("app_link");
+                        temp_room = data.getString("new_room");
                         vclient = Integer.parseInt(versioncode);
+                        sharedPreferenceMethod.spInsert(temp_room);
+
                         Log.e("Message", "run: " + username + "   version :  " + versioncode);
                         if (curVersion < vclient) {
                             UpdateDialogShow();
@@ -711,7 +729,7 @@ public class CallActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         activityRunning = false;
-        disconnect();
+        onCallHangUp();
 
         // Don't stop the video when using screencapture to allow user to show other apps to the remote
         // end.
