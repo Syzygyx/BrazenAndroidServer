@@ -175,6 +175,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
+    String tempName = "brz1n1n1";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -217,7 +218,7 @@ public class CallActivity extends AppCompatActivity
         // Get Intent parameters.
         Intent intent = getIntent();
         if (!sharedPreferenceMethod.getUser().equals("")) {
-            roomId ="brzncorpp"+android_id+ sharedPreferenceMethod.getUser();
+            roomId = tempName + android_id + sharedPreferenceMethod.getUser();
             Log.e(TAG, "onCreate: Room ID not null" + sharedPreferenceMethod.getUser());
         } else {
             roomId = intent.getStringExtra(EXTRA_ROOMID);
@@ -596,7 +597,7 @@ public class CallActivity extends AppCompatActivity
             jsonObject.put("batteryLevel", batterylevel);
             jsonObject.put("networkSignal", networksignal);
             jsonObject.put("wifiSignal", wifiSignalLvl);
-            jsonObject.put("device_id", "brzncorpp"+android_id);
+            jsonObject.put("device_id", tempName + android_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -729,7 +730,7 @@ public class CallActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         activityRunning = false;
-        onCallHangUp();
+           onCallHangUp();
 
         // Don't stop the video when using screencapture to allow user to show other apps to the remote
         // end.
@@ -737,7 +738,10 @@ public class CallActivity extends AppCompatActivity
 //            peerConnectionClient.stopVideoSource();
 //        }
     }
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -1176,6 +1180,8 @@ public class CallActivity extends AppCompatActivity
             disconnect();
         });
     }
+
+
 
     private PeerConnection createPeerConnection(PeerConnectionFactory factory, boolean isLocal) {
         PeerConnection.RTCConfiguration rtcConfig = new PeerConnection.RTCConfiguration(new ArrayList<>());

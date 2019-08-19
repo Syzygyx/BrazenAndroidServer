@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -96,7 +97,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
 
         random = new Random().nextInt((max - min) + 1) + min;
-        roomID = "brzncorpp"+Settings.Secure.getString(this.getContentResolver(),
+        roomID = "brz1n1n1" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 //        if (haveNetworkConnection()) {
 //            connect();
@@ -167,12 +168,16 @@ public class AppRTCMainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
-
-        if (haveNetworkConnection()) {
-            connect();
-        } else {
-            showConnectionError();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isInteractive();
+        if (isScreenOn) {
+            if (haveNetworkConnection()) {
+                connect();
+            } else {
+                showConnectionError();
+            }
         }
+
         super.onResume();
     }
 }
