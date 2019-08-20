@@ -175,7 +175,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "brz1n1n1";
+    String tempName = "brz1n1n21";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -730,7 +730,7 @@ public class CallActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         activityRunning = false;
-           onCallHangUp();
+        onCallHangUp();
 
         // Don't stop the video when using screencapture to allow user to show other apps to the remote
         // end.
@@ -738,10 +738,12 @@ public class CallActivity extends AppCompatActivity
 //            peerConnectionClient.stopVideoSource();
 //        }
     }
+
     @Override
     protected void onStop() {
         super.onStop();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -803,6 +805,9 @@ public class CallActivity extends AppCompatActivity
         public void onReceive(Context ctxt, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             batLevel = level + "%";
+            if (level < 20) {
+                Toast.makeText(CallActivity.this, "Battery low, charge device to continue.", Toast.LENGTH_SHORT).show();
+            }
             getWifiSignal();
 
         }
@@ -1180,7 +1185,6 @@ public class CallActivity extends AppCompatActivity
             disconnect();
         });
     }
-
 
 
     private PeerConnection createPeerConnection(PeerConnectionFactory factory, boolean isLocal) {
