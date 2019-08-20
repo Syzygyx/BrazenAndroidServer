@@ -575,8 +575,8 @@ public class CallActivity extends AppCompatActivity
     public void sendMessage(String lati, String longi, String batteryTemp, String batterylevel, String networksignal, String wifiSignalLvl) {
         Log.e(TAG, "sendMessage: LTE" + LTESignal);
         if (lati.equals("") && longi.equals("")) {
-            lati = "39.124032";
-            longi = "-104.880821";
+            lati = "0.0";
+            longi = "0.0";
         }
         if (LTESignal == null) {
             LTESignal = "No Signal";
