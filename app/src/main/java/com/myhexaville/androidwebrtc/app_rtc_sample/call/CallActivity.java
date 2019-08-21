@@ -175,7 +175,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "brz1n1n21";
+    String tempName = "brzen1n2";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -189,6 +189,8 @@ public class CallActivity extends AppCompatActivity
         }
     }
 
+
+    @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -210,6 +212,15 @@ public class CallActivity extends AppCompatActivity
             String version = pInfo.versionName;
             curVersion = pInfo.versionCode;
             vcode = pInfo.versionCode;
+            final LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+            location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+//                Toast.makeText(CallActivity.this, "\nLongitute" +location.getLatitude() +"\n Latitude"+ location.getLongitude(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Location: \n Latitude" + location.getLatitude() + "\nLongitute" + location.getLongitude());
+
+            }
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -995,6 +1006,7 @@ public class CallActivity extends AppCompatActivity
 //                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             if (isNetworkEnabled) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 10, this);
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (location != null) {
                     lastLat = location.getLatitude() + "";
