@@ -175,7 +175,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "brzen1n2";
+    String tempName = "2brzn1";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -1084,13 +1084,6 @@ public class CallActivity extends AppCompatActivity
         runOnUiThread(() -> {
             if (!isError) {
                 isError = true;
-//                if(description.equals("Room response error: FULL")){
-//                    ((WebSocketRTCClient) appRtcClient).sendPostMessage(WebSocketRTCClient.MessageType.LEAVE, "https://appr.tc/leave/" + roomId + "/"+signalingParameters.clientId, null);
-//
-//                }
-//                WebSocketRTCClient wsrtc = new WebSocketRTCClient();
-//                wsrtc.sendPostMessage(WebSocketRTCClient.MessageType.LEAVE, leaveUrl, null);
-
 
                 disconnectWithErrorMessage(description);
             }
@@ -1254,30 +1247,6 @@ public class CallActivity extends AppCompatActivity
             public void onDataChannel(DataChannel dataChannel) {
                 Log.d(TAG, "onDataChannel: is local: " + isLocal + " , state: " + dataChannel.state());
 
-//                dataChannel.registerObserver(new DataChannel.Observer() {
-//                    @Override
-//                    public void onBufferedAmountChange(long l) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onStateChange() {
-//                        Log.d(TAG, "onStateChange: remote data channel state: " + dataChannel.state().toString());
-//                    }
-//
-//                    @Override
-//                    public void onMessage(DataChannel.Buffer buffer) {
-//                        Log.d(TAG, "onMessage: got message");
-//                        Toast.makeText(CallActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-////                        String message = byteBufferToString(buffer.data, Charset.defaultCharset());
-////                        Log.d(TAG, "onMessage2: " + message);
-////                        runOnUiThread(() -> binding.text.setText(message));
-////                        Toast.makeText(CallActivity.this, "" + message, Toast.LENGTH_SHORT).show();
-////                        readIncomingMessage(buffer.data);
-//                    }
-//
-//
-//                });
             }
 
             @Override
