@@ -175,7 +175,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "2brzn1";
+    String tempName = "br1zn02abb";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -375,10 +375,8 @@ public class CallActivity extends AppCompatActivity
                 install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 Uri newuri = FileProvider.getUriForFile(CallActivity.this, getPackageName() + ".fileprovider", file);
-                install.setDataAndType(newuri,
-                        manager.getMimeTypeForDownloadedFile(downloadId));
+                install.setDataAndType(newuri,manager.getMimeTypeForDownloadedFile(downloadId));
                 disconnect();
-
                 startActivity(install);
                 unregisterReceiver(this);
                 finish();
@@ -868,7 +866,7 @@ public class CallActivity extends AppCompatActivity
                 LTESignal = "Low";
                 Log.e("OUT ", "LTE signal strength: " + LTESignal);
 
-            } else if (LTESingalStrength < -90 && LTESingalStrength >= -110) {
+            } else if (LTESingalStrength < -90 && LTESingalStrength >= -120) {
                 LTESignal = "Very Low";
                 Log.e("OUT ", "LTE signal strength: " + LTESignal);
 
