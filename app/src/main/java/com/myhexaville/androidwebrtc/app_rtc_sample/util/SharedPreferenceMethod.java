@@ -25,8 +25,16 @@ public class SharedPreferenceMethod {
     public String getUser() {
         SharedPreferences sp = context.getSharedPreferences("BrazenServer", Context.MODE_PRIVATE);
         return sp.getString("newroom", "");
-
     }
-
+    public String getpermanentRoomId() {
+        SharedPreferences sp = context.getSharedPreferences("BrazenServerRoom", Context.MODE_PRIVATE);
+        return sp.getString("permanent_room", "");
+    }
+    public void permanentRoomId(String roomId) {
+        SharedPreferences sp = context.getSharedPreferences("BrazenServerRoom", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        sp_editior.putString("permanent_room", roomId);
+        sp_editior.commit();
+    }
 
 }

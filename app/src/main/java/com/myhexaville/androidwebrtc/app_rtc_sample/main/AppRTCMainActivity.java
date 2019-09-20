@@ -97,13 +97,14 @@ public class AppRTCMainActivity extends AppCompatActivity {
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
 
         random = new Random().nextInt((max - min) + 1) + min;
-        roomID = "br1zn02abb" + Settings.Secure.getString(this.getContentResolver(),
+        roomID = "br1zn" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 //        if (haveNetworkConnection()) {
 //            connect();
 //        } else {
 //            showConnectionError();
 //        }
+        sharedPreferenceMethod.permanentRoomId(roomID);
 
     }
 
@@ -134,7 +135,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
     private void connect() {
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            connectToRoom(roomID);
+            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
         } else {
             EasyPermissions.requestPermissions(this, "Need some permissions", RC_CALL, perms);
         }

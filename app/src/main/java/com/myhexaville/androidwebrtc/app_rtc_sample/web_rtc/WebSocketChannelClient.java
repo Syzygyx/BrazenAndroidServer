@@ -38,7 +38,7 @@ import de.tavendo.autobahn.WebSocketException;
 
 public class WebSocketChannelClient {
     private static final String TAG = "WSChannelRTCClient";
-    private static final int CLOSE_TIMEOUT = 1000;
+    private static final int CLOSE_TIMEOUT = 5000;
     private final WebSocketChannelEvents events;
     private final Handler handler;
     private WebSocketConnection ws;

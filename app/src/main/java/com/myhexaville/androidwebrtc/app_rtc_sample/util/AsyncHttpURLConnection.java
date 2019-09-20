@@ -22,7 +22,7 @@ import java.util.Scanner;
  * Asynchronous http requests implementation.
  */
 public class AsyncHttpURLConnection {
-    private static final int HTTP_TIMEOUT_MS = 1000;
+    private static final int HTTP_TIMEOUT_MS = 5000;
     private static final String HTTP_ORIGIN = "https://appr.tc";
     private final String method;
     private final String url;
