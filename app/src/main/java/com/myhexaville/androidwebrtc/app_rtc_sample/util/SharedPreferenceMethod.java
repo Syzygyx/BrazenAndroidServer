@@ -21,7 +21,16 @@ public class SharedPreferenceMethod {
         sp_editior.putString("newroom", newroom);
         sp_editior.commit();
     }
-
+    public void spNewRoomError(String newroom) {
+        SharedPreferences sp = context.getSharedPreferences("BrazenServer", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        sp_editior.putString("newroom_err", newroom);
+        sp_editior.commit();
+    }
+    public String getNewRoomError() {
+        SharedPreferences sp = context.getSharedPreferences("BrazenServer", Context.MODE_PRIVATE);
+        return sp.getString("newroom_err", "");
+    }
     public String getUser() {
         SharedPreferences sp = context.getSharedPreferences("BrazenServer", Context.MODE_PRIVATE);
         return sp.getString("newroom", "");

@@ -45,6 +45,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.telecom.Call;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
 import android.telephony.PhoneStateListener;
@@ -68,7 +69,6 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.google.zxing.WriterException;
 import com.myhexaville.androidwebrtc.BuildConfig;
 import com.myhexaville.androidwebrtc.R;
-import com.myhexaville.androidwebrtc.app_rtc_sample.main.AppRTCMainActivity;
 import com.myhexaville.androidwebrtc.app_rtc_sample.util.SharedPreferenceMethod;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCAudioManager;
 import com.myhexaville.androidwebrtc.app_rtc_sample.web_rtc.AppRTCClient;
@@ -170,7 +170,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "br1zn";
+    String tempName = "brezn";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -225,17 +225,20 @@ public class CallActivity extends AppCompatActivity
 
         // Get Intent parameters.
         Intent intent = getIntent();
-        Log.e(TAG, "onCreate: check Intent" + "\n" + intent.getStringExtra(EXTRA_ROOMID));
+//        Log.e(TAG, "onCreate: check Intent" + "\n" + intent.getStringExtra(EXTRA_ROOMID));
 
         if (intent.getStringExtra(EXTRA_ROOMID).equals("false")) {
             roomId = sharedPreferenceMethod.getpermanentRoomId();
             Log.e(TAG, "onCreate: Room ID getpermanentRoomId ");
+        } if(intent.getStringExtra(EXTRA_ROOMID).equals("clientsocket")){
+            roomId = tempName + android_id + sharedPreferenceMethod.getNewRoomError();
+            sharedPreferenceMethod.permanentRoomId(tempName + android_id);
+            Log.e(TAG, "onCreate: Room ID random" + sharedPreferenceMethod.getUser());
         } else {
             roomId = tempName + android_id + sharedPreferenceMethod.getUser();
             sharedPreferenceMethod.permanentRoomId(tempName + android_id);
             Log.e(TAG, "onCreate: Room ID random" + sharedPreferenceMethod.getUser());
         }
-
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -304,6 +307,8 @@ public class CallActivity extends AppCompatActivity
 
         // Register the listener for the telephony manager
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        socketIO();
+
 
     }
 
@@ -526,7 +531,7 @@ public class CallActivity extends AppCompatActivity
     }
 
     private void socketIO() {
-        Username = sharedPreferenceMethod.getpermanentRoomId()+"brezen";
+        Username = sharedPreferenceMethod.getpermanentRoomId() + "brezen";
         if (hasConnection) {
 
         } else {
@@ -535,17 +540,17 @@ public class CallActivity extends AppCompatActivity
             mSocket.on("jsondata", onNewMessage);
             mSocket.on("new_apk", onNewUpdate);
             mSocket.on("new_room", onNewRoom);
+            mSocket.on("new_room_client", onNewRoomClient);
 
             JSONObject userId = new JSONObject();
             try {
                 userId.put("connected", Username + " Connected");
                 mSocket.emit("connect user", userId);
-//                sendData();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     void sendData() {
@@ -559,37 +564,36 @@ public class CallActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         Log.e("Socket Emit ROOM", "sendMessage: " + mSocket.emit("new_room", jsonObject));
     }
 
-    //    TimerTask hourlyTask = new TimerTask() {
-//        @Override
-//        public void run() {
-//            Log.e(TAG, "sendMessage: " + "TimeTask started! ");
-//
-//            runOnUiThread(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//                    Log.e(TAG, "run: Thread");
-//                    tv_bat_lvl.setText(batLevel);
-//                    tv_bat_temp.setText(batteryTemperature);
-//                    tv_wifi_signal.setText(wifiSignalLevel);
-//                    if (LTESignal == null) {
-//                        LTESignal = "No Signal";
-//                        tv_net_signal.setText(LTESignal);
-//                    } else {
-//                        tv_net_signal.setText(LTESignal);
-//
-//                    }
-//                    sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-//                    // Stuff that updates the UI
-//
-//                }
-//            });
-//        }
-//    };
+        /*TimerTask hourlyTask = new TimerTask() {
+        @Override
+        public void run() {
+            Log.e(TAG, "sendMessage: " + "TimeTask started! ");
+
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Log.e(TAG, "run: Thread");
+                    tv_bat_lvl.setText(batLevel);
+                    tv_bat_temp.setText(batteryTemperature);
+                    tv_wifi_signal.setText(wifiSignalLevel);
+                    if (LTESignal == null) {
+                        LTESignal = "No Signal";
+                        tv_net_signal.setText(LTESignal);
+                    } else {
+                        tv_net_signal.setText(LTESignal);
+
+                    }
+                    sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+                    // Stuff that updates the UI
+
+                }
+            });
+        }
+    };*/
     private static String getRandomString(final int sizeOfRandomString) {
         final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
 
@@ -609,7 +613,6 @@ public class CallActivity extends AppCompatActivity
         if (LTESignal == null) {
             LTESignal = "No Signal";
         }
-        Log.e("jsondata", "Data to send: " + lati + " \n" + longi + " \n" + batteryTemp + " \n" + batterylevel + " \n" + networksignal + " \n" + wifiSignalLvl + "\n" + sharedPreferenceMethod.getpermanentRoomId());
 //        String message = textField.getText().toString().trim();
         if (TextUtils.isEmpty(lati)) {
             Log.e("sendMessage2", "sendMessage:2 " + lati);
@@ -631,6 +634,7 @@ public class CallActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.e("jsondata", "Data to send: " +jsonObject + "\n" + sharedPreferenceMethod.getpermanentRoomId());
 
         Log.e("Socket Emit", "sendMessage: 1 " + mSocket.emit("jsondata", jsonObject));
     }
@@ -643,7 +647,7 @@ public class CallActivity extends AppCompatActivity
                 public void run() {
                     Log.e("Receive", "run: " + args.length);
                     JSONObject data = (JSONObject) args[0];
-                    Log.e(TAG, "run: on new Message"+data );
+                    Log.e(TAG, "run: on new Message" + data);
 
                 }
             });
@@ -655,14 +659,45 @@ public class CallActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("Socket Room", "Room " + args.length);
+                    Log.e("Socket Room", "Room :" + args.length);
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     try {
                         username = data.getString("username");
                         String Room = data.getString("socket_room");
-                        sharedPreferenceMethod.spInsert(Room);
-                        Log.e("NEW SOCKET", "ROOM" + username + "  socket :  " + Room);
+                        sharedPreferenceMethod.spNewRoomError(Room);
+                        Log.e("NEW SOCKET", " SERVER ROOM" + username + "  socket :  " + Room);
+                        Intent intent = new Intent(CallActivity.this, CallActivity.class);
+                        intent.putExtra(EXTRA_ROOMID,"socket");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+//                        Toast.makeText(CallActivity.this, message, Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+            });
+        }
+    };
+    Emitter.Listener onNewRoomClient = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("Socket Room", "Room :" + args.length);
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    try {
+                        username = data.getString("username");
+                        String Room = data.getString("socket_room");
+                        sharedPreferenceMethod.spNewRoomError(Room);
+                        Log.e("NEW SOCKET", "CLIENT ROOM" + username + "  socket :  " + Room);
+                        Intent intent = new Intent(CallActivity.this, CallActivity.class);
+                        intent.putExtra(EXTRA_ROOMID,"clientsocket");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
 //                        Toast.makeText(CallActivity.this, message, Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -678,7 +713,7 @@ public class CallActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("Socket Room", "Room " + args.length);
+                    Log.e("Socket Room", "Room onUpdate" + args.length);
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     String versioncode;
@@ -691,7 +726,7 @@ public class CallActivity extends AppCompatActivity
                         vclient = Integer.parseInt(versioncode);
                         sharedPreferenceMethod.spInsert(temp_room);
 
-                        Log.e("MessagefromClient", "run: " + username + "   version :  " + versioncode);
+                        Log.e("MessagefromClient", "run: OnUpdate " + data);
                         if (curVersion < vclient) {
                             UpdateDialogShow();
 
@@ -846,7 +881,6 @@ public class CallActivity extends AppCompatActivity
         if (statsDialog.isShowing()) {
             statsDialog.dismiss();
         }
-
         activityRunning = false;
         rootEglBase.release();
         super.onDestroy();
@@ -855,8 +889,7 @@ public class CallActivity extends AppCompatActivity
         if (isFinishing()) {
             Log.e("Destroying", "onDestroy: ");
 
-
-            JSONObject userId = new JSONObject();
+            /*JSONObject userId = new JSONObject();
             try {
                 userId.put("username", Username + " DisConnected");
                 mSocket.emit("connect user", userId);
@@ -868,9 +901,8 @@ public class CallActivity extends AppCompatActivity
             mSocket.off("connect user", onNewUser);
             mSocket.off("jsondata", onNewMessage);
             mSocket.off("new_apk", onNewUpdate);
-            mSocket.off("new_room", onNewRoom);
+            mSocket.off("new_room", onNewRoom);*/
             Username = "";
-
         } else {
             Log.i("Destroying", "onDestroy: is rotating.....");
         }
@@ -926,7 +958,7 @@ public class CallActivity extends AppCompatActivity
 
             } else if (LTESingalStrength < -70 && LTESingalStrength >= -80) {
                 LTESignal = "Average";
-                Log.e("OUT ", "LTE signal strength: " + LTESignal);
+//                Log.e("OUT ", "LTE signal strength: " + LTESignal);
 
             } else if (LTESingalStrength < -80 && LTESingalStrength >= -90) {
                 LTESignal = "Low";
@@ -934,7 +966,7 @@ public class CallActivity extends AppCompatActivity
 
             } else if (LTESingalStrength < -90 && LTESingalStrength >= -120) {
                 LTESignal = "Very Low";
-                Log.e("OUT ", "LTE signal strength: " + LTESignal);
+//                Log.e("OUT ", "LTE signal strength: " + LTESignal);
 
             } else {
                 LTESignal = "No Signal";
@@ -1042,9 +1074,8 @@ public class CallActivity extends AppCompatActivity
     private void callConnected() {
 //        dialog.dismiss();
         Log.e("room==>", roomId);
-        socketIO();
         onToggleMic();
-        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
+//        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
 
         AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setMode(AudioManager.MODE_IN_CALL);
@@ -1100,7 +1131,6 @@ public class CallActivity extends AppCompatActivity
             appRtcClient.disconnectFromRoom();
             appRtcClient = null;
         }
-
         if (peerConnectionClient != null) {
             peerConnectionClient.close();
             peerConnectionClient = null;
@@ -1135,19 +1165,17 @@ public class CallActivity extends AppCompatActivity
         } else {
             new AlertDialog.Builder(this)
                     .setTitle(getText(R.string.channel_error_title))
-                    .setMessage(errorMessage)
+                    .setMessage("Something went wrong, please try again!")
                     .setCancelable(false)
                     .setNeutralButton(R.string.ok,
                             (dialog, id) -> {
-
                                 if (errorMessage.equals("Room response error: FULL") ||
                                         errorMessage.equals("Room IO error: " +
                                                 "java.io.IOException: Non-200 response when requesting" +
                                                 " TURN server from https://networktraversal.googleapis.com/v1alpha/iceconfig?key=AIzaSyARF6xu5eZUJmsFqT_aCRZIgdV5BiCavYU :" +
                                                 " HTTP/1.1 429 Too Many Requests")) {
                                     isConnectionError = true;
-                                    sendData();
-                                    roomId = sharedPreferenceMethod.getpermanentRoomId()+RandomString;
+                                    roomId = sharedPreferenceMethod.getpermanentRoomId() + RandomString;
                                     Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
                                     Log.e(TAG, "disconnectWithErrorMessage: Use permanent room ID");
                                 }
@@ -1391,7 +1419,6 @@ public class CallActivity extends AppCompatActivity
         runOnUiThread(() -> {
             iceConnected = true;
             callConnected();
-
         });
     }
 
@@ -1416,6 +1443,7 @@ public class CallActivity extends AppCompatActivity
         mSocket.off("jsondata", onNewMessage);
         mSocket.off("new_apk", onNewUpdate);
         mSocket.off("new_room", onNewRoom);
+        mSocket.off("new_room_client", onNewRoomClient);
 
         Username = "";
     }
@@ -1488,7 +1516,7 @@ public class CallActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         String loc = location.getLatitude() + " " + location.getLongitude();
-        Log.e(TAG, "onLocationChanged: " + loc);
+//        Log.e(TAG, "onLocationChanged: " + loc);
         lastLat = location.getLatitude() + "";
         lastLong = location.getLongitude() + "";
 
