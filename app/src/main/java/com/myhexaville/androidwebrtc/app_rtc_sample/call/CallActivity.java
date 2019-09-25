@@ -45,7 +45,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.telecom.Call;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
 import android.telephony.PhoneStateListener;
@@ -170,7 +169,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "brezn";
+    String tempName = "brezen";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -197,31 +196,35 @@ public class CallActivity extends AppCompatActivity
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_call);
+
         if (savedInstanceState != null) {
             hasConnection = savedInstanceState.getBoolean("hasConnection");
         }
         statsDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         android_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+
+
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
+
+
+        socketIO();
+
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
             curVersion = pInfo.versionCode;
             vcode = pInfo.versionCode;
             final LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
             location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
 //                Toast.makeText(CallActivity.this, "\nLongitute" +location.getLatitude() +"\n Latitude"+ location.getLongitude(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Location: \n Latitude" + location.getLatitude() + "\nLongitute" + location.getLongitude());
-
             }
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
 
         // Get Intent parameters.
         Intent intent = getIntent();
@@ -230,11 +233,18 @@ public class CallActivity extends AppCompatActivity
         if (intent.getStringExtra(EXTRA_ROOMID).equals("false")) {
             roomId = sharedPreferenceMethod.getpermanentRoomId();
             Log.e(TAG, "onCreate: Room ID getpermanentRoomId ");
-        } if(intent.getStringExtra(EXTRA_ROOMID).equals("clientsocket")){
+        }
+        if (intent.getStringExtra(EXTRA_ROOMID).equals("clientsocket")) {
             roomId = tempName + android_id + sharedPreferenceMethod.getNewRoomError();
             sharedPreferenceMethod.permanentRoomId(tempName + android_id);
-            Log.e(TAG, "onCreate: Room ID random" + sharedPreferenceMethod.getUser());
-        } else {
+            Log.e(TAG, "onCreate: Room ID random" + roomId);
+        }
+        if(intent.getStringExtra(EXTRA_ROOMID).equals("socket")){
+            roomId = tempName + android_id + sharedPreferenceMethod.getNewRoomError();
+            Log.e(TAG, "onCreate: Room ID random" + roomId);
+        }
+        else {
+//            sendData();
             roomId = tempName + android_id + sharedPreferenceMethod.getUser();
             sharedPreferenceMethod.permanentRoomId(tempName + android_id);
             Log.e(TAG, "onCreate: Room ID random" + sharedPreferenceMethod.getUser());
@@ -266,7 +276,7 @@ public class CallActivity extends AppCompatActivity
         binding.localVideoView.setZOrderMediaOverlay(true);
         binding.localVideoView.setEnableHardwareScaler(true);
         binding.remoteVideoView.setEnableHardwareScaler(true);
-        updateVideoView();
+//        updateVideoView();
 
 
         if (roomId == null || roomId.length() == 0) {
@@ -307,7 +317,6 @@ public class CallActivity extends AppCompatActivity
 
         // Register the listener for the telephony manager
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-        socketIO();
 
 
     }
@@ -376,6 +385,7 @@ public class CallActivity extends AppCompatActivity
                 install.setDataAndType(newuri, manager.getMimeTypeForDownloadedFile(downloadId));
                 disconnect();
                 startActivity(install);
+
                 unregisterReceiver(this);
                 finish();
             }
@@ -531,7 +541,7 @@ public class CallActivity extends AppCompatActivity
     }
 
     private void socketIO() {
-        Username = sharedPreferenceMethod.getpermanentRoomId() + "brezen";
+        Username = sharedPreferenceMethod.getpermanentRoomId();
         if (hasConnection) {
 
         } else {
@@ -544,7 +554,8 @@ public class CallActivity extends AppCompatActivity
 
             JSONObject userId = new JSONObject();
             try {
-                userId.put("connected", Username + " Connected");
+                userId.put("connected", Username);
+                userId.put("userType", "Server");
                 mSocket.emit("connect user", userId);
 
             } catch (JSONException e) {
@@ -594,6 +605,7 @@ public class CallActivity extends AppCompatActivity
             });
         }
     };*/
+
     private static String getRandomString(final int sizeOfRandomString) {
         final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
 
@@ -634,7 +646,7 @@ public class CallActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("jsondata", "Data to send: " +jsonObject + "\n" + sharedPreferenceMethod.getpermanentRoomId());
+        Log.e("jsondata", "Data to send: " + jsonObject + "\n" + sharedPreferenceMethod.getpermanentRoomId());
 
         Log.e("Socket Emit", "sendMessage: 1 " + mSocket.emit("jsondata", jsonObject));
     }
@@ -666,12 +678,20 @@ public class CallActivity extends AppCompatActivity
                         username = data.getString("username");
                         String Room = data.getString("socket_room");
                         sharedPreferenceMethod.spNewRoomError(Room);
-                        Log.e("NEW SOCKET", " SERVER ROOM" + username + "  socket :  " + Room);
-                        Intent intent = new Intent(CallActivity.this, CallActivity.class);
-                        intent.putExtra(EXTRA_ROOMID,"socket");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-//                        Toast.makeText(CallActivity.this, message, Toast.LENGTH_SHORT).show();
+                        Log.e("NEW SOCKET", " SERVER ROOM " + username + "  socket :  " + Room);
+                        if (Room.equals(sharedPreferenceMethod.getpermanentRoomId())) {
+                            Log.e(TAG, "run: Server emit");
+
+                        } else {
+                            Intent intent = new Intent(CallActivity.this, CallActivity.class);
+                            intent.putExtra(EXTRA_ROOMID, "socket");
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+                        }
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         return;
@@ -692,13 +712,14 @@ public class CallActivity extends AppCompatActivity
                     try {
                         username = data.getString("username");
                         String Room = data.getString("socket_room");
-                        sharedPreferenceMethod.spNewRoomError(Room);
-                        Log.e("NEW SOCKET", "CLIENT ROOM" + username + "  socket :  " + Room);
-                        Intent intent = new Intent(CallActivity.this, CallActivity.class);
-                        intent.putExtra(EXTRA_ROOMID,"clientsocket");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+//                        sharedPreferenceMethod.spNewRoomError(Room);
+//                        Log.e("NEW SOCKET", "CLIENT ROOM" + username + "  socket :  " + Room);
+//                        Intent intent = new Intent(CallActivity.this, CallActivity.class);
+//                        intent.putExtra(EXTRA_ROOMID,"clientsocket");
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        startActivity(intent);
 //                        Toast.makeText(CallActivity.this, message, Toast.LENGTH_SHORT).show();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         return;
@@ -753,8 +774,7 @@ public class CallActivity extends AppCompatActivity
                     if (length == 0) {
                         return;
                     }
-                    //Here i'm getting weird error..................///////run :1 and run: 0
-                    Log.e("RUN", "run: " + args.length);
+
                     String username = args[0].toString();
                     try {
                         JSONObject object = new JSONObject(username);
@@ -765,16 +785,14 @@ public class CallActivity extends AppCompatActivity
                             if (isNetworkEnabled) {
                                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                                 if (location != null) {
+
 //                                Toast.makeText(CallActivity.this, location.getLatitude() + location.getLongitude() + "", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "onNewUser: " + location.getLatitude() + location.getLongitude());
 
                                 }
                             } else {
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
 //                                Toast.makeText(CallActivity.this, location.getLatitude() + location.getLongitude() + "", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "onNewUser: " + location.getLatitude() + location.getLongitude());
-
                                 }
                             }
 
@@ -1148,10 +1166,11 @@ public class CallActivity extends AppCompatActivity
             setResult(RESULT_CANCELED);
         }
         if (isConnectionError) {
-            sendData();
             Intent intent = new Intent(CallActivity.this, CallActivity.class);
             intent.putExtra(EXTRA_ROOMID, "false");
             startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
             isConnectionError = false;
         } else {
             finish();
@@ -1163,27 +1182,29 @@ public class CallActivity extends AppCompatActivity
             Log.e(LOG_TAG, "Critical error: " + errorMessage);
             disconnect();
         } else {
-            new AlertDialog.Builder(this)
-                    .setTitle(getText(R.string.channel_error_title))
-                    .setMessage("Something went wrong, please try again!")
-                    .setCancelable(false)
-                    .setNeutralButton(R.string.ok,
-                            (dialog, id) -> {
-                                if (errorMessage.equals("Room response error: FULL") ||
-                                        errorMessage.equals("Room IO error: " +
-                                                "java.io.IOException: Non-200 response when requesting" +
-                                                " TURN server from https://networktraversal.googleapis.com/v1alpha/iceconfig?key=AIzaSyARF6xu5eZUJmsFqT_aCRZIgdV5BiCavYU :" +
-                                                " HTTP/1.1 429 Too Many Requests")) {
-                                    isConnectionError = true;
-                                    roomId = sharedPreferenceMethod.getpermanentRoomId() + RandomString;
-                                    Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "disconnectWithErrorMessage: Use permanent room ID");
-                                }
-                                dialog.cancel();
-                                disconnect();
-                            })
-                    .create()
-                    .show();
+            sendData();
+
+//            new AlertDialog.Builder(this)
+//                    .setTitle(getText(R.string.channel_error_title))
+//                    .setMessage("Something went wrong, please try again!")
+//                    .setCancelable(false)
+//                    .setNeutralButton(R.string.ok,
+//                            (dialog, id) -> {
+//                                if (errorMessage.equals("Room response error: FULL") ||
+//                                        errorMessage.equals("Room IO error: " +
+//                                                "java.io.IOException: Non-200 response when requesting" +
+//                                                " TURN server from https://networktraversal.googleapis.com/v1alpha/iceconfig?key=AIzaSyARF6xu5eZUJmsFqT_aCRZIgdV5BiCavYU :" +
+//                                                " HTTP/1.1 429 Too Many Requests")) {
+//                                    isConnectionError = true;
+//                                    roomId = sharedPreferenceMethod.getpermanentRoomId() + RandomString;
+//                                    Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
+//                                    Log.e(TAG, "disconnectWithErrorMessage: Use permanent room ID");
+//                                }
+//                                dialog.cancel();
+//                                disconnect();
+//                            })
+//                    .create()
+//                    .show();
         }
     }
 
