@@ -65,7 +65,7 @@
             android:name="com.myhexaville.androidwebrtc.app_rtc_sample.call.CallActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="fullUser"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.Call" />
 
         <provider
@@ -80,9 +80,10 @@
 
         <activity
             android:name="com.myhexaville.androidwebrtc.app_rtc_sample.main.AppRTCMainActivity"
+            android:configChanges="orientation|screenSize"
             android:label="Brazen Monitor"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:stateNotNeeded="true"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>

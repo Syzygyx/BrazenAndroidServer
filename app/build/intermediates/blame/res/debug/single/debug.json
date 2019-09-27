@@ -208,6 +208,10 @@
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\1d20999ba102f9964060f1a47a3110b2\\res\\animator\\mtrl_chip_state_list_anim.xml"
     },
     {
+        "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\anim_fade_out.xml.flat",
+        "source": "E:\\Projects\\BrazenAndroidServerNew\\app\\src\\main\\res\\anim\\fade_out.xml"
+    },
+    {
         "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21_notification_action.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\85d3d5d22564133ccb889ae6818755df\\res\\layout-v21\\notification_action.xml"
     },
@@ -482,6 +486,10 @@
     {
         "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21_abc_action_bar_item_background_material.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\0743bbd977659b014bb4aa59b9210b64\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\anim_slide_up.xml.flat",
+        "source": "E:\\Projects\\BrazenAndroidServerNew\\app\\src\\main\\res\\anim\\slide_up.xml"
     },
     {
         "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_scrubber_control_off_mtrl_alpha.png.flat",
@@ -984,6 +992,10 @@
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\0743bbd977659b014bb4aa59b9210b64\\res\\layout\\abc_action_bar_title_item.xml"
     },
     {
+        "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\anim_fade_in.xml.flat",
+        "source": "E:\\Projects\\BrazenAndroidServerNew\\app\\src\\main\\res\\anim\\fade_in.xml"
+    },
+    {
         "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_item_background_holo_dark.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\0743bbd977659b014bb4aa59b9210b64\\res\\drawable\\abc_item_background_holo_dark.xml"
     },
@@ -1422,6 +1434,10 @@
     {
         "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_foreground.png.flat",
         "source": "E:\\Projects\\BrazenAndroidServerNew\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\anim_slide_down.xml.flat",
+        "source": "E:\\Projects\\BrazenAndroidServerNew\\app\\src\\main\\res\\anim\\slide_down.xml"
     },
     {
         "merged": "E:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
