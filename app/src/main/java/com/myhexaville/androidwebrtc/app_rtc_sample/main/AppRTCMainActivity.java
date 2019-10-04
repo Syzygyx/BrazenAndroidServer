@@ -97,7 +97,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
 
         random = new Random().nextInt((max - min) + 1) + min;
-        roomID = "brezen" + Settings.Secure.getString(this.getContentResolver(),
+        roomID = "brezn" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 //        if (haveNetworkConnection()) {
 //            connect();

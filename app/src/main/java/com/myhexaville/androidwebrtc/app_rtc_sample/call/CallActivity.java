@@ -169,7 +169,7 @@ public class CallActivity extends AppCompatActivity
     private final static String LTE_SIGNAL_STRENGTH = "getLteSignalStrength";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "brezen";
+    String tempName = "brezn";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
