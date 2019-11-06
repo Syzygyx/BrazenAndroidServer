@@ -1,4 +1,7 @@
-#Tue Oct 01 16:38:59 IST 2019
-base.0=E\:\\Projects\\BrazenAndroidServerNew\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+#Wed Nov 06 15:52:48 IST 2019
+base.0=C\:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.1=classes.dex
+renamed.1=classes2.dex
 path.0=classes.dex
 renamed.0=classes.dex
+base.1=C\:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\1

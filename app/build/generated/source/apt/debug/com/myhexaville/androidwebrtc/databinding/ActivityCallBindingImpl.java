@@ -48,9 +48,9 @@ public class ActivityCallBindingImpl extends ActivityCallBinding  {
             , (android.widget.SeekBar) bindings[12]
             , (android.widget.TextView) bindings[11]
             , (android.widget.TextView) bindings[6]
-            , (com.myhexaville.androidwebrtc.app_rtc_sample.view.PercentFrameLayout) bindings[3]
+            , (com.myhexaville.androidwebrtc.app_rtc.view.PercentFrameLayout) bindings[3]
             , (org.webrtc.SurfaceViewRenderer) bindings[4]
-            , (com.myhexaville.androidwebrtc.app_rtc_sample.view.PercentFrameLayout) bindings[1]
+            , (com.myhexaville.androidwebrtc.app_rtc.view.PercentFrameLayout) bindings[1]
             , (org.webrtc.SurfaceViewRenderer) bindings[2]
             );
         this.mboundView0 = (android.widget.RelativeLayout) bindings[0];

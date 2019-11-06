@@ -1090,6 +1090,7 @@ drawable design_password_eye
 drawable design_snackbar_background
 drawable disconnect
 drawable hot
+drawable ic_arrow_back
 drawable ic_battery_80_black_24dp
 drawable ic_clear_all_white_24dp
 drawable ic_launcher_background
@@ -1254,6 +1255,7 @@ id listMode
 id list_item
 id local_video_layout
 id local_video_view
+id lteSignals
 id masked
 id media_actions
 id message
@@ -1325,6 +1327,7 @@ id showCustom
 id showHome
 id showTitle
 id show_error
+id signals
 id smallLabel
 id snackbar_action
 id snackbar_text

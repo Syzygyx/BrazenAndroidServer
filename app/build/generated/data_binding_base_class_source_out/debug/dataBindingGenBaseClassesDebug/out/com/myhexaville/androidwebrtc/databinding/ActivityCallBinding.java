@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import com.myhexaville.androidwebrtc.app_rtc_sample.view.PercentFrameLayout;
+import com.myhexaville.androidwebrtc.app_rtc.view.PercentFrameLayout;
 import org.webrtc.SurfaceViewRenderer;
 
 public abstract class ActivityCallBinding extends ViewDataBinding {

@@ -10,6 +10,7 @@
         android:weightSum="1">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/room_edittext_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,6 +24,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:visibility="invisible"
                 android:id="@+id/room_edittext"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -32,6 +34,7 @@
                 android:singleLine="true" />
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/connect_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
