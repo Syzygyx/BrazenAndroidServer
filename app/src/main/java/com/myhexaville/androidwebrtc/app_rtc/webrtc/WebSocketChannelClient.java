@@ -239,7 +239,7 @@ public class WebSocketChannelClient {
             throw new IllegalStateException("WebSocket method is not called on valid thread");
         }
     }
-
+//   websocket observer  to get room
     private class WebSocketObserver implements WebSocketConnectionObserver {
         @Override
         public void onOpen() {

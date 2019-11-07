@@ -155,8 +155,7 @@ public class CallActivity extends AppCompatActivity
     private static final String TAG = "SampleDataChannelAct";
     private RoomConnectionParameters roomConnectionParameters;
     private PeerConnectionParameters peerConnectionParameters;
-    private PeerConnectionFactory factory;
-    private boolean iceConnected;
+   private boolean iceConnected;
     private boolean isError;
     Dialog statsDialog;
     private long callStartedTimeMs;
@@ -211,16 +210,21 @@ public class CallActivity extends AppCompatActivity
         if (savedInstanceState != null) {
             hasConnection = savedInstanceState.getBoolean("hasConnection");
         }
+//        stats Dialog initialize
         statsDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+
+//        get android ID for random room
         android_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-
+//        initialize shared preferences
         sharedPreferenceMethod = new SharedPreferencesMethod(this);
 
 
+//        Socket method call and initialization
         socketIO();
 
+//        get version code of app
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
@@ -240,7 +244,7 @@ public class CallActivity extends AppCompatActivity
         wifiCheck();
         // Get Intent parameters.
         Intent intent = getIntent();
-//        Log.e(TAG, "onCreate: check Intent" + "\n" + intent.getStringExtra(EXTRA_ROOMID));
+
 
         if (intent.getStringExtra(EXTRA_ROOMID).equals("false")) {
             roomId = sharedPreferenceMethod.getpermanentRoomId();
@@ -284,11 +288,9 @@ public class CallActivity extends AppCompatActivity
         rootEglBase = EglBase.create();
         binding.localVideoView.init(rootEglBase.getEglBaseContext(), null);
         binding.remoteVideoView.init(rootEglBase.getEglBaseContext(), null);
-
         binding.localVideoView.setZOrderMediaOverlay(true);
         binding.localVideoView.setEnableHardwareScaler(true);
         binding.remoteVideoView.setEnableHardwareScaler(true);
-//        updateVideoView();
 
         if (roomId == null || roomId.length() == 0) {
             Log.e(LOG_TAG, "Incorrect room ID in intent!");
@@ -309,7 +311,7 @@ public class CallActivity extends AppCompatActivity
         // Create connection parameters.
         roomConnectionParameters = new RoomConnectionParameters("https://appr.tc", roomId, false);
 
-
+//      listener for button
         setupListeners();
 
         peerConnectionClient = PeerConnectionClient.getInstance();
@@ -366,15 +368,15 @@ public class CallActivity extends AppCompatActivity
 
     }
 
-//    get wifilist to connect server to same network
+//    get wifi list to connect server to same network
     void wifiCheck() {
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
         wifiManager.startScan();
 
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
+//        wifi info and wifi SSID
         wifiInfo = wifiManager.getConnectionInfo();
         if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
             ssid = wifiInfo.getSSID();
@@ -401,6 +403,8 @@ public class CallActivity extends AppCompatActivity
         }
 
     }
+
+//    connect to wifi if available using network ssid and network password
     void connectToWifi(String networkSSID, String networkPass) {
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", networkSSID);
@@ -434,7 +438,6 @@ public class CallActivity extends AppCompatActivity
         String fileName = "serverupdate.apk";
         destination = destination + fileName;
         final Uri uri = Uri.parse("file://" + destination);
-
         //Delete update file if exists
         file = new File(destination);
         if (file.exists()) {
@@ -444,7 +447,7 @@ public class CallActivity extends AppCompatActivity
         //get url of app on server
         String url = app_link;
 
-        //set downloadmanager
+        //set download manager
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDescription("Update");
         request.setTitle("Brazen Monitor");
@@ -457,7 +460,6 @@ public class CallActivity extends AppCompatActivity
         final long downloadId = manager.enqueue(request);
 
         //set BroadcastReceiver to install app when .apk is downloaded
-
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 Intent install = new Intent(Intent.ACTION_VIEW);
@@ -575,7 +577,7 @@ public class CallActivity extends AppCompatActivity
             binding.buttonCallToggleMic.setAlpha(enabled ? 1.0f : 0.3f);
         });
     }
-
+//   if room id avialable connect server and start call
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != CAPTURE_PERMISSION_REQUEST_CODE) {
@@ -910,7 +912,7 @@ public class CallActivity extends AppCompatActivity
             connectivityManager.unregisterNetworkCallback(connectivityCallback);
             monitoringConnectivity = false;
         }
-        // Don't stop the video when using screencapture to allow user to show other apps to the remote
+        // Don't stop the video when using screen capture to allow user to show other apps to the remote
         // end.
 //        if (peerConnectionClient != null) {
 //            peerConnectionClient.stopVideoSource();
@@ -964,19 +966,6 @@ public class CallActivity extends AppCompatActivity
         if (isFinishing()) {
             Log.e("Destroying", "onDestroy: ");
 
-            /*JSONObject userId = new JSONObject();
-            try {
-                userId.put("username", Username + " DisConnected");
-                mSocket.emit("connect user", userId);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            mSocket.disconnect();
-            mSocket.off("connect user", onNewUser);
-            mSocket.off("jsondata", onNewMessage);
-            mSocket.off("new_apk", onNewUpdate);
-            mSocket.off("new_room", onNewRoom);*/
             Username = "";
         } else {
             Log.i("Destroying", "onDestroy: is rotating.....");
@@ -1160,10 +1149,11 @@ public class CallActivity extends AppCompatActivity
     }
 
 
+
     private void startCall() {
         callStartedTimeMs = System.currentTimeMillis();
-        // Start room connection.
 
+        // Start room connection.
         appRtcClient.connectToRoom(roomConnectionParameters);
 
         // Create and audio manager that will take care of audio routing,
@@ -1184,7 +1174,6 @@ public class CallActivity extends AppCompatActivity
     // Should be called from UI thread
     @SuppressLint("MissingPermission")
     private void callConnected() {
-//        dialog.dismiss();
         Log.e("room==>", roomId);
         onToggleMic();
 //        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
@@ -1198,7 +1187,7 @@ public class CallActivity extends AppCompatActivity
             Log.w(LOG_TAG, "Call is connected in closed or error state");
             return;
         }
-
+//      stats from watch(Brazen server app)
         showStats();
 
         // Update video view.
@@ -1207,8 +1196,6 @@ public class CallActivity extends AppCompatActivity
         peerConnectionClient.enableStatsEvents(true, STAT_CALLBACK_PERIOD);
 
         if (locationManager != null) {
-//            location = locationManager
-//                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             if (isNetworkEnabled) {
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 10, this);
@@ -1275,31 +1262,9 @@ public class CallActivity extends AppCompatActivity
             Log.e(LOG_TAG, "Critical error: " + errorMessage);
             disconnect();
         } else {
-
-
+//            send data to client app and send room id
             sendData();
-        //   error dialog
-        /*            new AlertDialog.Builder(this)
-                    .setTitle(getText(R.string.channel_error_title))
-                    .setMessage("Something went wrong, please try again!")
-                    .setCancelable(false)
-                    .setNeutralButton(R.string.ok,
-                            (dialog, id) -> {
-                                if (errorMessage.equals("Room response error: FULL") ||
-                                        errorMessage.equals("Room IO error: " +
-                                                "java.io.IOException: Non-200 response when requesting" +
-                                                " TURN server from https://networktraversal.googleapis.com/v1alpha/iceconfig?key=AIzaSyARF6xu5eZUJmsFqT_aCRZIgdV5BiCavYU :" +
-                                                " HTTP/1.1 429 Too Many Requests")) {
-                                    isConnectionError = true;
-                                    roomId = sharedPreferenceMethod.getpermanentRoomId() + RandomString;
-                                    Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "disconnectWithErrorMessage: Use permanent room ID");
-                                }
-                                dialog.cancel();
-                                disconnect();
-                            })
-                    .create()
-                    .show();*/
+
         }
     }
 

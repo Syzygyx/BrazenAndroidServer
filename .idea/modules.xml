@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BrazenAndroidServerNew.iml" filepath="$PROJECT_DIR$/BrazenAndroidServerNew.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BrazenAndroidServer-SRG-master.iml" filepath="$PROJECT_DIR$/BrazenAndroidServer-SRG-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/BrazenAndroidServer-SRG-master-app.iml" filepath="$PROJECT_DIR$/app/BrazenAndroidServer-SRG-master-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libwebrtc/BrazenAndroidServer-SRG-master-libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/BrazenAndroidServer-SRG-master-libwebrtc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libwebrtc/Desktop-BrazenAndroidServer-SRG-master-libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/Desktop-BrazenAndroidServer-SRG-master-libwebrtc.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/libwebrtc/libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/libwebrtc.iml" />
     </modules>

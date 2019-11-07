@@ -39,7 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myhexaville.androidwebrtc.R;
-import com.myhexaville.androidwebrtc.app_rtc.Utils.*;
+import com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod;
 import com.novoda.merlin.Connectable;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.MerlinsBeard;
@@ -92,11 +92,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
         roomID = "brezn" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-        /* if (haveNetworkConnection()) {
-            connect();
-        } else {
-            showConnectionError();
-        }*/
         sharedPreferenceMethod.permanentRoomId(roomID);
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -144,6 +139,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
     }
 
+    // check connectivity in onPause()
     @Override
     protected void onPause() {
         if (monitoringConnectivity) {
@@ -152,21 +148,27 @@ public class AppRTCMainActivity extends AppCompatActivity {
             connectivityManager.unregisterNetworkCallback(connectivityCallback);
             monitoringConnectivity = false;
         }
+//        stop merlin for checking connectivity
         merlin.unbind();
         super.onPause();
     }
 
+    //  check device is connected to internet or not
     private ConnectivityManager.NetworkCallback connectivityCallback
             = new ConnectivityManager.NetworkCallback() {
         @Override
         public void onAvailable(Network network) {
             isConnected = true;
+//            on network available  try to connect to server
             connect();
-            Log.e("ATAG", "INTERNET CONNECTED");
+            Log.e("INTERNET", "INTERNET CONNECTED");
         }
+
+//        on connection lost
         @Override
         public void onLost(Network network) {
             isConnected = false;
+//            show connection error dialog
             showConnectionError();
             Log.e("ATAG", "INTERNET LOST");
         }
@@ -210,7 +212,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
     }
 
-//    onConnection lost
+    //    onConnection lost
     public void showConnectionError() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
         dialog.setContentView(R.layout.showerror_conenction);
@@ -227,49 +229,33 @@ public class AppRTCMainActivity extends AppCompatActivity {
         });
     }
 
-    private static String getRandomString(final int sizeOfRandomString) {
-        final Random random = new Random();
-        final StringBuilder sb = new StringBuilder(sizeOfRandomString);
-        for (int i = 0; i < sizeOfRandomString; ++i)
-            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
-        return sb.toString();
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @AfterPermissionGranted(RC_CALL)
     private void connect() {
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
+//            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
+            Intent intent = new Intent(this, CallActivity.class);
+            intent.putExtra(EXTRA_ROOMID, sharedPreferenceMethod.getpermanentRoomId());
+            startActivityForResult(intent, CONNECTION_REQUEST);
         } else {
             EasyPermissions.requestPermissions(this, "Need some permissions", RC_CALL, perms);
         }
     }
 
 
-    private void connectToRoom(String roomId) {
-        Intent intent = new Intent(this, CallActivity.class);
-        intent.putExtra(EXTRA_ROOMID, roomId);
-        startActivityForResult(intent, CONNECTION_REQUEST);
-    }
-
+//    power manager for awake screen always when video is streaming
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
         Log.e("OnResume", "onResume: AppRTC");
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = pm.isInteractive();
+
+//        check connectivity if app is alive in foreground
         if (isScreenOn) {
-
             checkConnectivity();
-
-//            if (haveNetworkConnection()) {
-//                connect();
-//                new NetworkChangeReceiver();
-//            } else {
-//                showConnectionError();
-//                new NetworkChangeReceiver();
-//            }
         }
 
         super.onResume();

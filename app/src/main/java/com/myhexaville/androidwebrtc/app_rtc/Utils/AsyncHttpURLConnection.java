@@ -55,7 +55,7 @@ public class AsyncHttpURLConnection {
         Runnable runHttp = () -> sendHttpMessage();
         new Thread(runHttp).start();
     }
-
+//  sending http request make a connection
     private void sendHttpMessage() {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();

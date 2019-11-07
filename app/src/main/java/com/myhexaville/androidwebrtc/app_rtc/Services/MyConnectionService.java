@@ -24,7 +24,6 @@ public class MyConnectionService extends Service {
     public static String TAG_INTERVAL = "interval";
     public static String TAG_URL_PING = "url_ping";
     public static String TAG_ACTIVITY_NAME = "activity_name";
-
     private int interval;
     private String url_ping;
     private String activity_name;
@@ -51,19 +50,18 @@ public class MyConnectionService extends Service {
         interval = intent.getIntExtra(TAG_INTERVAL, 10);
         url_ping = intent.getStringExtra(TAG_URL_PING);
         activity_name = intent.getStringExtra(TAG_ACTIVITY_NAME);
-
+//      try connect app to internet
         try {
             mConnectionServiceCallback = (ConnectionServiceCallback) Class.forName(activity_name).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         mTimer = new Timer();
         mTimer.scheduleAtFixedRate(new CheckForConnection(), 0, interval * 1000);
 
         return super.onStartCommand(intent, flags, startId);
     }
-
+//  create timer to check connection
     class CheckForConnection extends TimerTask {
         @Override
         public void run() {
@@ -77,13 +75,14 @@ public class MyConnectionService extends Service {
         super.onDestroy();
     }
 
+//    check  if network availability
     private boolean isNetworkAvailable() {
         HttpGet httpGet = new HttpGet(url_ping);
         HttpParams httpParameters = new BasicHttpParams();
-
+//         set connection timeout
         int timeoutConnection = 5000;
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-
+//      set socket connection timeout
         int timeoutSocket = 7000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
