@@ -64,7 +64,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
     final int max = 99999;
     int random;
     TextView signalStrengthTxt;
-    private static final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
     String roomID;
     SharedPreferencesMethod sharedPreferenceMethod;
 
@@ -112,7 +111,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
             public void onConnect() {
 //                connect();
                 Log.e("Merlin", "onConnect: merlin connected!");
-                // Do something you haz internet!
+                // Do something you has internet!
             }
         });
 
@@ -126,7 +125,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
                 if (cellInfo instanceof CellInfoLte) {
                     // cast to CellInfoLte and call all the CellInfoLte methods you need
                     CellInfoLte ci = (CellInfoLte) cellInfo;
-                    Log.e("signallsss ", "LTE signal strength:  " + ci.getCellSignalStrength().getDbm());
                     LTESingalStrength = ci.getCellSignalStrength().getDbm();
                     signalStrengthTxt.setText("LTE Signal : " + LTESingalStrength + "dBm");
                     Log.e("signallsss ", "LTE signal  " + ci.getCellSignalStrength().getDbm());
@@ -164,7 +162,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
             Log.e("INTERNET", "INTERNET CONNECTED");
         }
 
-//        on connection lost
+        //        on connection lost
         @Override
         public void onLost(Network network) {
             isConnected = false;
@@ -244,12 +242,11 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
     }
 
-
-//    power manager for awake screen always when video is streaming
+    //    power manager for awake screen always when video is streaming
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
-        Log.e("OnResume", "onResume: AppRTC");
+
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = pm.isInteractive();
 

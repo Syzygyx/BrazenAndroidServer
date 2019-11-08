@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -74,7 +73,7 @@ import com.google.zxing.WriterException;
 import com.myhexaville.androidwebrtc.BuildConfig;
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc.Interface.OnCallEvents;
-import com.myhexaville.androidwebrtc.app_rtc.Utils.*;
+import com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod;
 import com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCAudioManager;
 import com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient;
 import com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient.RoomConnectionParameters;
@@ -91,12 +90,9 @@ import org.json.JSONObject;
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.Camera2Enumerator;
 import org.webrtc.CameraEnumerator;
-import org.webrtc.DataChannel;
 import org.webrtc.EglBase;
 import org.webrtc.IceCandidate;
 import org.webrtc.Logging;
-import org.webrtc.PeerConnection;
-import org.webrtc.PeerConnectionFactory;
 import org.webrtc.SessionDescription;
 import org.webrtc.StatsReport;
 import org.webrtc.VideoCapturer;
@@ -155,7 +151,7 @@ public class CallActivity extends AppCompatActivity
     private static final String TAG = "SampleDataChannelAct";
     private RoomConnectionParameters roomConnectionParameters;
     private PeerConnectionParameters peerConnectionParameters;
-   private boolean iceConnected;
+    private boolean iceConnected;
     private boolean isError;
     Dialog statsDialog;
     private long callStartedTimeMs;
@@ -195,6 +191,7 @@ public class CallActivity extends AppCompatActivity
         } catch (URISyntaxException e) {
         }
     }
+
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -341,7 +338,7 @@ public class CallActivity extends AppCompatActivity
         merlin = MerlinsBeard.from(this);
     }
 
-//    update server app
+    //    update server app
     void UpdateDialogShow() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
         dialog.setContentView(R.layout.update_dialog);
@@ -368,7 +365,7 @@ public class CallActivity extends AppCompatActivity
 
     }
 
-//    get wifi list to connect server to same network
+    //    get wifi list to connect server to same network
     void wifiCheck() {
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager.startScan();
@@ -404,7 +401,7 @@ public class CallActivity extends AppCompatActivity
 
     }
 
-//    connect to wifi if available using network ssid and network password
+    //    connect to wifi if available using network ssid and network password
     void connectToWifi(String networkSSID, String networkPass) {
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", networkSSID);
@@ -418,7 +415,7 @@ public class CallActivity extends AppCompatActivity
         wifiManager.reconnect();
     }
 
-//    wifi names list receiver
+    //    wifi names list receiver
     private final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context c, Intent intent) {
@@ -432,7 +429,7 @@ public class CallActivity extends AppCompatActivity
         }
     };
 
-//    update using apk
+    //    update using apk
     public void updateServerApk() {
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
         String fileName = "serverupdate.apk";
@@ -479,7 +476,7 @@ public class CallActivity extends AppCompatActivity
 
     }
 
-//    wifi signal level
+    //    wifi signal level
     private void getWifiSignal() {
         WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int numberOfLevels = 5;
@@ -489,29 +486,24 @@ public class CallActivity extends AppCompatActivity
         if (level <= 5 && level >= 4) {
             //Best signal
             wifiSignalLevel = "Very Good";
-            Log.d(TAG, "getWifiSignal: " + level + "");
 
         } else if (level < 4 && level >= 3) {
             //Good signal
             wifiSignalLevel = "Good";
-            Log.d(TAG, "getWifiSignal: " + level + "");
         } else if (level < 3 && level >= 2) {
             //Low signal
             wifiSignalLevel = "Low";
-            Log.d(TAG, "getWifiSignal: " + level + "");
 
         } else if (level < 2 && level >= 1) {
             //Very weak signal
             wifiSignalLevel = "Very Low";
-            Log.d(TAG, "getWifiSignal: " + level + "");
         } else {
             // no signals
             wifiSignalLevel = "No Wifi Signal";
-            Log.d(TAG, "getWifiSignal: " + level + "");
         }
     }
 
-//    showing stats on call connect
+    //    showing stats on call connect
     void showStats() {
         statsDialog.setContentView(R.layout.stats_dialog);
         statsDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -544,7 +536,8 @@ public class CallActivity extends AppCompatActivity
 
                     @Override
                     public void run() {
-                        Log.e(TAG, "run: Thread");
+                        // Stuff that updates the UI
+
                         tv_bat_lvl.setText(batLevel);
                         tv_bat_temp.setText(batteryTemperature);
                         tv_wifi_signal.setText(wifiSignalLevel);
@@ -555,15 +548,12 @@ public class CallActivity extends AppCompatActivity
                             tv_net_signal.setText(LTESignal);
                         }
                         sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-                        // Stuff that updates the UI
 
                     }
                 });
-
             }
 
         }, 0, interval);
-
     }
 
     private void setupListeners() {
@@ -577,7 +567,8 @@ public class CallActivity extends AppCompatActivity
             binding.buttonCallToggleMic.setAlpha(enabled ? 1.0f : 0.3f);
         });
     }
-//   if room id avialable connect server and start call
+
+    //   if room id avialable connect server and start call
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != CAPTURE_PERMISSION_REQUEST_CODE) {
@@ -586,7 +577,7 @@ public class CallActivity extends AppCompatActivity
         startCall();
     }
 
-//    socket for data share
+    //    socket for data share
     private void socketIO() {
         Username = sharedPreferenceMethod.getpermanentRoomId();
         if (hasConnection) {
@@ -612,7 +603,7 @@ public class CallActivity extends AppCompatActivity
         }
     }
 
-//    for update room id
+    //    for update room id
     void sendData() {
         JSONObject jsonObject = new JSONObject();
         try {
@@ -627,7 +618,7 @@ public class CallActivity extends AppCompatActivity
         Log.e("Socket Emit ROOM", "sendMessage: " + mSocket.emit("new_room", jsonObject));
     }
 
-//random string for room id
+    //random string for room id
     private static String getRandomString(final int sizeOfRandomString) {
         final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
 
@@ -638,7 +629,7 @@ public class CallActivity extends AppCompatActivity
         return sb.toString();
     }
 
-//    send stats to client app
+    //    send stats to client app
     public void sendMessage(String lati, String longi, String batteryTemp, String batterylevel, String networksignal, String wifiSignalLvl) {
         Log.e(TAG, "sendMessage: LTE" + LTESignal);
         if (lati.equals("") && longi.equals("")) {
@@ -674,7 +665,7 @@ public class CallActivity extends AppCompatActivity
         Log.e("Socket Emit", "sendMessage: 1 " + mSocket.emit("jsondata", jsonObject));
     }
 
-//    onMessage Emitter for message
+    //    onMessage Emitter for message
     Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -697,7 +688,6 @@ public class CallActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("Socket Room", "Room :" + args.length);
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     try {
@@ -731,20 +721,12 @@ public class CallActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("Socket Room", "Room :" + args.length);
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     try {
                         username = data.getString("username");
                         String Room = data.getString("socket_room");
-                       /* sharedPreferenceMethod.spNewRoomError(Room);
-                        Log.e("NEW SOCKET", "CLIENT ROOM" + username + "  socket :  " + Room);
-                       Intent intent = new Intent(CallActivity.this, CallActivity.class);
-                        intent.putExtra(EXTRA_ROOMID,"clientsocket");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                       startActivity(intent);
-                        Toast.makeText(CallActivity.this, message, Toast.LENGTH_SHORT).show();
-                        */
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -760,7 +742,6 @@ public class CallActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("Socket Room", "Room onUpdate" + args.length);
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     String versioncode;
@@ -801,7 +782,6 @@ public class CallActivity extends AppCompatActivity
                     if (length == 0) {
                         return;
                     }
-
                     String username = args[0].toString();
                     try {
                         JSONObject object = new JSONObject(username);
@@ -812,9 +792,7 @@ public class CallActivity extends AppCompatActivity
                             if (isNetworkEnabled) {
                                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                                 if (location != null) {
-
 //                                Toast.makeText(CallActivity.this, location.getLatitude() + location.getLongitude() + "", Toast.LENGTH_SHORT).show();
-
                                 }
                             } else {
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -822,7 +800,6 @@ public class CallActivity extends AppCompatActivity
 //                                Toast.makeText(CallActivity.this, location.getLatitude() + location.getLongitude() + "", Toast.LENGTH_SHORT).show();
                                 }
                             }
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -860,6 +837,7 @@ public class CallActivity extends AppCompatActivity
         }
     };
 
+    //    camera 2 api for video streaming
     private boolean useCamera2() {
         return Camera2Enumerator.isSupported(this);
     }
@@ -890,7 +868,6 @@ public class CallActivity extends AppCompatActivity
             if (!enumerator.isFrontFacing(deviceName)) {
                 Logging.d(LOG_TAG, "Creating other camera capturer.");
                 VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
-
                 if (videoCapturer != null) {
                     return videoCapturer;
                 }
@@ -997,7 +974,6 @@ public class CallActivity extends AppCompatActivity
         }
     };
 
-    //    get LTE Signal Strength
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void getLTEsignalStrength() {
         try {
@@ -1028,7 +1004,7 @@ public class CallActivity extends AppCompatActivity
             } else if (LTESingalStrength < -80 && LTESingalStrength >= -90) {
                 LTESignal = "Low";
 
-            } else if (LTESingalStrength < -90 && LTESingalStrength >= -120) {
+            } else if (LTESingalStrength < -90 && LTESingalStrength >= -110) {
                 LTESignal = "Very Low";
 
             } else {
@@ -1112,8 +1088,6 @@ public class CallActivity extends AppCompatActivity
             isConnected = false;
             showConnectionError();
             Log.e("ATAG", "INTERNET LOST");
-
-
         }
     };
 
@@ -1122,7 +1096,6 @@ public class CallActivity extends AppCompatActivity
         if (peerConnectionClient != null) {
             micEnabled = !micEnabled;
             peerConnectionClient.setAudioEnabled(true);
-
         }
         return true;
     }
@@ -1147,7 +1120,6 @@ public class CallActivity extends AppCompatActivity
         binding.localVideoView.requestLayout();
         binding.remoteVideoView.requestLayout();
     }
-
 
 
     private void startCall() {
@@ -1562,6 +1534,7 @@ public class CallActivity extends AppCompatActivity
     public void onProviderEnabled(String s) {
 
     }
+
     @Override
     public void onProviderDisabled(String s) {
 
