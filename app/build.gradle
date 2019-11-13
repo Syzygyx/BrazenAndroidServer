@@ -21,16 +21,14 @@ android {
         enabled true
     }
     lintOptions {
-
         checkReleaseBuilds false
-
     }
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
         applicationId "com.myhexaville.androidwebrtc"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 12
+        versionCode 11
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

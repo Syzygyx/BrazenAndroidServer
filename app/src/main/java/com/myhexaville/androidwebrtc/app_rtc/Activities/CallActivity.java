@@ -340,29 +340,28 @@ public class CallActivity extends AppCompatActivity
 
     //    update server app
     void UpdateDialogShow() {
-        Dialog dialog = new Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
-        dialog.setContentView(R.layout.update_dialog);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Button not_now = dialog.findViewById(R.id.not_now);
-        Button update_now = dialog.findViewById(R.id.update_now);
-        dialog.show();
-        not_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                showStats();
-            }
-        });
-        update_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        Dialog dialog = new Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
+//        dialog.setContentView(R.layout.update_dialog);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        Button not_now = dialog.findViewById(R.id.not_now);
+//        Button update_now = dialog.findViewById(R.id.update_now);
+//        dialog.show();
+//        not_now.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//                showStats();
+//            }
+//        });
+//        update_now.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
                 updateServerApk();
                 Toast.makeText(CallActivity.this, "Downloading Update...", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
-                showStats();
-            }
-        });
-
+//                dialog.dismiss();
+//                showStats();
+//            }
+//        });
     }
 
     //    get wifi list to connect server to same network
@@ -563,7 +562,6 @@ public class CallActivity extends AppCompatActivity
 
         binding.buttonCallToggleMic.setOnClickListener(view -> {
             boolean enabled = onToggleMic();
-
             binding.buttonCallToggleMic.setAlpha(enabled ? 1.0f : 0.3f);
         });
     }
@@ -994,24 +992,18 @@ public class CallActivity extends AppCompatActivity
             }
             if (LTESingalStrength <= 0 && LTESingalStrength >= -50) {
                 LTESignal = "Very Good";
-
             } else if (LTESingalStrength < -50 && LTESingalStrength >= -70) {
                 LTESignal = "Good";
-
             } else if (LTESingalStrength < -70 && LTESingalStrength >= -80) {
                 LTESignal = "Average";
-
             } else if (LTESingalStrength < -80 && LTESingalStrength >= -90) {
                 LTESignal = "Low";
-
             } else if (LTESingalStrength < -90 && LTESingalStrength >= -110) {
                 LTESignal = "Very Low";
-
             } else {
                 LTESignal = "No Signal";
                 Log.e("OUT ", "LTE signal strength: " + LTESignal);
             }
-
         } catch (Exception e) {
             Log.e(LTE_TAG, "Exception: " + e.toString());
         }
