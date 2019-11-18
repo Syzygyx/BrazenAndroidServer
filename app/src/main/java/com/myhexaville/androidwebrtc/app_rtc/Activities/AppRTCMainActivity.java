@@ -88,7 +88,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         merlin = new Merlin.Builder().withConnectableCallbacks().build(this);
         merlinsBeard = MerlinsBeard.from(this);
         random = new Random().nextInt((max - min) + 1) + min;
-        roomID = "brezn" + Settings.Secure.getString(this.getContentResolver(),
+        roomID = "brzn1" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
         sharedPreferenceMethod.permanentRoomId(roomID);
@@ -105,7 +105,13 @@ public class AppRTCMainActivity extends AppCompatActivity {
 
         // Register the listener for the telephony manager
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
+       /* try {
+            Runtime.getRuntime().exec("dpm set-device-owner com.myhexaville.androidwebrtc.app_rtc.Services/.AdminReceiver");
+        } catch (Exception e) {
+            Log.e("signalStrength", "device owner not set");
+            Log.e("signalStrength", e.toString());
+            e.printStackTrace();
+        }*/
         merlin.registerConnectable(new Connectable() {
             @Override
             public void onConnect() {
@@ -162,7 +168,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
             Log.e("INTERNET", "INTERNET CONNECTED");
         }
 
-        //        on connection lost
+//        on connection lost
         @Override
         public void onLost(Network network) {
             isConnected = false;

@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/libwebrtc/Desktop-BrazenAndroidServer-SRG-master-libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/Desktop-BrazenAndroidServer-SRG-master-libwebrtc.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/libwebrtc/libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/libwebrtc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libwebrtc/user-Desktop-BrazenAndroidServer-SRG-master-libwebrtc.iml" filepath="$PROJECT_DIR$/libwebrtc/user-Desktop-BrazenAndroidServer-SRG-master-libwebrtc.iml" />
     </modules>
   </component>
 </project>

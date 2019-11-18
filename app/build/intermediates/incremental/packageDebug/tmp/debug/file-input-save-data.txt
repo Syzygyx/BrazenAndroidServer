@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Wed Nov 13 18:04:12 IST 2019
+#Fri Nov 15 17:42:22 IST 2019
 17.baseType=DIRECTORY
 4.path=lib/x86/libjingle_peerconnection_so.so
 8.set=NATIVE_RESOURCE

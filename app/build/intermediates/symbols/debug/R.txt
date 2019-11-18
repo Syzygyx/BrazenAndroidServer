@@ -3238,6 +3238,7 @@ int styleable zxing_finder_zxing_viewfinder_laser 2
 int styleable zxing_finder_zxing_viewfinder_mask 3
 int[] styleable zxing_view { 0x7f040245 }
 int styleable zxing_view_zxing_scanner_layout 0
-int xml file_paths 0x7f130000
-int xml preferences 0x7f130001
-int xml provider_paths 0x7f130002
+int xml device_admin 0x7f130000
+int xml file_paths 0x7f130001
+int xml preferences 0x7f130002
+int xml provider_paths 0x7f130003

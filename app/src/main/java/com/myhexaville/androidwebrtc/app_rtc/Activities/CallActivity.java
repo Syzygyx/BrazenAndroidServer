@@ -15,6 +15,11 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.DownloadManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -60,7 +65,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -99,13 +103,18 @@ import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -138,6 +147,7 @@ public class CallActivity extends AppCompatActivity
     String RandomString;
     // to check if we are connected to Network
     boolean isConnected = true;
+    boolean isUpdateRunning = true;
     MerlinsBeard merlin;
     // to check if we are monitoring Network
     private boolean monitoringConnectivity = false;
@@ -184,6 +194,14 @@ public class CallActivity extends AppCompatActivity
     WifiManager wifiManager;
     List<ScanResult> getWifiSSIDs;
     WifiInfo wifiInfo;
+
+    public final int REQUEST_ENABLE_BT = 101;
+    private static final UUID MY_UUID_INSECURE =
+            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private BluetoothDevice mmDevice;
+    private UUID deviceUUID;
+    ConnectedThread mConnectedThread;
 
     {
         try {
@@ -336,6 +354,20 @@ public class CallActivity extends AppCompatActivity
         // Register the listener for the telephony manager
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         merlin = MerlinsBeard.from(this);
+
+
+        // Initializes Bluetooth adapter.
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+
+        // Register for broadcasts when a device is discovered.
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(receiver, filter);
+
+
+        pairDevice();
+
     }
 
     //    update server app
@@ -356,8 +388,10 @@ public class CallActivity extends AppCompatActivity
 //        update_now.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-                updateServerApk();
-                Toast.makeText(CallActivity.this, "Downloading Update...", Toast.LENGTH_LONG).show();
+//        if (!isUpdateRunning) {
+        updateServerApk();
+//            isUpdateRunning = true;
+//        }
 //                dialog.dismiss();
 //                showStats();
 //            }
@@ -368,7 +402,6 @@ public class CallActivity extends AppCompatActivity
     void wifiCheck() {
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager.startScan();
-
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -456,16 +489,20 @@ public class CallActivity extends AppCompatActivity
         final long downloadId = manager.enqueue(request);
 
         //set BroadcastReceiver to install app when .apk is downloaded
+        String finalDestination = destination;
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
+
+//                InstallAPK(finalDestination);
+
                 Intent install = new Intent(Intent.ACTION_VIEW);
                 install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 Uri newuri = FileProvider.getUriForFile(CallActivity.this, getPackageName() + ".fileprovider", file);
                 install.setDataAndType(newuri, manager.getMimeTypeForDownloadedFile(downloadId));
-                disconnect();
                 startActivity(install);
-
+                Toast.makeText(getApplicationContext(), "Downloading update..", Toast.LENGTH_LONG).show();
+                disconnect();
                 unregisterReceiver(this);
                 finish();
             }
@@ -474,6 +511,7 @@ public class CallActivity extends AppCompatActivity
         registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
     }
+
 
     //    wifi signal level
     private void getWifiSignal() {
@@ -600,6 +638,287 @@ public class CallActivity extends AppCompatActivity
             }
         }
     }
+
+
+    public void startServer() {
+        AcceptThread accept = new AcceptThread();
+        accept.start();
+    }
+
+    public void pairDevice() {
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        Log.e("MainActivity", "" + pairedDevices.size());
+        if (pairedDevices.size() > 0) {
+            for (int i = 0; i < pairedDevices.size(); i++) {
+
+
+                Object[] devices = pairedDevices.toArray();
+
+                BluetoothDevice device = (BluetoothDevice) devices[i];
+
+                if (device.getName().equals("Realme 2 Pro")) {
+                    ConnectThread connect = new ConnectThread(device, MY_UUID_INSECURE);
+                    connect.start();
+                    Log.e("MAinActivity", "" + device);
+                }
+            }
+            //ParcelUuid[] uuid = device.getUuids();
+            //Log.e("MAinActivity", "" + uuid)
+
+        }
+        startServer();
+    }
+
+    public void SendWifiMessage(String wifiName, String wifiPassword) {
+//        String jsonObject = "Hello There";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("latitute", "latitute");
+            jsonObject.put("longitute", "longitute");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        byte[] bytes = jsonObject.toString().getBytes(Charset.defaultCharset());
+        mConnectedThread.write(bytes);
+    }
+
+    private class AcceptThread extends Thread {
+        // The local server socket
+        private final BluetoothServerSocket mmServerSocket;
+
+        public AcceptThread() {
+            BluetoothServerSocket tmp = null;
+
+            // Create a new listening server socket
+            try {
+                tmp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("Bluetooth Test", MY_UUID_INSECURE);
+
+                Log.d(TAG, "AcceptThread: Setting up Server using: " + MY_UUID_INSECURE);
+            } catch (IOException e) {
+                Log.e(TAG, "AcceptThread: IOException: " + e.getMessage());
+            }
+
+            mmServerSocket = tmp;
+        }
+
+        public void run() {
+            Log.d(TAG, "run: AcceptThread Running.");
+
+            BluetoothSocket socket = null;
+
+            try {
+                // This is a blocking call and will only return on a
+                // successful connection or an exception
+                Log.d(TAG, "run: RFCOM server socket start.....");
+
+                socket = mmServerSocket.accept();
+
+                Log.d(TAG, "run: RFCOM server socket accepted connection.");
+
+            } catch (IOException e) {
+                Log.e(TAG, "AcceptThread: IOException: " + e.getMessage());
+            }
+
+            //talk about this is in the 3rd
+            if (socket != null) {
+                connected(socket);
+            }
+
+            Log.i(TAG, "END mAcceptThread ");
+        }
+
+        public void cancel() {
+            Log.d(TAG, "cancel: Canceling AcceptThread.");
+            try {
+                mmServerSocket.close();
+            } catch (IOException e) {
+                Log.e(TAG, "cancel: Close of AcceptThread ServerSocket failed. " + e.getMessage());
+            }
+        }
+
+    }
+
+    private class ConnectThread extends Thread {
+        private BluetoothSocket mmSocket;
+
+        public ConnectThread(BluetoothDevice device, UUID uuid) {
+            Log.d(TAG, "ConnectThread: started.");
+            mmDevice = device;
+            deviceUUID = uuid;
+        }
+
+        public void run() {
+            BluetoothSocket tmp = null;
+            Log.i(TAG, "RUN mConnectThread ");
+
+            // Get a BluetoothSocket for a connection with the
+            // given BluetoothDevice
+            try {
+                Log.d(TAG, "ConnectThread: Trying to create InsecureRfcommSocket using UUID: "
+                        + MY_UUID_INSECURE);
+                tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID_INSECURE);
+            } catch (IOException e) {
+                Log.e(TAG, "ConnectThread: Could not create InsecureRfcommSocket " + e.getMessage());
+            }
+
+            mmSocket = tmp;
+
+            // Make a connection to the BluetoothSocket
+
+            try {
+                // This is a blocking call and will only return on a
+                // successful connection or an exception
+                mmSocket.connect();
+
+            } catch (IOException e) {
+                // Close the socket
+                try {
+                    mmSocket.close();
+                    Log.d(TAG, "run: Closed Socket.");
+                } catch (IOException e1) {
+                    Log.e(TAG, "mConnectThread: run: Unable to close connection in socket " + e1.getMessage());
+                }
+                Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID_INSECURE);
+            }
+
+            //will talk about this in the 3rd video
+            connected(mmSocket);
+        }
+
+        public void cancel() {
+            try {
+                Log.d(TAG, "cancel: Closing Client Socket.");
+                mmSocket.close();
+            } catch (IOException e) {
+                Log.e(TAG, "cancel: close() of mmSocket in Connectthread failed. " + e.getMessage());
+            }
+        }
+    }
+
+    private void connected(BluetoothSocket mmSocket) {
+        Log.d(TAG, "connected: Starting.");
+
+        // Start the thread to manage the connection and perform transmissions
+        mConnectedThread = new ConnectedThread(mmSocket);
+        mConnectedThread.start();
+    }
+
+    private class ConnectedThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            Log.d(TAG, "ConnectedThread: Starting.");
+
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+
+            try {
+                tmpIn = mmSocket.getInputStream();
+                tmpOut = mmSocket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            byte[] buffer = new byte[1024];  // buffer store for the stream
+
+            int bytes; // bytes returned from read()
+
+            // Keep listening to the InputStream until an exception occurs
+            while (true) {
+                // Read from the InputStream
+                try {
+                    bytes = mmInStream.read(buffer);
+                    final String incomingMessage = new String(buffer, 0, bytes);
+                    Log.d(TAG, "InputStream: " + incomingMessage);
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            String wifiSSID = "", wifiPassword = "";
+//                            view_data.setText(incomingMessage);
+                          /*  try {
+                                JSONObject jsonObject = new JSONObject(incomingMessage);
+                                wifiSSID = jsonObject.getString("name");
+                                wifiPassword = jsonObject.getString("password");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (!wifiSSID.equals("")) {
+                                sharedPreferenceMethod.wifiSSIDandPass(wifiSSID, wifiPassword);
+                                connectToWifi(sharedPreferenceMethod.getWifiSSID(), sharedPreferenceMethod.getWifiPassword());
+                            }*/
+                            Log.e(TAG, "Bluetooth: " + incomingMessage);
+                        }
+                    });
+
+
+                } catch (IOException e) {
+                    Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
+                    break;
+                }
+            }
+        }
+
+
+        public void write(byte[] bytes) {
+            String text = new String(bytes, Charset.defaultCharset());
+            Log.d(TAG, "write: Writing to outputstream: " + text);
+            try {
+                mmOutStream.write(bytes);
+            } catch (IOException e) {
+                Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
+            }
+        }
+
+        /* Call this from the main activity to shutdown the connection */
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+
+/*    public void SendWifiMessage(View v) {
+//        String jsonObject = "Hello There";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("latitute", "latitute");
+            jsonObject.put("longitute", "longitute");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        byte[] bytes = jsonObject.toString().getBytes(Charset.defaultCharset());
+        mConnectedThread.write(bytes);
+    }*/
+
+    // Create a BroadcastReceiver for ACTION_FOUND.
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+                Log.e("Bluetooth Device", "onReceive: " + deviceName);
+            }
+        }
+    };
+
 
     //    for update room id
     void sendData() {
@@ -754,7 +1073,10 @@ public class CallActivity extends AppCompatActivity
 
                         Log.e("MessagefromClient", "run: OnUpdate " + data);
                         if (curVersion < vclient) {
+//                            if (!isUpdateRunning) {
                             UpdateDialogShow();
+//                                isUpdateRunning = true;
+//                            }
 
                         }
 
@@ -825,6 +1147,7 @@ public class CallActivity extends AppCompatActivity
                     try {
                         JSONObject object = new JSONObject(username);
                         Log.e("myWifi", "run: " + object);
+
                         sharedPreferenceMethod.wifiSSIDandPass(object.getString("name"), object.getString("password"));
                         connectToWifi(sharedPreferenceMethod.getWifiSSID(), sharedPreferenceMethod.getWifiPassword());
                     } catch (JSONException e) {
