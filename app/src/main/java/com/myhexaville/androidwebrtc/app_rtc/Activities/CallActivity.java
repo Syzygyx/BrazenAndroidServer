@@ -182,7 +182,7 @@ public class CallActivity extends AppCompatActivity
     public final static String LTE_TAG = "LTE_Tag";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "brezn";
+    String tempName = "brezan";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -195,13 +195,13 @@ public class CallActivity extends AppCompatActivity
     List<ScanResult> getWifiSSIDs;
     WifiInfo wifiInfo;
 
-    public final int REQUEST_ENABLE_BT = 101;
+    /*public final int REQUEST_ENABLE_BT = 101;
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BluetoothDevice mmDevice;
-    private UUID deviceUUID;
-    ConnectedThread mConnectedThread;
+    private UUID deviceUUID;*/
+//    ConnectedThread mConnectedThread;
 
     {
         try {
@@ -356,17 +356,17 @@ public class CallActivity extends AppCompatActivity
         merlin = MerlinsBeard.from(this);
 
 
-        // Initializes Bluetooth adapter.
+        /*// Initializes Bluetooth adapter.
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
 
         // Register for broadcasts when a device is discovered.
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(receiver, filter);
+        registerReceiver(receiver, filter);*/
 
 
-        pairDevice();
+//        pairDevice();
 
     }
 
@@ -389,7 +389,7 @@ public class CallActivity extends AppCompatActivity
 //            @Override
 //            public void onClick(View view) {
 //        if (!isUpdateRunning) {
-        updateServerApk();
+//        updateServerApk();
 //            isUpdateRunning = true;
 //        }
 //                dialog.dismiss();
@@ -640,7 +640,7 @@ public class CallActivity extends AppCompatActivity
     }
 
 
-    public void startServer() {
+    /*public void startServer() {
         AcceptThread accept = new AcceptThread();
         accept.start();
     }
@@ -847,7 +847,7 @@ public class CallActivity extends AppCompatActivity
                         public void run() {
                             String wifiSSID = "", wifiPassword = "";
 //                            view_data.setText(incomingMessage);
-                          /*  try {
+                          *//*  try {
                                 JSONObject jsonObject = new JSONObject(incomingMessage);
                                 wifiSSID = jsonObject.getString("name");
                                 wifiPassword = jsonObject.getString("password");
@@ -857,11 +857,10 @@ public class CallActivity extends AppCompatActivity
                             if (!wifiSSID.equals("")) {
                                 sharedPreferenceMethod.wifiSSIDandPass(wifiSSID, wifiPassword);
                                 connectToWifi(sharedPreferenceMethod.getWifiSSID(), sharedPreferenceMethod.getWifiPassword());
-                            }*/
+                            }*//*
                             Log.e(TAG, "Bluetooth: " + incomingMessage);
                         }
                     });
-
 
                 } catch (IOException e) {
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
@@ -881,14 +880,14 @@ public class CallActivity extends AppCompatActivity
             }
         }
 
-        /* Call this from the main activity to shutdown the connection */
+        *//* Call this from the main activity to shutdown the connection *//*
         public void cancel() {
             try {
                 mmSocket.close();
             } catch (IOException e) {
             }
         }
-    }
+    }*/
 
 
 /*    public void SendWifiMessage(View v) {
@@ -904,7 +903,7 @@ public class CallActivity extends AppCompatActivity
         mConnectedThread.write(bytes);
     }*/
 
-    // Create a BroadcastReceiver for ACTION_FOUND.
+   /* // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -917,7 +916,7 @@ public class CallActivity extends AppCompatActivity
                 Log.e("Bluetooth Device", "onReceive: " + deviceName);
             }
         }
-    };
+    };*/
 
 
     //    for update room id
@@ -938,7 +937,6 @@ public class CallActivity extends AppCompatActivity
     //random string for room id
     private static String getRandomString(final int sizeOfRandomString) {
         final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
-
         final Random random = new Random();
         final StringBuilder sb = new StringBuilder(sizeOfRandomString);
         for (int i = 0; i < sizeOfRandomString; ++i)

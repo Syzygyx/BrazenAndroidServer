@@ -37,19 +37,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod;
 import com.novoda.merlin.Connectable;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.MerlinsBeard;
-
 import java.util.List;
 import java.util.Random;
-
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-
 import static com.myhexaville.androidwebrtc.app_rtc.Utils.Constant.EXTRA_ROOMID;
 
 
@@ -88,7 +84,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         merlin = new Merlin.Builder().withConnectableCallbacks().build(this);
         merlinsBeard = MerlinsBeard.from(this);
         random = new Random().nextInt((max - min) + 1) + min;
-        roomID = "brzn1" + Settings.Secure.getString(this.getContentResolver(),
+        roomID = "brezan" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
         sharedPreferenceMethod.permanentRoomId(roomID);
