@@ -27,8 +27,6 @@ public final class R {
     public static final int design_snackbar_out=0x7f01000f;
     public static final int fade_in=0x7f010010;
     public static final int fade_out=0x7f010011;
-    public static final int slide_down=0x7f010012;
-    public static final int slide_up=0x7f010013;
   }
   public static final class animator {
     public static final int design_appbar_state_list_animator=0x7f020000;
@@ -21574,8 +21572,9 @@ public final class R {
     public static final int zxing_view_zxing_scanner_layout=0;
   }
   public static final class xml {
-    public static final int file_paths=0x7f130000;
-    public static final int preferences=0x7f130001;
-    public static final int provider_paths=0x7f130002;
+    public static final int device_admin=0x7f130000;
+    public static final int file_paths=0x7f130001;
+    public static final int preferences=0x7f130002;
+    public static final int provider_paths=0x7f130003;
   }
 }

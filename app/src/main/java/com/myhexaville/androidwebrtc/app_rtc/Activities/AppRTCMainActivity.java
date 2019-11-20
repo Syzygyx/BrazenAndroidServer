@@ -37,19 +37,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod;
 import com.novoda.merlin.Connectable;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.MerlinsBeard;
-
 import java.util.List;
 import java.util.Random;
-
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-
 import static com.myhexaville.androidwebrtc.app_rtc.Utils.Constant.EXTRA_ROOMID;
 
 
@@ -64,7 +60,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
     final int max = 99999;
     int random;
     TextView signalStrengthTxt;
-    private static final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
     String roomID;
     SharedPreferencesMethod sharedPreferenceMethod;
 
@@ -89,7 +84,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         merlin = new Merlin.Builder().withConnectableCallbacks().build(this);
         merlinsBeard = MerlinsBeard.from(this);
         random = new Random().nextInt((max - min) + 1) + min;
-        roomID = "brezn" + Settings.Secure.getString(this.getContentResolver(),
+        roomID = "brezan" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
         sharedPreferenceMethod.permanentRoomId(roomID);
@@ -106,13 +101,19 @@ public class AppRTCMainActivity extends AppCompatActivity {
 
         // Register the listener for the telephony manager
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
+       /* try {
+            Runtime.getRuntime().exec("dpm set-device-owner com.myhexaville.androidwebrtc.app_rtc.Services/.AdminReceiver");
+        } catch (Exception e) {
+            Log.e("signalStrength", "device owner not set");
+            Log.e("signalStrength", e.toString());
+            e.printStackTrace();
+        }*/
         merlin.registerConnectable(new Connectable() {
             @Override
             public void onConnect() {
 //                connect();
                 Log.e("Merlin", "onConnect: merlin connected!");
-                // Do something you haz internet!
+                // Do something you has internet!
             }
         });
 
@@ -126,7 +127,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
                 if (cellInfo instanceof CellInfoLte) {
                     // cast to CellInfoLte and call all the CellInfoLte methods you need
                     CellInfoLte ci = (CellInfoLte) cellInfo;
-                    Log.e("signallsss ", "LTE signal strength:  " + ci.getCellSignalStrength().getDbm());
                     LTESingalStrength = ci.getCellSignalStrength().getDbm();
                     signalStrengthTxt.setText("LTE Signal : " + LTESingalStrength + "dBm");
                     Log.e("signallsss ", "LTE signal  " + ci.getCellSignalStrength().getDbm());
@@ -244,12 +244,11 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
     }
 
-
-//    power manager for awake screen always when video is streaming
+    //    power manager for awake screen always when video is streaming
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
-        Log.e("OnResume", "onResume: AppRTC");
+
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = pm.isInteractive();
 

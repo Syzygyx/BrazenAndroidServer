@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\incremental\\mergeReleaseResources\\stripped.dir\\layout\\activity_sample_peer_connection.xml",
+        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\layout\\activity_sample_peer_connection.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\incremental\\mergeReleaseResources\\stripped.dir\\layout\\activity_main.xml",
+        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\incremental\\mergeReleaseResources\\stripped.dir\\layout\\activity_sample_camera_render.xml",
+        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\layout\\activity_sample_camera_render.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\incremental\\mergeReleaseResources\\stripped.dir\\layout\\activity_call.xml",
+        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\layout\\activity_call.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\incremental\\mergeReleaseResources\\stripped.dir\\layout\\activity_sample_data_channel.xml",
+        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\layout\\activity_sample_data_channel.xml"
+    }
+]

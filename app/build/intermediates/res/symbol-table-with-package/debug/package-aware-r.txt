@@ -17,8 +17,6 @@ anim design_snackbar_in
 anim design_snackbar_out
 anim fade_in
 anim fade_out
-anim slide_down
-anim slide_up
 animator design_appbar_state_list_animator
 animator design_fab_hide_motion_spec
 animator design_fab_show_motion_spec
@@ -2367,6 +2365,7 @@ styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable zxing_camera_preview zxing_framing_rect_height zxing_framing_rect_width zxing_preview_scaling_strategy zxing_use_texture_view
 styleable zxing_finder zxing_possible_result_points zxing_result_view zxing_viewfinder_laser zxing_viewfinder_mask
 styleable zxing_view zxing_scanner_layout
+xml device_admin
 xml file_paths
 xml preferences
 xml provider_paths

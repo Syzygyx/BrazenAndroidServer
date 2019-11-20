@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#67E1B6"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Stats"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/versioncode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:text="ver.: 6"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#fff" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:weightSum="4">
+
+                    <ImageView
+                        android:id="@+id/batTemp"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_below="@id/stats"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/hot"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#000" />
+
+                    <TextView
+                        android:id="@+id/batTempsocket"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stats"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#000" />
+
+                    <ImageView
+                        android:id="@+id/batlvl"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_below="@id/batTemp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:textColor="#000"
+                        app:srcCompat="@drawable/ic_battery_80_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/batlvlsocket"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#000" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:padding="10dp"
+                    android:weightSum="4">
+
+                    <ImageView
+                        android:id="@+id/networksignal"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:textColor="#000"
+                        app:srcCompat="@drawable/ic_signal_cellular_3_bar_black_24dp" />
+
+
+                    <TextView
+                        android:id="@+id/networksignalsocket"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#000" />
+
+                    <ImageView
+                        android:id="@+id/wifisignal"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_below="@id/batlvl"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="#000"
+                        app:srcCompat="@drawable/ic_network_wifi_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/wifisignalsocket"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DBDBDB" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

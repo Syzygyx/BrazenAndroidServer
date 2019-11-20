@@ -848,10 +848,6 @@
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\0743bbd977659b014bb4aa59b9210b64\\res\\layout\\abc_action_mode_bar.xml"
     },
     {
-        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\anim_slide_down.xml.flat",
-        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\anim\\slide_down.xml"
-    },
-    {
         "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\color_mtrl_bottom_nav_colored_item_tint.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\1d20999ba102f9964060f1a47a3110b2\\res\\color\\mtrl_bottom_nav_colored_item_tint.xml"
     },
@@ -894,6 +890,10 @@
     {
         "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\color-v23_abc_tint_seek_thumb.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\0743bbd977659b014bb4aa59b9210b64\\res\\color-v23\\abc_tint_seek_thumb.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\xml_device_admin.xml.flat",
+        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\xml\\device_admin.xml"
     },
     {
         "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_textfield_default_mtrl_alpha.9.png.flat",
@@ -2082,10 +2082,6 @@
     {
         "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_abc_scrubber_control_off_mtrl_alpha.png.flat",
         "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\0743bbd977659b014bb4aa59b9210b64\\res\\drawable-xhdpi-v4\\abc_scrubber_control_off_mtrl_alpha.png"
-    },
-    {
-        "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\anim_slide_up.xml.flat",
-        "source": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\src\\main\\res\\anim\\slide_up.xml"
     },
     {
         "merged": "C:\\Users\\user\\Desktop\\BrazenAndroidServer-SRG-master\\app\\build\\intermediates\\res\\merged\\debug\\drawable_mtrl_snackbar_background.xml.flat",
