@@ -389,7 +389,7 @@ public class CallActivity extends AppCompatActivity
 //            @Override
 //            public void onClick(View view) {
 //        if (!isUpdateRunning) {
-//        updateServerApk();
+        updateServerApk();
 //            isUpdateRunning = true;
 //        }
 //                dialog.dismiss();
@@ -440,7 +440,7 @@ public class CallActivity extends AppCompatActivity
         wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
 
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-//remember id
+//        remember id
         int netId = wifiManager.addNetwork(wifiConfig);
         wifiManager.disconnect();
         wifiManager.enableNetwork(netId, true);
@@ -847,7 +847,8 @@ public class CallActivity extends AppCompatActivity
                         public void run() {
                             String wifiSSID = "", wifiPassword = "";
 //                            view_data.setText(incomingMessage);
-                          *//*  try {
+                          */
+    /*  try {
                                 JSONObject jsonObject = new JSONObject(incomingMessage);
                                 wifiSSID = jsonObject.getString("name");
                                 wifiPassword = jsonObject.getString("password");
@@ -857,7 +858,8 @@ public class CallActivity extends AppCompatActivity
                             if (!wifiSSID.equals("")) {
                                 sharedPreferenceMethod.wifiSSIDandPass(wifiSSID, wifiPassword);
                                 connectToWifi(sharedPreferenceMethod.getWifiSSID(), sharedPreferenceMethod.getWifiPassword());
-                            }*//*
+                            }*/
+    /*
                             Log.e(TAG, "Bluetooth: " + incomingMessage);
                         }
                     });
@@ -880,7 +882,8 @@ public class CallActivity extends AppCompatActivity
             }
         }
 
-        *//* Call this from the main activity to shutdown the connection *//*
+        */
+    /* Call this from the main activity to shutdown the connection *//*
         public void cancel() {
             try {
                 mmSocket.close();
@@ -1740,8 +1743,8 @@ public class CallActivity extends AppCompatActivity
             iceConnected = false;
             disconnect();
         });
-        showQR();
 
+        showQR();
 
         JSONObject userId = new JSONObject();
         try {
@@ -1750,12 +1753,13 @@ public class CallActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mSocket.disconnect();
-        mSocket.off("connect user", onNewUser);
-        mSocket.off("jsondata", onNewMessage);
-        mSocket.off("new_apk", onNewUpdate);
-        mSocket.off("new_room", onNewRoom);
-        mSocket.off("new_room_client", onNewRoomClient);
+
+//        mSocket.disconnect();
+//        mSocket.off("connect user", onNewUser);
+//        mSocket.off("jsondata", onNewMessage);
+//        mSocket.off("new_apk", onNewUpdate);
+//        mSocket.off("new_room", onNewRoom);
+//        mSocket.off("new_room_client", onNewRoomClient);
 
         Username = "";
     }
@@ -1767,6 +1771,7 @@ public class CallActivity extends AppCompatActivity
     @Override
     public void onPeerConnectionStatsReady(final StatsReport[] reports) {
         runOnUiThread(() -> {
+
         });
     }
 
@@ -1818,17 +1823,13 @@ public class CallActivity extends AppCompatActivity
                 Log.e(this + "", e.toString());
             }
         }
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
         /*String loc = location.getLatitude() + " " + location.getLongitude();*/
-
         lastLat = location.getLatitude() + "";
         lastLong = location.getLongitude() + "";
-
-//        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
 
     }
 
