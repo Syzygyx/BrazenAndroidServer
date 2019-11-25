@@ -7199,6 +7199,7 @@ android.support.v4.content.FileProvider -> android.support.v4.a.b:
     void <init>() -> <init>
     boolean onCreate() -> onCreate
     void attachInfo(android.content.Context,android.content.pm.ProviderInfo) -> attachInfo
+    android.net.Uri getUriForFile(android.content.Context,java.lang.String,java.io.File) -> a
     android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String) -> query
     java.lang.String getType(android.net.Uri) -> getType
     android.net.Uri insert(android.net.Uri,android.content.ContentValues) -> insert
@@ -7213,12 +7214,14 @@ android.support.v4.content.FileProvider -> android.support.v4.a.b:
     java.lang.Object[] copyOf(java.lang.Object[],int) -> a
     void <clinit>() -> <clinit>
 android.support.v4.content.FileProvider$PathStrategy -> android.support.v4.a.b$a:
+    android.net.Uri getUriForFile(java.io.File) -> a
     java.io.File getFileForUri(android.net.Uri) -> a
 android.support.v4.content.FileProvider$SimplePathStrategy -> android.support.v4.a.b$b:
     java.lang.String mAuthority -> a
     java.util.HashMap mRoots -> b
     void <init>(java.lang.String) -> <init>
     void addRoot(java.lang.String,java.io.File) -> a
+    android.net.Uri getUriForFile(java.io.File) -> a
     java.io.File getFileForUri(android.net.Uri) -> a
 android.support.v4.content.Loader -> android.support.v4.a.c:
     int mId -> a
@@ -22210,68 +22213,69 @@ com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity -> com.myhexaville
     java.lang.String lastLong -> m
     java.lang.String RandomString -> n
     boolean isConnected -> o
-    com.novoda.merlin.MerlinsBeard merlin -> p
-    boolean monitoringConnectivity -> V
-    com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient peerConnectionClient -> W
-    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient appRtcClient -> X
-    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient$SignalingParameters signalingParameters -> Y
-    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCAudioManager audioManager -> Z
-    org.webrtc.EglBase rootEglBase -> aa
-    java.util.List remoteRenderers -> ab
-    boolean activityRunning -> ac
-    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient$RoomConnectionParameters roomConnectionParameters -> ad
-    com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient$PeerConnectionParameters peerConnectionParameters -> ae
-    boolean iceConnected -> af
-    boolean isError -> ag
-    android.app.Dialog statsDialog -> q
-    long callStartedTimeMs -> ah
-    boolean micEnabled -> ai
-    android.location.LocationManager locationManager -> r
-    com.myhexaville.androidwebrtc.databinding.ActivityCallBinding binding -> aj
-    android.app.Dialog dialog -> s
-    java.lang.String roomId -> t
-    android.graphics.Bitmap bitmap -> u
-    androidmads.library.qrgenearator.QRGEncoder qrgEncoder -> v
-    java.lang.String android_id -> ak
-    java.lang.String Username -> al
-    java.lang.String batLevel -> am
-    java.lang.String batteryTemperature -> an
-    java.lang.String wifiSignalLevel -> ao
-    java.lang.String LTESignal -> ap
-    java.lang.Boolean hasConnection -> aq
-    com.github.nkzawa.socketio.client.Socket mSocket -> ar
-    android.location.Location location -> w
-    boolean isNetworkEnabled -> x
-    android.telephony.SignalStrength signalStrength -> as
-    android.telephony.TelephonyManager telephonyManager -> at
-    int interval -> au
-    java.util.Timer timer -> y
-    java.lang.String tempName -> z
-    int curVersion -> A
-    int vcode -> B
-    int vclient -> C
-    java.lang.String app_link -> D
-    java.lang.String temp_room -> E
-    java.io.File file -> F
-    android.widget.TextView setversionCode -> G
-    android.widget.TextView signalStrengthTxt -> H
-    com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod sharedPreferenceMethod -> I
-    boolean isConnectionError -> J
-    java.lang.String ssid -> K
-    java.lang.String networkSSID -> L
-    android.net.wifi.WifiManager wifiManager -> M
-    java.util.List getWifiSSIDs -> N
-    android.net.wifi.WifiInfo wifiInfo -> O
-    android.content.BroadcastReceiver mWifiScanReceiver -> av
-    com.github.nkzawa.emitter.Emitter$Listener onNewMessage -> P
-    com.github.nkzawa.emitter.Emitter$Listener onNewRoom -> Q
-    com.github.nkzawa.emitter.Emitter$Listener onNewRoomClient -> R
-    com.github.nkzawa.emitter.Emitter$Listener onNewUpdate -> S
-    com.github.nkzawa.emitter.Emitter$Listener onNewUser -> T
-    com.github.nkzawa.emitter.Emitter$Listener onMyWifi -> U
-    android.content.BroadcastReceiver mBatInfoReceiver -> aw
-    android.content.BroadcastReceiver mBatInfoTemp -> ax
-    android.net.ConnectivityManager$NetworkCallback connectivityCallback -> ay
+    boolean isUpdateRunning -> p
+    com.novoda.merlin.MerlinsBeard merlin -> q
+    boolean monitoringConnectivity -> W
+    com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient peerConnectionClient -> X
+    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient appRtcClient -> Y
+    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient$SignalingParameters signalingParameters -> Z
+    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCAudioManager audioManager -> aa
+    org.webrtc.EglBase rootEglBase -> ab
+    java.util.List remoteRenderers -> ac
+    boolean activityRunning -> ad
+    com.myhexaville.androidwebrtc.app_rtc.webrtc.AppRTCClient$RoomConnectionParameters roomConnectionParameters -> ae
+    com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient$PeerConnectionParameters peerConnectionParameters -> af
+    boolean iceConnected -> ag
+    boolean isError -> ah
+    android.app.Dialog statsDialog -> r
+    long callStartedTimeMs -> ai
+    boolean micEnabled -> aj
+    android.location.LocationManager locationManager -> s
+    com.myhexaville.androidwebrtc.databinding.ActivityCallBinding binding -> ak
+    android.app.Dialog dialog -> t
+    java.lang.String roomId -> u
+    android.graphics.Bitmap bitmap -> v
+    androidmads.library.qrgenearator.QRGEncoder qrgEncoder -> w
+    java.lang.String android_id -> al
+    java.lang.String Username -> am
+    java.lang.String batLevel -> an
+    java.lang.String batteryTemperature -> ao
+    java.lang.String wifiSignalLevel -> ap
+    java.lang.String LTESignal -> aq
+    java.lang.Boolean hasConnection -> ar
+    com.github.nkzawa.socketio.client.Socket mSocket -> as
+    android.location.Location location -> x
+    boolean isNetworkEnabled -> y
+    android.telephony.SignalStrength signalStrength -> at
+    android.telephony.TelephonyManager telephonyManager -> au
+    int interval -> av
+    java.util.Timer timer -> z
+    java.lang.String tempName -> A
+    int curVersion -> B
+    int vcode -> C
+    int vclient -> D
+    java.lang.String app_link -> E
+    java.lang.String temp_room -> F
+    java.io.File file -> G
+    android.widget.TextView setversionCode -> H
+    android.widget.TextView signalStrengthTxt -> I
+    com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod sharedPreferenceMethod -> J
+    boolean isConnectionError -> K
+    java.lang.String ssid -> L
+    java.lang.String networkSSID -> M
+    android.net.wifi.WifiManager wifiManager -> N
+    java.util.List getWifiSSIDs -> O
+    android.net.wifi.WifiInfo wifiInfo -> P
+    android.content.BroadcastReceiver mWifiScanReceiver -> aw
+    com.github.nkzawa.emitter.Emitter$Listener onNewMessage -> Q
+    com.github.nkzawa.emitter.Emitter$Listener onNewRoom -> R
+    com.github.nkzawa.emitter.Emitter$Listener onNewRoomClient -> S
+    com.github.nkzawa.emitter.Emitter$Listener onNewUpdate -> T
+    com.github.nkzawa.emitter.Emitter$Listener onNewUser -> U
+    com.github.nkzawa.emitter.Emitter$Listener onMyWifi -> V
+    android.content.BroadcastReceiver mBatInfoReceiver -> ax
+    android.content.BroadcastReceiver mBatInfoTemp -> ay
+    android.net.ConnectivityManager$NetworkCallback connectivityCallback -> az
     void <init>() -> <init>
     void onCreate(android.os.Bundle) -> onCreate
     void UpdateDialogShow() -> k
@@ -22385,9 +22389,10 @@ com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$2 -> com.myhexavil
     void <init>(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity) -> <init>
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
 com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$3 -> com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$10:
-    java.lang.String val$finalDestination -> a
-    com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity this$0 -> b
-    void <init>(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity,java.lang.String) -> <init>
+    android.app.DownloadManager val$manager -> a
+    long val$downloadId -> b
+    com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity this$0 -> c
+    void <init>(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity,android.app.DownloadManager,long) -> <init>
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
 com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$6 -> com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$11:
     com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity this$0 -> a

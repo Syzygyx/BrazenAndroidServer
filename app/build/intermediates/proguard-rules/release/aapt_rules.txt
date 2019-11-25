@@ -1,20 +1,20 @@
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:132
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:147
 -keep class com.journeyapps.barcodescanner.CaptureActivity { <init>(...); }
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:91
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:106
 -keep class com.myhexaville.androidwebrtc.app_rtc.Activities.AppRTCMainActivity { <init>(...); }
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:69
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:71
 -keep class com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity { <init>(...); }
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:64
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:66
 -keep class com.myhexaville.androidwebrtc.app_rtc.Services.MyConnectionService { <init>(...); }
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:81
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:83
 -keep class com.myhexaville.androidwebrtc.app_rtc.Utils.GenericFileProvider { <init>(...); }
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:117
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:132
 -keep class com.myhexaville.smartimagepicker.CustomFileProvider { <init>(...); }
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:65
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:67
 -keep class com.novoda.merlin.MerlinService { <init>(...); }
-# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:112
--keep class com.theartofdev.edmodo.cropper.CropImageActivity { <init>(...); }
 # Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:127
+-keep class com.theartofdev.edmodo.cropper.CropImageActivity { <init>(...); }
+# Referenced at C:\Users\user\Desktop\BrazenAndroidServer-SRG-master\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:142
 -keep class pub.devrel.easypermissions.AppSettingsDialogHolderActivity { <init>(...); }
 # Referenced at C:\Users\user\.gradle\caches\transforms-2\files-2.1\1d20999ba102f9964060f1a47a3110b2\res\layout\design_bottom_navigation_item.xml:27
 -keep class android.support.design.internal.BaselineLayout { <init>(...); }

@@ -13795,6 +13795,7 @@ com.myhexaville.androidwebrtc.R$styleable: int zxing_finder_zxing_viewfinder_las
 com.myhexaville.androidwebrtc.R$styleable: int zxing_finder_zxing_viewfinder_mask
 com.myhexaville.androidwebrtc.R$styleable: int[] zxing_view
 com.myhexaville.androidwebrtc.R$styleable: int zxing_view_zxing_scanner_layout
+com.myhexaville.androidwebrtc.R$xml: int device_admin
 com.myhexaville.androidwebrtc.R$xml: int file_paths
 com.myhexaville.androidwebrtc.R$xml: int preferences
 com.myhexaville.androidwebrtc.R$xml: int provider_paths

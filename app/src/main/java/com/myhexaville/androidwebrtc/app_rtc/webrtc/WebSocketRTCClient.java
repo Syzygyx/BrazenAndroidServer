@@ -185,6 +185,7 @@ public class WebSocketRTCClient implements AppRTCClient, WebSocketChannelClient.
                 events.onRemoteDescription(sdpAnswer);
             }
         });
+
     }
 
     // Send local answer SDP to the other participant.

@@ -2531,11 +2531,6 @@ android.support.v4.content.FileProvider:
     private static final java.lang.String TAG_EXTERNAL_MEDIA
     private static final java.lang.String ATTR_NAME
     private static final java.lang.String ATTR_PATH
-    417:418:public static android.net.Uri getUriForFile(android.content.Context,java.lang.String,java.io.File)
-android.support.v4.content.FileProvider$PathStrategy:
-    public abstract android.net.Uri getUriForFile(java.io.File)
-android.support.v4.content.FileProvider$SimplePathStrategy:
-    723:754:public android.net.Uri getUriForFile(java.io.File)
 android.support.v4.content.IntentCompat
 android.support.v4.content.Loader:
     android.support.v4.content.Loader$OnLoadCanceledListener mOnLoadCanceledListener
@@ -7263,30 +7258,31 @@ com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity:
     android.widget.TextView tv_wifi_signal
     android.widget.TextView tv_net_signal
     android.widget.TextView versioncode
-    544:593:void showStats()
-    669:701:public void sendMessage(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-    1099:1102:public void onCaptureFormatChange(int,int,int)
-    1134:1151:private void updateVideoView()
-    1178:1216:private void callConnected()
-    1410:1423:public void onLocalDescription(org.webrtc.SessionDescription)
-    1427:1433:public void onIceCandidate(org.webrtc.IceCandidate)
-    1437:1442:public void onIceCandidatesRemoved(org.webrtc.IceCandidate[])
-    1447:1451:public void onIceConnected()
-    1455:1477:public void onIceDisconnected()
-    1456:1458:private synthetic void lambda$onIceDisconnected$13()
-    1448:1450:private synthetic void lambda$onIceConnected$12()
-    1438:1441:private synthetic void lambda$onIceCandidatesRemoved$11(org.webrtc.IceCandidate[])
-    1428:1432:private synthetic void lambda$onIceCandidate$10(org.webrtc.IceCandidate)
-    1411:1422:private synthetic void lambda$onLocalDescription$9(org.webrtc.SessionDescription)
-    133:133:static synthetic java.lang.String access$300(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
-    133:133:static synthetic java.lang.String access$400(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
-    133:133:static synthetic java.lang.String access$500(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
-    133:133:static synthetic java.lang.String access$600(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
-    133:133:static synthetic java.lang.String access$602(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity,java.lang.String)
+    545:594:void showStats()
+    952:984:public void sendMessage(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    1386:1389:public void onCaptureFormatChange(int,int,int)
+    1421:1438:private void updateVideoView()
+    1465:1503:private void callConnected()
+    1697:1710:public void onLocalDescription(org.webrtc.SessionDescription)
+    1714:1720:public void onIceCandidate(org.webrtc.IceCandidate)
+    1724:1729:public void onIceCandidatesRemoved(org.webrtc.IceCandidate[])
+    1734:1738:public void onIceConnected()
+    1742:1765:public void onIceDisconnected()
+    1743:1745:private synthetic void lambda$onIceDisconnected$13()
+    1735:1737:private synthetic void lambda$onIceConnected$12()
+    1725:1728:private synthetic void lambda$onIceCandidatesRemoved$11(org.webrtc.IceCandidate[])
+    1715:1719:private synthetic void lambda$onIceCandidate$10(org.webrtc.IceCandidate)
+    1698:1709:private synthetic void lambda$onLocalDescription$9(org.webrtc.SessionDescription)
+    141:141:static synthetic java.lang.String access$300(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
+    141:141:static synthetic java.lang.String access$400(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
+    141:141:static synthetic java.lang.String access$500(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
+    141:141:static synthetic java.lang.String access$600(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity)
+    141:141:static synthetic java.lang.String access$602(com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity,java.lang.String)
 com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$4
 com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$5
 com.myhexaville.androidwebrtc.app_rtc.Activities.CallActivity$5$1
 com.myhexaville.androidwebrtc.app_rtc.Interface.OnCallEvents
+com.myhexaville.androidwebrtc.app_rtc.Services.AdminReceiver
 com.myhexaville.androidwebrtc.app_rtc.Services.WifiConnectionReceiver
 com.myhexaville.androidwebrtc.app_rtc.Utils.AppRTCUtils:
     17:18:private AppRTCUtils()
@@ -7425,15 +7421,15 @@ com.myhexaville.androidwebrtc.app_rtc.webrtc.WebSocketRTCClient:
     private static final java.lang.String ROOM_JOIN
     private static final java.lang.String ROOM_MESSAGE
     private static final java.lang.String ROOM_LEAVE
-    172:188:public void sendOfferSdp(org.webrtc.SessionDescription)
-    193:203:public void sendAnswerSdp(org.webrtc.SessionDescription)
-    208:229:public void sendLocalIceCandidate(org.webrtc.IceCandidate)
-    234:257:public void sendLocalIceCandidateRemovals(org.webrtc.IceCandidate[])
-    343:347:private static void jsonPut(org.json.JSONObject,java.lang.String,java.lang.Object)
-    384:388:private org.json.JSONObject toJsonCandidate(org.webrtc.IceCandidate)
-    235:256:private synthetic void lambda$sendLocalIceCandidateRemovals$4(org.webrtc.IceCandidate[])
-    209:228:private synthetic void lambda$sendLocalIceCandidate$3(org.webrtc.IceCandidate)
-    194:202:private synthetic void lambda$sendAnswerSdp$2(org.webrtc.SessionDescription)
+    172:189:public void sendOfferSdp(org.webrtc.SessionDescription)
+    194:204:public void sendAnswerSdp(org.webrtc.SessionDescription)
+    209:230:public void sendLocalIceCandidate(org.webrtc.IceCandidate)
+    235:258:public void sendLocalIceCandidateRemovals(org.webrtc.IceCandidate[])
+    344:348:private static void jsonPut(org.json.JSONObject,java.lang.String,java.lang.Object)
+    385:389:private org.json.JSONObject toJsonCandidate(org.webrtc.IceCandidate)
+    236:257:private synthetic void lambda$sendLocalIceCandidateRemovals$4(org.webrtc.IceCandidate[])
+    210:229:private synthetic void lambda$sendLocalIceCandidate$3(org.webrtc.IceCandidate)
+    195:203:private synthetic void lambda$sendAnswerSdp$2(org.webrtc.SessionDescription)
     173:187:private synthetic void lambda$sendOfferSdp$1(org.webrtc.SessionDescription)
 com.myhexaville.androidwebrtc.databinding.ActivityCallBinding:
     81:81:public static com.myhexaville.androidwebrtc.databinding.ActivityCallBinding inflate(android.view.LayoutInflater,android.view.ViewGroup,boolean)
