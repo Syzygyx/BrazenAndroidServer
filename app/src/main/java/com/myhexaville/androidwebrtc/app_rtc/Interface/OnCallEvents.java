@@ -5,7 +5,6 @@ package com.myhexaville.androidwebrtc.app_rtc.Interface;
  */
 public interface OnCallEvents {
     void onCallHangUp();
-
     void onCameraSwitch();
     void onCaptureFormatChange(int width, int height, int framerate);
     boolean onToggleMic();

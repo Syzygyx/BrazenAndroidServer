@@ -238,6 +238,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
 //            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
             Intent intent = new Intent(this, CallActivity.class);
             intent.putExtra(EXTRA_ROOMID, sharedPreferenceMethod.getpermanentRoomId());
+
             startActivityForResult(intent, CONNECTION_REQUEST);
         } else {
             EasyPermissions.requestPermissions(this, "Need some permissions", RC_CALL, perms);

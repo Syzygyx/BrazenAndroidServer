@@ -15,11 +15,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.DownloadManager;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -103,18 +98,13 @@ import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -194,7 +184,7 @@ public class CallActivity extends AppCompatActivity
     WifiManager wifiManager;
     List<ScanResult> getWifiSSIDs;
     WifiInfo wifiInfo;
-
+    boolean isCallConnected = false;
     /*public final int REQUEST_ENABLE_BT = 101;
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
@@ -335,10 +325,21 @@ public class CallActivity extends AppCompatActivity
 
 //        call manager when user connected to room
         startCall();
+        if (intent.hasExtra("call1")) {
+            JSONObject data = new JSONObject();
+            String username;
+            try {
 
+//                Log.e(TAG, "Call_connect "+mSocket.emit("call_connect",data) );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
 //        show QR code for room connection
+
         showQR();
+
 
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -494,7 +495,6 @@ public class CallActivity extends AppCompatActivity
             public void onReceive(Context ctxt, Intent intent) {
 
 //                InstallAPK(finalDestination);
-
                 Intent install = new Intent(Intent.ACTION_VIEW);
                 install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -594,7 +594,13 @@ public class CallActivity extends AppCompatActivity
     }
 
     private void setupListeners() {
-        binding.buttonCallDisconnect.setOnClickListener(view -> onCallHangUp());
+        binding.buttonCallDisconnect.
+                setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCallHangUp();
+                    }
+                });
 
         binding.buttonCallSwitchCamera.setOnClickListener(view -> onCameraSwitch());
 
@@ -626,6 +632,7 @@ public class CallActivity extends AppCompatActivity
             mSocket.on("new_room", onNewRoom);
             mSocket.on("myWifi", onMyWifi);
             mSocket.on("new_room_client", onNewRoomClient);
+            mSocket.on("call_connect", onCallConnect);
 
             JSONObject userId = new JSONObject();
             try {
@@ -639,19 +646,15 @@ public class CallActivity extends AppCompatActivity
         }
     }
 
-
     /*public void startServer() {
         AcceptThread accept = new AcceptThread();
         accept.start();
     }
-
     public void pairDevice() {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         Log.e("MainActivity", "" + pairedDevices.size());
         if (pairedDevices.size() > 0) {
             for (int i = 0; i < pairedDevices.size(); i++) {
-
-
                 Object[] devices = pairedDevices.toArray();
 
                 BluetoothDevice device = (BluetoothDevice) devices[i];
@@ -883,7 +886,10 @@ public class CallActivity extends AppCompatActivity
         }
 
         */
-    /* Call this from the main activity to shutdown the connection *//*
+    /*
+    Call this from the main activity to shutdown the connection
+    * */
+    /*
         public void cancel() {
             try {
                 mmSocket.close();
@@ -891,9 +897,7 @@ public class CallActivity extends AppCompatActivity
             }
         }
     }*/
-
-
-/*    public void SendWifiMessage(View v) {
+    /*    public void SendWifiMessage(View v) {
 //        String jsonObject = "Hello There";
         JSONObject jsonObject = new JSONObject();
         try {
@@ -905,8 +909,7 @@ public class CallActivity extends AppCompatActivity
         byte[] bytes = jsonObject.toString().getBytes(Charset.defaultCharset());
         mConnectedThread.write(bytes);
     }*/
-
-   /* // Create a BroadcastReceiver for ACTION_FOUND.
+    /* // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -920,7 +923,6 @@ public class CallActivity extends AppCompatActivity
             }
         }
     };*/
-
 
     //    for update room id
     void sendData() {
@@ -1015,7 +1017,6 @@ public class CallActivity extends AppCompatActivity
                         Log.e("NEW SOCKET", " SERVER ROOM " + username + "  socket :  " + Room);
                         if (Room.equals(sharedPreferenceMethod.getpermanentRoomId())) {
                             Log.e(TAG, "run: Server emit");
-
                         } else {
                             Intent intent = new Intent(CallActivity.this, CallActivity.class);
                             intent.putExtra(EXTRA_ROOMID, "socket");
@@ -1024,6 +1025,25 @@ public class CallActivity extends AppCompatActivity
                             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
+    //  onCallConnect emitter
+    Emitter.Listener onCallConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    try {
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1075,7 +1095,7 @@ public class CallActivity extends AppCompatActivity
                         Log.e("MessagefromClient", "run: OnUpdate " + data);
                         if (curVersion < vclient) {
 //                            if (!isUpdateRunning) {
-                            UpdateDialogShow();
+//                            UpdateDialogShow();
 //                                isUpdateRunning = true;
 //                            }
 
@@ -1199,12 +1219,14 @@ public class CallActivity extends AppCompatActivity
         return null;
     }
 
+
     // Activity interfaces
     @Override
     public void onPause() {
         super.onPause();
         activityRunning = false;
         onCallHangUp();
+
         if (monitoringConnectivity) {
             final ConnectivityManager connectivityManager
                     = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1226,11 +1248,15 @@ public class CallActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+
+            Log.e(TAG, "onResume: " + mSocket.emit("call", "call"));
+
 //        socketIO();
 //        checkConnectivity();
         activityRunning = true;
         // Video is not paused for screencapture. See onPause.
         if (peerConnectionClient != null) {
+
             peerConnectionClient.startVideoSource();
         }
     }
@@ -1262,6 +1288,8 @@ public class CallActivity extends AppCompatActivity
         super.onDestroy();
         unregisterReceiver(mBatInfoTemp);
         unregisterReceiver(mBatInfoReceiver);
+
+
         if (isFinishing()) {
             Log.e("Destroying", "onDestroy: ");
 
@@ -1462,7 +1490,11 @@ public class CallActivity extends AppCompatActivity
     // Should be called from UI thread
     @SuppressLint("MissingPermission")
     private void callConnected() {
+
+
         Log.e("room==>", roomId);
+
+
         onToggleMic();
 //        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
 
@@ -1512,6 +1544,7 @@ public class CallActivity extends AppCompatActivity
 
     // Disconnect from remote resources, dispose of local resources, and exit.
     private void disconnect() {
+
         activityRunning = false;
         if (appRtcClient != null) {
             appRtcClient.disconnectFromRoom();
@@ -1529,7 +1562,6 @@ public class CallActivity extends AppCompatActivity
         }
         if (iceConnected && !isError) {
             setResult(RESULT_OK);
-
         } else {
             setResult(RESULT_CANCELED);
         }
@@ -1541,6 +1573,10 @@ public class CallActivity extends AppCompatActivity
 
             isConnectionError = false;
         } else {
+//            Intent intent = new Intent(CallActivity.this, CallActivity.class);
+//            intent.putExtra("call1", "call");
+//            intent.putExtra(EXTRA_ROOMID, "disconnected");
+//            startActivity(intent);
             finish();
         }
     }
@@ -1754,12 +1790,12 @@ public class CallActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-//        mSocket.disconnect();
-//        mSocket.off("connect user", onNewUser);
-//        mSocket.off("jsondata", onNewMessage);
-//        mSocket.off("new_apk", onNewUpdate);
-//        mSocket.off("new_room", onNewRoom);
-//        mSocket.off("new_room_client", onNewRoomClient);
+        /*mSocket.disconnect();
+        mSocket.off("connect user", onNewUser);
+        mSocket.off("jsondata", onNewMessage);
+        mSocket.off("new_apk", onNewUpdate);
+        mSocket.off("new_room", onNewRoom);
+        mSocket.off("new_room_client", onNewRoomClient);*/
 
         Username = "";
     }
