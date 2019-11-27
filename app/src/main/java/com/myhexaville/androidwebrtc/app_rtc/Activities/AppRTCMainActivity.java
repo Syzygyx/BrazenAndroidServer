@@ -238,7 +238,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
 //            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
             Intent intent = new Intent(this, CallActivity.class);
             intent.putExtra(EXTRA_ROOMID, sharedPreferenceMethod.getpermanentRoomId());
-
             startActivityForResult(intent, CONNECTION_REQUEST);
         } else {
             EasyPermissions.requestPermissions(this, "Need some permissions", RC_CALL, perms);
@@ -249,10 +248,8 @@ public class AppRTCMainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
-
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = pm.isInteractive();
-
 //        check connectivity if app is alive in foreground
         if (isScreenOn) {
             checkConnectivity();
