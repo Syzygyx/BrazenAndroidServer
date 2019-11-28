@@ -137,7 +137,7 @@ public class CallActivity extends AppCompatActivity
     String RandomString;
     // to check if we are connected to Network
     boolean isConnected = true;
-    int EVENT_FLAG=0;
+    int EVENT_FLAG = 0;
     boolean isUpdateRunning = true;
     MerlinsBeard merlin;
     private int FLAG = 0;
@@ -412,6 +412,7 @@ public class CallActivity extends AppCompatActivity
         if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
             ssid = wifiInfo.getSSID();
         }
+
         if (mWifi.isConnected()) {
             if (getWifiSSIDs != null) {
                 for (int i = 0; i < getWifiSSIDs.size(); i++) {
@@ -437,11 +438,15 @@ public class CallActivity extends AppCompatActivity
 
     //    connect to wifi if available using network ssid and network password
     void connectToWifi(String networkSSID, String networkPass) {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", networkSSID);
         wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
 
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        boolean wifiEnabled = wifiManager.isWifiEnabled();
+        if(!wifiEnabled){
+            wifiManager.setWifiEnabled(true);
+        }
 //        remember id
         int netId = wifiManager.addNetwork(wifiConfig);
         wifiManager.disconnect();
@@ -742,11 +747,11 @@ public class CallActivity extends AppCompatActivity
                         } else {
 //                            if(EVENT_FLAG==0){
 //                                EVENT_FLAG=1;
-                                Intent intent = new Intent(CallActivity.this, CallActivity.class);
-                                intent.putExtra(EXTRA_ROOMID, "socket");
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            Intent intent = new Intent(CallActivity.this, CallActivity.class);
+                            intent.putExtra(EXTRA_ROOMID, "socket");
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 //                            }
                         }
                     } catch (Exception e) {
@@ -891,7 +896,7 @@ public class CallActivity extends AppCompatActivity
                     try {
                         JSONObject object = new JSONObject(username);
                         Log.e("myWifi", "run: " + object);
-
+                        networkSSID = object.getString("name");
                         sharedPreferenceMethod.wifiSSIDandPass(object.getString("name"), object.getString("password"));
                         connectToWifi(sharedPreferenceMethod.getWifiSSID(), sharedPreferenceMethod.getWifiPassword());
                     } catch (JSONException e) {
@@ -975,6 +980,7 @@ public class CallActivity extends AppCompatActivity
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("call", "callResumed");
+                jsonObject.put("networkName", ssid);
                 Log.e(TAG, "onResume: " + mSocket.emit("call_connect", jsonObject));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -994,7 +1000,6 @@ public class CallActivity extends AppCompatActivity
         super.onStart();
         Bundle args = getIntent().getExtras();
         if (args != null) {
-
             /*String contactName = args.getString(EXTRA_ROOMID);
            binding.contactNameCall.setText(contactName);*/
         }
@@ -1006,7 +1011,7 @@ public class CallActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         disconnect();
-//        dialog.dismiss();
+        dialog.dismiss();
 //        android.os.Process.killProcess(android.os.Process.myPid());
         this.unregisterReceiver(mWifiScanReceiver);
         if (statsDialog.isShowing()) {
@@ -1017,7 +1022,6 @@ public class CallActivity extends AppCompatActivity
         super.onDestroy();
         unregisterReceiver(mBatInfoTemp);
         unregisterReceiver(mBatInfoReceiver);
-
 
         if (isFinishing()) {
             Log.e("Destroying", "onDestroy: ");
@@ -1222,8 +1226,6 @@ public class CallActivity extends AppCompatActivity
 
         Log.v("room==>", roomId);
         onToggleMic();
-//        sendMessage(lastLat, lastLong, batteryTemperature, batLevel, LTESignal, wifiSignalLevel);
-
         AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setMode(AudioManager.MODE_IN_CALL);
         audioManager.setSpeakerphoneOn(false);
@@ -1305,6 +1307,8 @@ public class CallActivity extends AppCompatActivity
 //            intent.putExtra(EXTRA_ROOMID, "disconnected");
 //            startActivity(intent);
             finish();
+//            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
         }
     }
 
