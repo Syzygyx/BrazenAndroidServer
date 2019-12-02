@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 
-
-
 public class SharedPreferencesMethod {
     private Context context;
 
@@ -32,6 +30,29 @@ public class SharedPreferencesMethod {
         SharedPreferences.Editor sp_editior = sp.edit();
         sp_editior.putString("ssid", ssid);
         sp_editior.putString("wifi_password", wifi_password);
+        sp_editior.apply();
+    }
+
+    public boolean getScanned() {
+        SharedPreferences sp = context.getSharedPreferences("BrazenServer", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        if (sp.contains("is_manual_dis")) {
+
+//            return true;
+        }
+        return sp.getBoolean("is_manual_dis",false);
+
+        /*else {
+            return sp.getBoolean("is_manual_dis", false);
+
+        }*/
+
+    }
+
+    public void insertScanned(boolean key) {
+        SharedPreferences sp = context.getSharedPreferences("BrazenServer", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        sp_editior.putBoolean("is_manual_dis", key);
         sp_editior.apply();
     }
 

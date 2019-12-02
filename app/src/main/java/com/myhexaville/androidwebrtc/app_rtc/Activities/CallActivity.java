@@ -61,6 +61,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -137,10 +138,12 @@ public class CallActivity extends AppCompatActivity
     String RandomString;
     // to check if we are connected to Network
     boolean isConnected = true;
+    boolean onCallDiscoonect = false;
     int EVENT_FLAG = 0;
     boolean isUpdateRunning = true;
     MerlinsBeard merlin;
     private int FLAG = 0;
+    LinearLayout bgColorStats;
     // to check if we are monitoring Network
     private boolean monitoringConnectivity = false;
     private PeerConnectionClient peerConnectionClient;
@@ -186,6 +189,7 @@ public class CallActivity extends AppCompatActivity
     WifiManager wifiManager;
     List<ScanResult> getWifiSSIDs;
     WifiInfo wifiInfo;
+    JSONObject onCallJSON;
     boolean isCallConnected = false;
     /*public final int REQUEST_ENABLE_BT = 101;
     private static final UUID MY_UUID_INSECURE =
@@ -219,6 +223,7 @@ public class CallActivity extends AppCompatActivity
         }
 //        stats Dialog initialize
         statsDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 
 //        get android ID for random room
         android_id = Settings.Secure.getString(this.getContentResolver(),
@@ -226,7 +231,6 @@ public class CallActivity extends AppCompatActivity
 
 //        initialize shared preferences
         sharedPreferenceMethod = new SharedPreferencesMethod(this);
-
 
 //        Socket method call and initialization
         socketIO();
@@ -253,20 +257,19 @@ public class CallActivity extends AppCompatActivity
         Intent intent = getIntent();
 
 
-        if (intent.getStringExtra(EXTRA_ROOMID).equals("false")) {
+        if (intent.hasExtra("false")) {
             roomId = sharedPreferenceMethod.getpermanentRoomId();
         }
-        if (intent.getStringExtra(EXTRA_ROOMID).equals("clientsocket")) {
-            roomId = tempName + android_id + sharedPreferenceMethod.getNewRoomError();
-            sharedPreferenceMethod.permanentRoomId(tempName + android_id);
-        }
-        if (intent.getStringExtra(EXTRA_ROOMID).equals("socket")) {
+            /*if (intent.getStringExtra(EXTRA_ROOMID).equals("clientsocket")) {
+                roomId = tempName + android_id + sharedPreferenceMethod.getNewRoomError();
+                sharedPreferenceMethod.permanentRoomId(tempName + android_id);
+            }*/
+        if (intent.hasExtra(EXTRA_ROOMID) && intent.getStringExtra(EXTRA_ROOMID).equals("socket")) {
             roomId = tempName + android_id + sharedPreferenceMethod.getNewRoomError();
         } else {
             roomId = tempName + android_id + sharedPreferenceMethod.getUser();
             sharedPreferenceMethod.permanentRoomId(tempName + android_id);
         }
-
 
 //        permission check
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -327,19 +330,14 @@ public class CallActivity extends AppCompatActivity
 
 //        call manager when user connected to room
         startCall();
-        if (intent.hasExtra("call1")) {
-            JSONObject data = new JSONObject();
-            String username;
-            try {
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
 //        show QR code for room connection
-
-        showQR();
+        if (sharedPreferenceMethod.getScanned()) {
+            showStats();
+        } else {
+            showQR();
+        }
 
 
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -444,7 +442,7 @@ public class CallActivity extends AppCompatActivity
         wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
 
         boolean wifiEnabled = wifiManager.isWifiEnabled();
-        if(!wifiEnabled){
+        if (!wifiEnabled) {
             wifiManager.setWifiEnabled(true);
         }
 //        remember id
@@ -548,9 +546,11 @@ public class CallActivity extends AppCompatActivity
 
     //    showing stats on call connect
     void showStats() {
+
         statsDialog.setContentView(R.layout.stats_dialog);
         statsDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         tv_bat_lvl = statsDialog.findViewById(R.id.batlvlsocket);
+        bgColorStats = statsDialog.findViewById(R.id.background);
         tv_bat_temp = statsDialog.findViewById(R.id.batTempsocket);
         tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
         versioncode = statsDialog.findViewById(R.id.versioncode);
@@ -561,7 +561,16 @@ public class CallActivity extends AppCompatActivity
         tv_bat_temp.setText(batteryTemperature);
         tv_wifi_signal.setText(wifiSignalLevel);
         tv_net_signal.setText(LTESignal);
+//        bgColorStats.setBackgroundColor(getResources().getColor(R.color.bgColor));
 
+        tv_bat_temp.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_bat_lvl.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+//        if (onCallDiscoonect) {
+//            bgColorStats.setBackgroundColor(getResources().getColor(R.color.bgColor));
+//        }
 //        timer.schedule(hourlyTask, 0l, 1000 * 60);
         statsDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
@@ -768,11 +777,47 @@ public class CallActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONObject data = (JSONObject) args[0];
+                    onCallJSON = (JSONObject) args[0];
                     String username;
+                    Log.e(TAG, "call JSON: " + onCallJSON);
                     try {
+                        if (onCallJSON.has("scanned") && onCallJSON.getString("scanned").equals("false")) {
+                            sharedPreferenceMethod.insertScanned(false);
+                        }
+                        if (onCallJSON.has("scanned") && onCallJSON.getString("scanned").equals("true")) {
+                            sharedPreferenceMethod.insertScanned(true);
+
+                        }
+                        if (onCallJSON.has("manual")) {
+                            finish();
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+                        } else {
+                            if (onCallJSON.has("color") && onCallJSON.getString("color").equals("red")) {
+                                if (statsDialog.isShowing()) {
+                                    bgColorStats.setBackgroundColor(getResources().getColor(R.color.bgColor));
+                                    tv_bat_temp.setTextColor(getResources().getColor(R.color.whiteFontColor));
+                                    tv_bat_lvl.setTextColor(getResources().getColor(R.color.whiteFontColor));
+                                    tv_net_signal.setTextColor(getResources().getColor(R.color.whiteFontColor));
+                                    tv_net_signal.setTextColor(getResources().getColor(R.color.whiteFontColor));
+                                    tv_wifi_signal.setTextColor(getResources().getColor(R.color.whiteFontColor));
+                                }
+                            }
+                            if (onCallJSON.has("color") && onCallJSON.getString("color").equals("white")) {
+                                if (statsDialog.isShowing()) {
+                                    bgColorStats.setBackgroundColor(getResources().getColor(R.color.bgColorWhite));
+                                    tv_bat_temp.setTextColor(getResources().getColor(R.color.blackFontColor));
+                                    tv_bat_lvl.setTextColor(getResources().getColor(R.color.blackFontColor));
+                                    tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+                                    tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+                                    tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+                                }
+//                                finish();
+
+                            }
 
 
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -821,6 +866,9 @@ public class CallActivity extends AppCompatActivity
                         vclient = Integer.parseInt(versioncode);
                         sharedPreferenceMethod.spInsert(temp_room);
 
+                        if (data.has("scanned") && data.getString("scanned").equals("user")) {
+                            sharedPreferenceMethod.insertScanned(true);
+                        }
                         Log.e("MessagefromClient", "run: OnUpdate " + data);
                         if (curVersion < vclient) {
 //                            if (!isUpdateRunning) {
@@ -855,6 +903,9 @@ public class CallActivity extends AppCompatActivity
                     try {
                         JSONObject object = new JSONObject(username);
 //                        username = object.getString("connected");
+                        if (object.has("scanned") && object.getString("scanned").equals("false")) {
+                            sharedPreferenceMethod.insertScanned(false);
+                        }
                         Log.e("UserName", "run: " + object);
                         if (locationManager != null) {
                             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -953,7 +1004,15 @@ public class CallActivity extends AppCompatActivity
         super.onPause();
         activityRunning = false;
         onCallHangUp();
-
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("call", "callPaused");
+            jsonObject.put("networkName", ssid);
+//                jsonObject.put("manual", "no");
+            Log.e(TAG, "onResume: " + mSocket.emit("call_connect", jsonObject));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (monitoringConnectivity) {
             final ConnectivityManager connectivityManager
                     = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -979,8 +1038,9 @@ public class CallActivity extends AppCompatActivity
             FLAG = 1;
             try {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("call", "callResumed");
+                jsonObject.put("call", "callResume");
                 jsonObject.put("networkName", ssid);
+//                jsonObject.put("manual", "no");
                 Log.e(TAG, "onResume: " + mSocket.emit("call_connect", jsonObject));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1011,12 +1071,17 @@ public class CallActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         disconnect();
-        dialog.dismiss();
-//        android.os.Process.killProcess(android.os.Process.myPid());
-        this.unregisterReceiver(mWifiScanReceiver);
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
         if (statsDialog.isShowing()) {
             statsDialog.dismiss();
+
         }
+        this.unregisterReceiver(mWifiScanReceiver);
+//        if (statsDialog.isShowing()) {
+//            statsDialog.dismiss();
+//        }
         activityRunning = false;
         rootEglBase.release();
         super.onDestroy();
@@ -1025,7 +1090,6 @@ public class CallActivity extends AppCompatActivity
 
         if (isFinishing()) {
             Log.e("Destroying", "onDestroy: ");
-
             Username = "";
         } else {
             Log.i("Destroying", "onDestroy: is rotating.....");
@@ -1116,6 +1180,7 @@ public class CallActivity extends AppCompatActivity
         } else {
             Log.i("Destroying", "onDestroy: is rotating.....");
         }*/
+
         disconnect();
     }
 
@@ -1130,6 +1195,7 @@ public class CallActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 finish();
+
                 startActivity(new Intent(CallActivity.this, AppRTCMainActivity.class));
             }
         });
@@ -1296,7 +1362,7 @@ public class CallActivity extends AppCompatActivity
         }
         if (isConnectionError) {
             Intent intent = new Intent(CallActivity.this, CallActivity.class);
-            intent.putExtra(EXTRA_ROOMID, "false");
+            intent.putExtra("false", "false");
             startActivity(intent);
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
@@ -1306,9 +1372,21 @@ public class CallActivity extends AppCompatActivity
 //            intent.putExtra("call1", "call");
 //            intent.putExtra(EXTRA_ROOMID, "disconnected");
 //            startActivity(intent);
-            finish();
-//            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            /*if (onCallJSON != null) {
+                if (onCallJSON.has("manual")) {
+                    if (statsDialog.isShowing()) {
+                        statsDialog.dismiss();
+                        finish();
 
+                    }
+                } else {*/
+            finish();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+/*
+                }
+            }*/
+//            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 
@@ -1568,7 +1646,6 @@ public class CallActivity extends AppCompatActivity
                     smallerDimension);
             try {
                 bitmap = qrgEncoder.encodeAsBitmap();
-                dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 dialog.setContentView(R.layout.custom_record_timer);
                 signalStrengthTxt = dialog.findViewById(R.id.lteSignals);
                 setversionCode = dialog.findViewById(R.id.vercode);

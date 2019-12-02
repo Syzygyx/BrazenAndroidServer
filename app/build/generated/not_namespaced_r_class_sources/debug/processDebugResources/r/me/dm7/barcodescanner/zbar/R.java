@@ -12,9 +12,9 @@ public final class R {
     public static final class color {
         private color() {}
 
-        public static final int viewfinder_border = 0x7f060083;
-        public static final int viewfinder_laser = 0x7f060084;
-        public static final int viewfinder_mask = 0x7f060085;
+        public static final int viewfinder_border = 0x7f060086;
+        public static final int viewfinder_laser = 0x7f060087;
+        public static final int viewfinder_mask = 0x7f060088;
     }
     public static final class integer {
         private integer() {}

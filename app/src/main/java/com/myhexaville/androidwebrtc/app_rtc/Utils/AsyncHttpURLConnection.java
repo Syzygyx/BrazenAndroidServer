@@ -36,7 +36,6 @@ public class AsyncHttpURLConnection {
      */
     public interface AsyncHttpEvents {
         void onHttpError(String errorMessage);
-
         void onHttpComplete(String response);
     }
 

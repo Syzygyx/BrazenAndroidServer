@@ -655,6 +655,9 @@ color background_floating_material_dark
 color background_floating_material_light
 color background_material_dark
 color background_material_light
+color bgColor
+color bgColorWhite
+color blackFontColor
 color bright_foreground_disabled_material_dark
 color bright_foreground_disabled_material_light
 color bright_foreground_inverse_material_dark
@@ -759,6 +762,7 @@ color tooltip_background_light
 color viewfinder_border
 color viewfinder_laser
 color viewfinder_mask
+color whiteFontColor
 color zxing_custom_possible_result_points
 color zxing_custom_result_view
 color zxing_custom_viewfinder_laser
@@ -1153,6 +1157,7 @@ id all
 id always
 id async
 id auto
+id background
 id barrier
 id batTemp
 id batTempsocket
