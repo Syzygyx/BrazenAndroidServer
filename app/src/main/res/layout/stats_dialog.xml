@@ -152,8 +152,6 @@
                         android:textColor="#000"
                         app:srcCompat="@drawable/ic_network_wifi_black_24dp" />
 
-
-
                     <TextView
                         android:id="@+id/wifisignalsocket"
                         android:layout_width="0dp"

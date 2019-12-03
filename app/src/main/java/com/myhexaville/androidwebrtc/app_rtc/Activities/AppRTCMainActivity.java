@@ -37,15 +37,19 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod;
 import com.novoda.merlin.Connectable;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.MerlinsBeard;
+
 import java.util.List;
 import java.util.Random;
+
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
 import static com.myhexaville.androidwebrtc.app_rtc.Utils.Constant.EXTRA_ROOMID;
 
 
@@ -160,11 +164,20 @@ public class AppRTCMainActivity extends AppCompatActivity {
         public void onAvailable(Network network) {
             isConnected = true;
 //            on network available  try to connect to server
-            connect();
+            String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (EasyPermissions.hasPermissions(AppRTCMainActivity.this, perms)) {
+//            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
+                Intent intent = new Intent(AppRTCMainActivity.this, CallActivity.class);
+                intent.putExtra(EXTRA_ROOMID, sharedPreferenceMethod.getpermanentRoomId());
+                intent.putExtra("call_event", "call_event");
+                startActivityForResult(intent, CONNECTION_REQUEST);
+            } else {
+                EasyPermissions.requestPermissions(AppRTCMainActivity.this, "Need some permissions", RC_CALL, perms);
+            }
             Log.e("INTERNET", "INTERNET CONNECTED");
         }
 
-//        on connection lost
+        //        on connection lost
         @Override
         public void onLost(Network network) {
             isConnected = false;
@@ -192,7 +205,6 @@ public class AppRTCMainActivity extends AppCompatActivity {
         isConnected = activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
 
         if (!isConnected) {
-
             /*
             SHOW ANY ACTION YOU WANT TO SHOW
             WHEN WE ARE NOT CONNECTED TO INTERNET/NETWORK
@@ -208,7 +220,16 @@ public class AppRTCMainActivity extends AppCompatActivity {
             monitoringConnectivity = true;
             showConnectionError();
         } else {
-            connect();
+            String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (EasyPermissions.hasPermissions(this, perms)) {
+//            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
+                Intent intent = new Intent(this, CallActivity.class);
+                intent.putExtra(EXTRA_ROOMID, sharedPreferenceMethod.getpermanentRoomId());
+                intent.putExtra("call_event", "call_event");
+                startActivityForResult(intent, CONNECTION_REQUEST);
+            } else {
+                EasyPermissions.requestPermissions(this, "Need some permissions", RC_CALL, perms);
+            }
         }
     }
 
@@ -257,7 +278,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
 
         super.onResume();
-        if(merlin !=null){
+        if (merlin != null) {
             merlin.bind();
         }
     }

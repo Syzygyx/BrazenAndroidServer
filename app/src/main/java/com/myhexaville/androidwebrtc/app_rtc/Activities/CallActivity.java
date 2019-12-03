@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -69,6 +70,15 @@ import android.widget.Toast;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.zxing.WriterException;
 import com.myhexaville.androidwebrtc.BuildConfig;
 import com.myhexaville.androidwebrtc.R;
@@ -136,6 +146,8 @@ public class CallActivity extends AppCompatActivity
     String lastLat = "0.0";
     String lastLong = "0.0";
     String RandomString;
+    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+
     // to check if we are connected to Network
     boolean isConnected = true;
     boolean onCallDiscoonect = false;
@@ -327,7 +339,19 @@ public class CallActivity extends AppCompatActivity
         peerConnectionClient = PeerConnectionClient.getInstance();
         peerConnectionClient.createPeerConnectionFactory(this, peerConnectionParameters, this);
 
+        if(intent.hasExtra("call_event")){
 
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("call", "callResume");
+                jsonObject.put("networkName", ssid);
+                jsonObject.put("type", "server");
+//                jsonObject.put("manual", "no");
+                Log.e(TAG, "call_event: " + mSocket.emit("call_connect", jsonObject));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 //        call manager when user connected to room
         startCall();
 
@@ -338,6 +362,7 @@ public class CallActivity extends AppCompatActivity
         } else {
             showQR();
         }
+
 
 
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -355,7 +380,8 @@ public class CallActivity extends AppCompatActivity
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         merlin = MerlinsBeard.from(this);
 
-
+//        Turn Location dialog
+        displayLocationSettingsRequest(this);
         /*// Initializes Bluetooth adapter.
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -542,6 +568,47 @@ public class CallActivity extends AppCompatActivity
             // no signals
             wifiSignalLevel = "No Wifi Signal";
         }
+    }
+
+    private void displayLocationSettingsRequest(Context context) {
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
+                .addApi(LocationServices.API).build();
+        googleApiClient.connect();
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000 / 2);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        Log.i(TAG, "All location settings are satisfied.");
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+
+                        try {
+                            // Show the dialog by calling startResolutionForResult(), and check the result
+                            // in onActivityResult().
+                            status.startResolutionForResult(CallActivity.this, REQUEST_CHECK_SETTINGS);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.i(TAG, "PendingIntent unable to execute request.");
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
+                        break;
+                }
+            }
+        });
     }
 
     //    showing stats on call connect
@@ -1008,8 +1075,10 @@ public class CallActivity extends AppCompatActivity
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("call", "callPaused");
             jsonObject.put("networkName", ssid);
+            jsonObject.put("type", "server");
+
 //                jsonObject.put("manual", "no");
-            Log.e(TAG, "onResume: " + mSocket.emit("call_connect", jsonObject));
+            Log.e(TAG, "onPause: " + mSocket.emit("call_connect", jsonObject));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1040,8 +1109,9 @@ public class CallActivity extends AppCompatActivity
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("call", "callResume");
                 jsonObject.put("networkName", ssid);
+                jsonObject.put("type", "server");
 //                jsonObject.put("manual", "no");
-                Log.e(TAG, "onResume: " + mSocket.emit("call_connect", jsonObject));
+//                Log.e(TAG, "onResume: " + mSocket.emit("call_connect", jsonObject));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1054,7 +1124,6 @@ public class CallActivity extends AppCompatActivity
             peerConnectionClient.startVideoSource();
         }
     }
-
     @Override
     public void onStart() {
         super.onStart();
