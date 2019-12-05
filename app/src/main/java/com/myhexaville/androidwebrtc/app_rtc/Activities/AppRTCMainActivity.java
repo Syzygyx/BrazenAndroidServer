@@ -12,9 +12,11 @@ package com.myhexaville.androidwebrtc.app_rtc.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -26,6 +28,7 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
@@ -40,9 +43,9 @@ import android.widget.Toast;
 
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod;
-import com.novoda.merlin.Connectable;
+/*import com.novoda.merlin.Connectable;
 import com.novoda.merlin.Merlin;
-import com.novoda.merlin.MerlinsBeard;
+import com.novoda.merlin.MerlinsBeard;*/
 
 import java.util.List;
 import java.util.Random;
@@ -74,8 +77,8 @@ public class AppRTCMainActivity extends AppCompatActivity {
     // to check if we are monitoring Network
     private boolean monitoringConnectivity = false;
     private int LTESingalStrength = 0;
-    Merlin merlin;
-    MerlinsBeard merlinsBeard;
+//    Merlin merlin;
+//    MerlinsBeard merlinsBeard;
 
     @SuppressLint("HardwareIds")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -85,10 +88,11 @@ public class AppRTCMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPreferenceMethod = new SharedPreferencesMethod(this);
-        merlin = new Merlin.Builder().withConnectableCallbacks().build(this);
-        merlinsBeard = MerlinsBeard.from(this);
+//        merlin = new Merlin.Builder().withConnectableCallbacks().build(this);
+//        merlinsBeard = MerlinsBeard.from(this);
         random = new Random().nextInt((max - min) + 1) + min;
-        roomID = "brezan" + Settings.Secure.getString(this.getContentResolver(),
+
+        roomID = "brazan" + Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
         sharedPreferenceMethod.permanentRoomId(roomID);
@@ -112,14 +116,14 @@ public class AppRTCMainActivity extends AppCompatActivity {
             Log.e("signalStrength", e.toString());
             e.printStackTrace();
         }*/
-        merlin.registerConnectable(new Connectable() {
-            @Override
-            public void onConnect() {
-//                connect();
-                Log.e("Merlin", "onConnect: merlin connected!");
-                // Do something you has internet!
-            }
-        });
+//        merlin.registerConnectable(new Connectable() {
+//            @Override
+//            public void onConnect() {
+////                connect();
+//                Log.e("Merlin", "onConnect: merlin connected!");
+//                // Do something you has internet!
+//            }
+//        });
 
     }
 
@@ -142,7 +146,27 @@ public class AppRTCMainActivity extends AppCompatActivity {
             Log.e("LTE TAG", "Exception: " + e.toString());
         }
     }
+    public String getIMEI() {
 
+        //andGoToYourNextStep
+        return getDeviceIMEI(AppRTCMainActivity.this);
+    }
+
+    @SuppressLint("HardwareIds")
+    public static String getDeviceIMEI(Activity activity) {
+
+        String deviceUniqueIdentifier = null;
+        TelephonyManager tm = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+        if (null != tm) {
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            else
+                deviceUniqueIdentifier = tm.getDeviceId();
+            if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length())
+                deviceUniqueIdentifier = "0";
+        }
+        return deviceUniqueIdentifier;
+    }
     // check connectivity in onPause()
     @Override
     protected void onPause() {
@@ -153,7 +177,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
             monitoringConnectivity = false;
         }
 //        stop merlin for checking connectivity
-        merlin.unbind();
+//        merlin.unbind();
         super.onPause();
     }
 
@@ -164,7 +188,8 @@ public class AppRTCMainActivity extends AppCompatActivity {
         public void onAvailable(Network network) {
             isConnected = true;
 //            on network available  try to connect to server
-            String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            String[] perms = {Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             if (EasyPermissions.hasPermissions(AppRTCMainActivity.this, perms)) {
 //            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
                 Intent intent = new Intent(AppRTCMainActivity.this, CallActivity.class);
@@ -220,7 +245,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
             monitoringConnectivity = true;
             showConnectionError();
         } else {
-            String[] perms = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            String[] perms = {Manifest.permission.CAMERA,Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             if (EasyPermissions.hasPermissions(this, perms)) {
 //            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
                 Intent intent = new Intent(this, CallActivity.class);
@@ -278,9 +303,9 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
 
         super.onResume();
-        if (merlin != null) {
-            merlin.bind();
-        }
+//        if (merlin != null) {
+//            merlin.bind();
+//        }
     }
 
 

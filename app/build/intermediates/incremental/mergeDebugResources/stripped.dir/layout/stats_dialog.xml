@@ -44,6 +44,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:background="#FF1616"
                 android:id="@+id/background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -78,11 +79,12 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
+
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:text="-"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#000" />
+                        android:textColor="#fff" />
 
                     <ImageView
                         android:id="@+id/batlvl"
@@ -92,7 +94,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight=".5"
                         android:textColor="#000"
                         app:srcCompat="@drawable/ic_battery_80_black_24dp" />
 
@@ -105,10 +107,10 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:text="-"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#000" />
+                        android:textColor="#fff" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -137,7 +139,7 @@
                         android:layout_weight="1"
                         android:text="-"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#000" />
+                        android:textColor="#fff" />
 
                     <ImageView
                         android:id="@+id/wifisignal"
@@ -147,9 +149,9 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight=".5"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         app:srcCompat="@drawable/ic_network_wifi_black_24dp" />
 
                     <TextView
@@ -159,10 +161,10 @@
 
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:text="-"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#000" />
+                        android:textColor="#fff" />
                 </LinearLayout>
             </LinearLayout>
 

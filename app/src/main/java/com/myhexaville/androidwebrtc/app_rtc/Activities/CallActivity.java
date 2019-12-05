@@ -13,6 +13,7 @@ package com.myhexaville.androidwebrtc.app_rtc.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -25,6 +26,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
@@ -92,9 +94,6 @@ import com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient;
 import com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient.PeerConnectionParameters;
 import com.myhexaville.androidwebrtc.app_rtc.webrtc.WebSocketRTCClient;
 import com.myhexaville.androidwebrtc.databinding.ActivityCallBinding;
-import com.novoda.merlin.Connectable;
-import com.novoda.merlin.MerlinsBeard;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.Camera1Enumerator;
@@ -140,7 +139,9 @@ import static org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FIT;
 
 
 public class CallActivity extends AppCompatActivity
-        implements AppRTCClient.SignalingEvents, PeerConnectionClient.PeerConnectionEvents, OnCallEvents, LocationListener, Connectable {
+        implements AppRTCClient.SignalingEvents, PeerConnectionClient.PeerConnectionEvents, OnCallEvents, LocationListener
+        /*, Connectable*/
+{
     int LTESingalStrength = 0;
     private static final String LOG_TAG = "CallActivity";
     String lastLat = "0.0";
@@ -153,7 +154,7 @@ public class CallActivity extends AppCompatActivity
     boolean onCallDiscoonect = false;
     int EVENT_FLAG = 0;
     boolean isUpdateRunning = true;
-    MerlinsBeard merlin;
+//    MerlinsBeard merlin;
     private int FLAG = 0;
     LinearLayout bgColorStats;
     // to check if we are monitoring Network
@@ -189,7 +190,7 @@ public class CallActivity extends AppCompatActivity
     public final static String LTE_TAG = "LTE_Tag";
     private final int interval = 1000 * 60; // 60 Seconds
     Timer timer = new Timer();
-    String tempName = "brezan";
+    String tempName = "brazan";
     int curVersion, vcode, vclient = 0;
     String app_link, temp_room = "";
     File file;
@@ -247,6 +248,10 @@ public class CallActivity extends AppCompatActivity
 //        Socket method call and initialization
         socketIO();
 
+        // get IMEI Number
+        getIMEI();
+        Log.e(TAG, "onCreate: "+getIMEI());
+
 //        get version code of app
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -285,16 +290,18 @@ public class CallActivity extends AppCompatActivity
 
 //        permission check
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this, Manifest.permission.ACCESS_COARSE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(
                     this, Manifest.permission.ACCESS_FINE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(
-                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(
+                    this, Manifest.permission.READ_PHONE_STATE)) {
             } else {
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE,
+                                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         200);
             }
         }
@@ -320,6 +327,7 @@ public class CallActivity extends AppCompatActivity
             finish();
             return;
         }
+
 //        register broadcast receiver for battery lvl & temp
         this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         this.registerReceiver(this.mBatInfoTemp, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
@@ -336,10 +344,11 @@ public class CallActivity extends AppCompatActivity
 //      listener for button
         setupListeners();
 
+        Log.e(TAG, "onCreate: IMEI NUMBER : "+getIMEI());
         peerConnectionClient = PeerConnectionClient.getInstance();
         peerConnectionClient.createPeerConnectionFactory(this, peerConnectionParameters, this);
 
-        if(intent.hasExtra("call_event")){
+        if (intent.hasExtra("call_event")) {
 
             try {
                 JSONObject jsonObject = new JSONObject();
@@ -363,8 +372,6 @@ public class CallActivity extends AppCompatActivity
             showQR();
         }
 
-
-
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         // Listener for the signal strength.
@@ -378,7 +385,7 @@ public class CallActivity extends AppCompatActivity
 
         // Register the listener for the telephony manager
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-        merlin = MerlinsBeard.from(this);
+//        merlin = MerlinsBeard.from(this);
 
 //        Turn Location dialog
         displayLocationSettingsRequest(this);
@@ -395,6 +402,29 @@ public class CallActivity extends AppCompatActivity
 //        pairDevice();
 
     }
+
+    public String getIMEI() {
+
+        //andGoToYourNextStep
+        return getDeviceIMEI(CallActivity.this);
+    }
+
+    @SuppressLint("HardwareIds")
+    public static String getDeviceIMEI(Activity activity) {
+
+        String deviceUniqueIdentifier = null;
+        TelephonyManager tm = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+        if (null != tm) {
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            else
+                deviceUniqueIdentifier = tm.getDeviceId();
+            if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length())
+                deviceUniqueIdentifier = "0";
+        }
+        return deviceUniqueIdentifier;
+    }
+
 
     //    update server app
     void updateDialogShow() {
@@ -486,7 +516,7 @@ public class CallActivity extends AppCompatActivity
                 List<ScanResult> mScanResults = wifiManager.getScanResults();
                 getWifiSSIDs = mScanResults;
                 for (int i = 0; i < mScanResults.size(); i++) {
-                    Log.e(" Network ID", "wifi in range: " + getWifiSSIDs.get(i).SSID);
+//                    Log.e(" Network ID", "wifi in range: " + getWifiSSIDs.get(i).SSID);
                 }
             }
         }
@@ -630,11 +660,11 @@ public class CallActivity extends AppCompatActivity
         tv_net_signal.setText(LTESignal);
 //        bgColorStats.setBackgroundColor(getResources().getColor(R.color.bgColor));
 
-        tv_bat_temp.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_bat_lvl.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+//        tv_bat_temp.setTextColor(getResources().getColor(R.color.blackFontColor));
+//        tv_bat_lvl.setTextColor(getResources().getColor(R.color.blackFontColor));
+//        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+//        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+//        tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
 //        if (onCallDiscoonect) {
 //            bgColorStats.setBackgroundColor(getResources().getColor(R.color.bgColor));
 //        }
@@ -779,6 +809,7 @@ public class CallActivity extends AppCompatActivity
             jsonObject.put("wifiSignal", wifiSignalLvl);
             jsonObject.put("device_id", tempName + android_id);
             jsonObject.put("permanent_room", sharedPreferenceMethod.getpermanentRoomId());
+            jsonObject.put("device_imei", getIMEI());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -940,6 +971,9 @@ public class CallActivity extends AppCompatActivity
                         if (curVersion < vclient) {
 //                            if (!isUpdateRunning) {
 //                            updateDialogShow();
+
+//                            updateServerApk();
+
 //                                isUpdateRunning = true;
 //                            }
                         }
@@ -1124,6 +1158,7 @@ public class CallActivity extends AppCompatActivity
             peerConnectionClient.startVideoSource();
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -1198,14 +1233,14 @@ public class CallActivity extends AppCompatActivity
                 if (cellInfo instanceof CellInfoLte) {
                     // cast to CellInfoLte and call all the CellInfoLte methods you need
                     CellInfoLte ci = (CellInfoLte) cellInfo;
-                    Log.e("signallsss ", "LTE signal strength:  " + ci.getCellSignalStrength().getDbm());
+                    Log.e("", "LTE signal strength:  " + ci.getCellSignalStrength().getDbm());
                     LTESingalStrength = ci.getCellSignalStrength().getDbm();
                     signalStrengthTxt.setText("LTE Signal : " + LTESingalStrength + "dBm");
-                    Log.e("signallsss ", "LTE signal  " + ci.getCellSignalStrength().getDbm());
-                    if (!merlin.isConnected()) {
+//                    Log.e("signallsss ", "LTE signal  " + ci.getCellSignalStrength().getDbm());
+                    /*if (!merlin.isConnected()) {
                         finish();
                         startActivity(new Intent(CallActivity.this, AppRTCMainActivity.class));
-                    }
+                    }*/
                 }
             }
             if (LTESingalStrength <= 0 && LTESingalStrength >= -50) {
@@ -1361,6 +1396,7 @@ public class CallActivity extends AppCompatActivity
 
         Log.v("room==>", roomId);
         onToggleMic();
+
         AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setMode(AudioManager.MODE_IN_CALL);
         audioManager.setSpeakerphoneOn(false);
@@ -1372,7 +1408,15 @@ public class CallActivity extends AppCompatActivity
         }
 //      stats from watch(Brazen server app)
         showStats();
+        if(statsDialog.isShowing()){
+            bgColorStats.setBackgroundColor(Color.WHITE);
+            tv_bat_temp.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_bat_lvl.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+        tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
 
+        }
         // Update video view.
         updateVideoView();
 
@@ -1629,7 +1673,6 @@ public class CallActivity extends AppCompatActivity
             if (appRtcClient != null) {
                 appRtcClient.sendLocalIceCandidate(candidate);
             }
-
         });
     }
 
@@ -1767,9 +1810,9 @@ public class CallActivity extends AppCompatActivity
 
     }
 
-    @Override
+    /*@Override
     public void onConnect() {
         finish();
         startActivity(new Intent(CallActivity.this, AppRTCMainActivity.class));
-    }
+    }*/
 }
