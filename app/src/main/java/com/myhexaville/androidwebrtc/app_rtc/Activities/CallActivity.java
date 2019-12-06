@@ -94,6 +94,7 @@ import com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient;
 import com.myhexaville.androidwebrtc.app_rtc.webrtc.PeerConnectionClient.PeerConnectionParameters;
 import com.myhexaville.androidwebrtc.app_rtc.webrtc.WebSocketRTCClient;
 import com.myhexaville.androidwebrtc.databinding.ActivityCallBinding;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.Camera1Enumerator;
@@ -140,8 +141,7 @@ import static org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FIT;
 
 public class CallActivity extends AppCompatActivity
         implements AppRTCClient.SignalingEvents, PeerConnectionClient.PeerConnectionEvents, OnCallEvents, LocationListener
-        /*, Connectable*/
-{
+        /*, Connectable*/ {
     int LTESingalStrength = 0;
     private static final String LOG_TAG = "CallActivity";
     String lastLat = "0.0";
@@ -154,7 +154,7 @@ public class CallActivity extends AppCompatActivity
     boolean onCallDiscoonect = false;
     int EVENT_FLAG = 0;
     boolean isUpdateRunning = true;
-//    MerlinsBeard merlin;
+    //    MerlinsBeard merlin;
     private int FLAG = 0;
     LinearLayout bgColorStats;
     // to check if we are monitoring Network
@@ -248,9 +248,10 @@ public class CallActivity extends AppCompatActivity
 //        Socket method call and initialization
         socketIO();
 
+
         // get IMEI Number
         getIMEI();
-        Log.e(TAG, "onCreate: "+getIMEI());
+        Log.e(TAG, "onCreate: " + getIMEI());
 
 //        get version code of app
         try {
@@ -344,7 +345,7 @@ public class CallActivity extends AppCompatActivity
 //      listener for button
         setupListeners();
 
-        Log.e(TAG, "onCreate: IMEI NUMBER : "+getIMEI());
+        Log.e(TAG, "onCreate: IMEI NUMBER : " + getIMEI());
         peerConnectionClient = PeerConnectionClient.getInstance();
         peerConnectionClient.createPeerConnectionFactory(this, peerConnectionParameters, this);
 
@@ -353,7 +354,7 @@ public class CallActivity extends AppCompatActivity
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("call", "callResume");
-                jsonObject.put("networkName", ssid);
+                jsonObject.put("networkName", "");
                 jsonObject.put("type", "server");
 //                jsonObject.put("manual", "no");
                 Log.e(TAG, "call_event: " + mSocket.emit("call_connect", jsonObject));
@@ -424,7 +425,6 @@ public class CallActivity extends AppCompatActivity
         }
         return deviceUniqueIdentifier;
     }
-
 
     //    update server app
     void updateDialogShow() {
@@ -745,6 +745,7 @@ public class CallActivity extends AppCompatActivity
             mSocket.on("myWifi", onMyWifi);
             mSocket.on("new_room_client", onNewRoomClient);
             mSocket.on("call_connect", onCallConnect);
+            mSocket.on("destroyed", onDestroyed);
 
             JSONObject userId = new JSONObject();
             try {
@@ -759,7 +760,7 @@ public class CallActivity extends AppCompatActivity
     }
 
     //    for update room id
-    void sendData() {
+    void newRoomUpdate() {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("username", Username);
@@ -810,7 +811,6 @@ public class CallActivity extends AppCompatActivity
             jsonObject.put("device_id", tempName + android_id);
             jsonObject.put("permanent_room", sharedPreferenceMethod.getpermanentRoomId());
             jsonObject.put("device_imei", getIMEI());
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -834,8 +834,28 @@ public class CallActivity extends AppCompatActivity
             });
         }
     };
-
     //    onNewMessage Emitter for new Room
+    Emitter.Listener onDestroyed = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    try {
+                        username = data.getString("username");
+                        String Room = data.getString("socket_room");
+//                        sharedPreferenceMethod.spNewRoomError(Room);
+                        Log.e("onDestroyed", " onDestroyed JSON" + data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
+    //    onNewRoom Emitter for new Room
     Emitter.Listener onNewRoom = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -910,7 +930,6 @@ public class CallActivity extends AppCompatActivity
                                     tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
                                     tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
                                 }
-//                                finish();
 
                             }
 
@@ -969,13 +988,13 @@ public class CallActivity extends AppCompatActivity
                         }
                         Log.e("MessagefromClient", "run: OnUpdate " + data);
                         if (curVersion < vclient) {
-//                            if (!isUpdateRunning) {
-//                            updateDialogShow();
+                           /* if (!isUpdateRunning) {
+                            updateDialogShow();
 
-//                            updateServerApk();
+                            updateServerApk();
 
-//                                isUpdateRunning = true;
-//                            }
+                                isUpdateRunning = true;
+                            }*/
                         }
 
                     } catch (Exception e) {
@@ -1104,13 +1123,23 @@ public class CallActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         activityRunning = false;
+//        JSONObject jObject = new JSONObject();
+//        try {
+//            jObject.put("username", Username);
+//            RandomString = getRandomString(4);
+//            jObject.put("socket_room", RandomString);
+//            sharedPreferenceMethod.spInsert(RandomString);
+//            Log.e(TAG, "onPause: " + mSocket.emit("destroyed", jObject));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         onCallHangUp();
+
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("call", "callPaused");
-            jsonObject.put("networkName", ssid);
+            jsonObject.put("networkName", "");
             jsonObject.put("type", "server");
-
 //                jsonObject.put("manual", "no");
             Log.e(TAG, "onPause: " + mSocket.emit("call_connect", jsonObject));
         } catch (Exception e) {
@@ -1142,13 +1171,14 @@ public class CallActivity extends AppCompatActivity
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("call", "callResume");
-                jsonObject.put("networkName", ssid);
+                jsonObject.put("networkName", "");
                 jsonObject.put("type", "server");
 //                jsonObject.put("manual", "no");
 //                Log.e(TAG, "onResume: " + mSocket.emit("call_connect", jsonObject));
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 //        socketIO();
 //        checkConnectivity();
@@ -1180,12 +1210,12 @@ public class CallActivity extends AppCompatActivity
         }
         if (statsDialog.isShowing()) {
             statsDialog.dismiss();
-
         }
         this.unregisterReceiver(mWifiScanReceiver);
 //        if (statsDialog.isShowing()) {
 //            statsDialog.dismiss();
 //        }
+
         activityRunning = false;
         rootEglBase.release();
         super.onDestroy();
@@ -1236,6 +1266,9 @@ public class CallActivity extends AppCompatActivity
                     Log.e("", "LTE signal strength:  " + ci.getCellSignalStrength().getDbm());
                     LTESingalStrength = ci.getCellSignalStrength().getDbm();
                     signalStrengthTxt.setText("LTE Signal : " + LTESingalStrength + "dBm");
+
+                    LTESignal = LTESingalStrength + "dBm";
+
 //                    Log.e("signallsss ", "LTE signal  " + ci.getCellSignalStrength().getDbm());
                     /*if (!merlin.isConnected()) {
                         finish();
@@ -1243,8 +1276,9 @@ public class CallActivity extends AppCompatActivity
                     }*/
                 }
             }
-            if (LTESingalStrength <= 0 && LTESingalStrength >= -50) {
-                LTESignal = "Very Good";
+           /* if (LTESingalStrength <= 0 && LTESingalStrength >= -110) {
+//                LTESignal = "Very Good";
+                LTESignal = LTESingalStrength + "dBm";
             } else if (LTESingalStrength < -50 && LTESingalStrength >= -70) {
                 LTESignal = "Good";
             } else if (LTESingalStrength < -70 && LTESingalStrength >= -80) {
@@ -1256,7 +1290,7 @@ public class CallActivity extends AppCompatActivity
             } else {
                 LTESignal = "No Signal";
                 Log.e("OUT ", "LTE signal strength: " + LTESignal);
-            }
+            }*/
         } catch (Exception e) {
             Log.e(LTE_TAG, "Exception: " + e.toString());
         }
@@ -1408,13 +1442,13 @@ public class CallActivity extends AppCompatActivity
         }
 //      stats from watch(Brazen server app)
         showStats();
-        if(statsDialog.isShowing()){
+        if (statsDialog.isShowing()) {
             bgColorStats.setBackgroundColor(Color.WHITE);
             tv_bat_temp.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_bat_lvl.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
-        tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+            tv_bat_lvl.setTextColor(getResources().getColor(R.color.blackFontColor));
+            tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+            tv_net_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
+            tv_wifi_signal.setTextColor(getResources().getColor(R.color.blackFontColor));
 
         }
         // Update video view.
@@ -1457,10 +1491,14 @@ public class CallActivity extends AppCompatActivity
         if (appRtcClient != null) {
             appRtcClient.disconnectFromRoom();
             appRtcClient = null;
+            Log.w(LOG_TAG, "Call Disconnect 1");
+
         }
         if (peerConnectionClient != null) {
             peerConnectionClient.close();
             peerConnectionClient = null;
+            Log.w(LOG_TAG, "Call Disconnect 2");
+
         }
         binding.localVideoView.release();
         binding.remoteVideoView.release();
@@ -1473,6 +1511,9 @@ public class CallActivity extends AppCompatActivity
         } else {
             setResult(RESULT_CANCELED);
         }
+
+        Log.w(LOG_TAG, "Call Disconnect");
+
         if (isConnectionError) {
             Intent intent = new Intent(CallActivity.this, CallActivity.class);
             intent.putExtra("false", "false");
@@ -1509,7 +1550,7 @@ public class CallActivity extends AppCompatActivity
             disconnect();
         } else {
 //            send data to client app and send room id
-            sendData();
+            newRoomUpdate();
 
         }
     }

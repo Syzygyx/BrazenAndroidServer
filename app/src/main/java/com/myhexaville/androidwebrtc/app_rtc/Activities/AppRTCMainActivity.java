@@ -43,9 +43,6 @@ import android.widget.Toast;
 
 import com.myhexaville.androidwebrtc.R;
 import com.myhexaville.androidwebrtc.app_rtc.Utils.SharedPreferencesMethod;
-/*import com.novoda.merlin.Connectable;
-import com.novoda.merlin.Merlin;
-import com.novoda.merlin.MerlinsBeard;*/
 
 import java.util.List;
 import java.util.Random;
@@ -54,6 +51,10 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.myhexaville.androidwebrtc.app_rtc.Utils.Constant.EXTRA_ROOMID;
+
+/*import com.novoda.merlin.Connectable;
+import com.novoda.merlin.Merlin;
+import com.novoda.merlin.MerlinsBeard;*/
 
 
 /**
@@ -146,6 +147,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
             Log.e("LTE TAG", "Exception: " + e.toString());
         }
     }
+
     public String getIMEI() {
 
         //andGoToYourNextStep
@@ -167,6 +169,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         }
         return deviceUniqueIdentifier;
     }
+
     // check connectivity in onPause()
     @Override
     protected void onPause() {
@@ -188,7 +191,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
         public void onAvailable(Network network) {
             isConnected = true;
 //            on network available  try to connect to server
-            String[] perms = {Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,
+            String[] perms = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             if (EasyPermissions.hasPermissions(AppRTCMainActivity.this, perms)) {
 //            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
@@ -245,7 +248,7 @@ public class AppRTCMainActivity extends AppCompatActivity {
             monitoringConnectivity = true;
             showConnectionError();
         } else {
-            String[] perms = {Manifest.permission.CAMERA,Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             if (EasyPermissions.hasPermissions(this, perms)) {
 //            connectToRoom(sharedPreferenceMethod.getpermanentRoomId());
                 Intent intent = new Intent(this, CallActivity.class);
