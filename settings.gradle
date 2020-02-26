@@ -1,1 +1,2 @@
-include ':app', ':libwebrtc'
+include ':app'
+rootProject.name='BrazenWatch'

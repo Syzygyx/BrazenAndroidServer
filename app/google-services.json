@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "308995812147",
+    "firebase_url": "https://brazenwatch.firebaseio.com",
+    "project_id": "brazenwatch",
+    "storage_bucket": "brazenwatch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308995812147:android:f9154e9e6cae0dbdb56c46",
+        "android_client_info": {
+          "package_name": "com.doozycod.brazenwatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308995812147-c797p9kg678t2cc566blvpm63abvimc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doozycod.brazenwatch",
+            "certificate_hash": "d18ace7089ce0475e830f216584821eb9558e3da"
+          }
+        },
+        {
+          "client_id": "308995812147-jnrjo3m4iu01f2f97r9hnmr6upfnjb4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_mYmw2tvhLmTZsub_Z869el5GUwIIIz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308995812147-jnrjo3m4iu01f2f97r9hnmr6upfnjb4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
