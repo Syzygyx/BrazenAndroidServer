@@ -55,6 +55,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -235,7 +236,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
     int LTESingalStrength = 0;
     private String android_id;
     private String batLevel, batteryTemperature, wifiSignalLevel, LTESignal = "";
-    TextView tv_bat_lvl, tv_bat_temp, tv_wifi_signal, tv_net_signal, versioncode, setversionCode, signalStrengthTxt, signalStrengthTxtqr;
+    TextView tv_bat_lvl, tv_bat_temp, tv_wifi_signal, tv_net_signal, versioncode, signalStrengthTxt, signalStrengthTxtqr;
     protected LocationManager locationManager;
     String ssid;
     String networkSSID = "Doozycod";
@@ -266,7 +267,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         return token;
     }
 
-    @SuppressLint("MissingPermission")
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -278,14 +279,37 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         reconnectingProgressBar = findViewById(R.id.reconnecting_progress_bar);
         dialog = new android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         statsDialog = new android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-        signalStrengthTxtqr = dialog.findViewById(R.id.lteSignals);
-        tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
+//        signalStrengthTxtqr = dialog.findViewById(R.id.lteSignals);
+//        tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
 
         connectActionFab = findViewById(R.id.connect_action_fab);
         switchCameraActionFab = findViewById(R.id.switch_camera_action_fab);
         localVideoActionFab = findViewById(R.id.local_video_action_fab);
         muteActionFab = findViewById(R.id.mute_action_fab);
 
+
+        Dexter.withActivity(this).withPermissions(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+
+//        get location manager
+//                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, VideoActivity.this);
+                /* ... */
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
+        }).check();
 //        clientManager = TwilioChatApplication.get().getChatClientManager();
         // Create the local data track
         localDataTrack = LocalDataTrack.create(this);
@@ -318,31 +342,20 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         generatePushToken();
 
 //        accessTokenFetcher = new AccessTokenFetcher(this);
-        Dexter.withActivity(this).withPermissions(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_CONTACTS,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-        ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
 
-//        get location manager
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, VideoActivity.this);
-                /* ... */
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
-        }).check();
 //            Log.e("FCM Token", "Token " + token);
 //        }
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return;
+        }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, VideoActivity.this);
 
         setTokenInterface(this);
@@ -541,6 +554,11 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
     public void sendMessage() {
 
         getLTEsignalStrength();
+        if (LTESingalStrength != 0) {
+            tv_net_signal.setText(LTESingalStrength + " dBm");
+        } else {
+            tv_net_signal.setText("No Signal");
+        }
 //        textField.setText("");
         JSONObject jsonObject = new JSONObject();
         try {
@@ -955,30 +973,32 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void getLTEsignalStrength() {
-        try {
-            @SuppressLint("MissingPermission") List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
-            for (CellInfo cellInfo : cellInfoList) {
-                if (cellInfo instanceof CellInfoLte) {
-                    // cast to CellInfoLte and call all the CellInfoLte methods you need
-                    CellInfoLte ci = (CellInfoLte) cellInfo;
-                    Log.d("LTE TAG", "LTE signal strength: " + ci.getCellSignalStrength().getDbm());
-                    LTESingalStrength = ci.getCellSignalStrength().getDbm();
-                    if (LTESingalStrength != 0) {
-                        signalStrengthTxtqr.setText(LTESingalStrength + " dBm");
-                        signalStrengthTxt.setText(LTESingalStrength + " dBm");
-                        tv_net_signal.setText(LTESingalStrength + " dBm");
-                    } else {
+//        try {
+        @SuppressLint("MissingPermission") List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
+        for (CellInfo cellInfo : cellInfoList) {
+            if (cellInfo instanceof CellInfoLte) {
+                // cast to CellInfoLte and call all the CellInfoLte methods you need
+                CellInfoLte ci = (CellInfoLte) cellInfo;
+                Log.d("LTE TAG", "LTE signal strength: " + ci.getCellSignalStrength().getDbm());
+                LTESingalStrength = ci.getCellSignalStrength().getDbm();
+                if (LTESingalStrength != 0) {
+                    if(dialog.isShowing())
+                    signalStrengthTxtqr.setText(LTESingalStrength + " dBm");
+//                        signalStrengthTxt.setText(LTESingalStrength + " dBm");
+//                    tv_net_signal.setText(LTESingalStrength + " dBm");
+                } else {
+                    if(dialog.isShowing())
                         signalStrengthTxtqr.setText("No Signal");
-                        signalStrengthTxt.setText("No Signal");
-                        tv_net_signal.setText("No Signal");
-                    }
-
+//                        signalStrengthTxt.setText("No Signal");
+//                    tv_net_signal.setText("No Signal");
                 }
-            }
 
-        } catch (Exception e) {
-            Log.e("LTE_TAG", "Exception: " + e.toString());
+            }
         }
+
+//        } catch (Exception e) {
+//            Log.e("LTE_TAG", "Exception: " + e.toString());
+//        }
     }
 
     @Override
@@ -1219,7 +1239,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         } else {
             ActivityCompat.requestPermissions(
                     this,
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     CAMERA_MIC_PERMISSION_REQUEST_CODE);
         }
     }
