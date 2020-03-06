@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -20,7 +21,6 @@ import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
@@ -136,7 +136,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import static com.doozycod.brazenserver.MyFirebaseMessagingService.setTokenInterface;
 
 
-public class VideoActivity extends AppCompatActivity implements OnTokenReceive, OnRoomDecoded, LocationListener {
+public class VideoActivity extends AppCompatActivity implements OnTokenReceive, OnRoomDecoded, LocationListener, NetworkListener {
     private static final int CAMERA_MIC_PERMISSION_REQUEST_CODE = 1;
     private static final String TAG = "VideoActivity";
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
@@ -244,10 +244,17 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
     List<ScanResult> getWifiSSIDs;
     WifiInfo wifiInfo;
     LinearLayout connection_state;
+    CustomProgressBar progressBar;
+    private BroadcastReceiver MyReceiver = null;
+    android.app.Dialog connectionDialog;
+    private int curVersion=0;
+    private TextView setversionCode;
 
-    //    AccessTokenFetcher accessTokenFetcher;
-//    private ChatClientManager clientManager;
     // Update this identity for each individual user, for instance after they login
+    public void broadcastIntent() {
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
     public String generatePushToken() {
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -255,6 +262,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
                             Log.e("TOKEN", "getInstanceId failed", task.getException());
+                            Toast.makeText(VideoActivity.this, "Unable to connect!\nCheck Connectivity...", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         // Get new Instance ID token
@@ -267,6 +275,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         return token;
     }
 
+    // Method to check network connectivity in Main Activity
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +288,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         reconnectingProgressBar = findViewById(R.id.reconnecting_progress_bar);
         dialog = new android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         statsDialog = new android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        connectionDialog = new android.app.Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
 //        signalStrengthTxtqr = dialog.findViewById(R.id.lteSignals);
 //        tv_net_signal = statsDialog.findViewById(R.id.networksignalsocket);
 
@@ -286,7 +296,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         switchCameraActionFab = findViewById(R.id.switch_camera_action_fab);
         localVideoActionFab = findViewById(R.id.local_video_action_fab);
         muteActionFab = findViewById(R.id.mute_action_fab);
-
+        progressBar = new CustomProgressBar(this);
 
         Dexter.withActivity(this).withPermissions(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -316,6 +326,9 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
 //      device Id
         android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
+
+        MyReceiver = new NetworkChangeReceiver();
+        broadcastIntent();
 //      for network Exception
         StrictMode.ThreadPolicy policy =
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -339,7 +352,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         // Register the listener for the telephony manager
         telephonyManager.listen(mListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 //        if (generatePushToken() == null) {
-        generatePushToken();
+
 
 //        accessTokenFetcher = new AccessTokenFetcher(this);
 
@@ -358,6 +371,16 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, VideoActivity.this);
 
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = pInfo.versionName;
+        curVersion = pInfo.versionCode;
+        
         setTokenInterface(this);
         JWTUtils.setJWTUTils(this);
         displayLocationSettingsRequest(this);
@@ -407,6 +430,8 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
          */
         intializeUI();
 
+//      show progressbar
+        progressBar.showProgress();
 //        fetch Location
         if (locationManager != null) {
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -748,32 +773,13 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
         });
     }
 
-    //    network callback when Internet/network is available
-    private ConnectivityManager.NetworkCallback connectivityCallback
-            = new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onAvailable(Network network) {
-//            isConnected = true;
-//            startActivity(new Intent(VideoActivity.this, AppRTCMainActivity.class));
-//            finish();
-            Log.e("TAG_INTERNET", "INTERNET CONNECTED");
-        }
-
-        @Override
-        public void onLost(Network network) {
-//            isConnected = false;
-            showConnectionError();
-            Log.e("TAG_INTERNET", "INTERNET LOST");
-        }
-    };
 
     //    show Connection error when Internet is not available
     public void showConnectionError() {
-        android.app.Dialog dialog = new android.app.Dialog(this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
-        dialog.setContentView(R.layout.showerror_conenction);
-        RelativeLayout show_error = dialog.findViewById(R.id.show_error);
-        signalStrengthTxt = dialog.findViewById(R.id.signals);
-        dialog.show();
+        connectionDialog.setContentView(R.layout.showerror_conenction);
+        RelativeLayout show_error = connectionDialog.findViewById(R.id.show_error);
+        signalStrengthTxt = connectionDialog.findViewById(R.id.signals);
+        connectionDialog.show();
 
 
         /*if (monitoringConnectivity) {
@@ -982,12 +988,12 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
                 Log.d("LTE TAG", "LTE signal strength: " + ci.getCellSignalStrength().getDbm());
                 LTESingalStrength = ci.getCellSignalStrength().getDbm();
                 if (LTESingalStrength != 0) {
-                    if(dialog.isShowing())
-                    signalStrengthTxtqr.setText(LTESingalStrength + " dBm");
+                    if (dialog.isShowing())
+                        signalStrengthTxtqr.setText(LTESingalStrength + " dBm");
 //                        signalStrengthTxt.setText(LTESingalStrength + " dBm");
 //                    tv_net_signal.setText(LTESingalStrength + " dBm");
                 } else {
-                    if(dialog.isShowing())
+                    if (dialog.isShowing())
                         signalStrengthTxtqr.setText("No Signal");
 //                        signalStrengthTxt.setText("No Signal");
 //                    tv_net_signal.setText("No Signal");
@@ -1057,9 +1063,15 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
     @Override
     protected void onResume() {
         super.onResume();
+
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         if (isInternetAvailable()) {
             Log.e(TAG, "onResume: Internet connected");
+//            generatePushToken();
+
         } else {
+            progressBar.hideProgress();
+            showConnectionError();
             Log.e(TAG, "onResume: Internet not connected");
         }
         /*
@@ -1128,6 +1140,8 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
          * Release the local video track before going in the background. This ensures that the
          * camera can be used by other applications while this app is in the background.
          */
+        // if network is being moniterd then we will unregister the network callback
+
         if (localVideoTrack != null) {
             /*
              * If this local video track is being shared in a Room, unpublish from room before
@@ -1141,7 +1155,10 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
             localVideoTrack.release();
             localVideoTrack = null;
         }
+
+
         super.onPause();
+        unregisterReceiver(MyReceiver);
     }
 
     @Override
@@ -1195,7 +1212,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
                 bitmap = qrgEncoder.encodeAsBitmap();
                 dialog.setContentView(R.layout.show_qr_dialog);
                 signalStrengthTxtqr = dialog.findViewById(R.id.lteSignals);
-//                setversionCode = dialog.findViewById(R.id.vercode);
+                setversionCode = dialog.findViewById(R.id.vercode);
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 ImageView QR_img = dialog.findViewById(R.id.QR_img);
                 QR_img.setImageBitmap(bitmap);
@@ -1207,7 +1224,7 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
                     signalStrengthTxtqr.setText("No Signal");
 
                 }
-//                setversionCode.setText("v" + BuildConfig.VERSION_CODE);
+                setversionCode.setText("v" + BuildConfig.VERSION_CODE);
 
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override
@@ -2181,6 +2198,27 @@ public class VideoActivity extends AppCompatActivity implements OnTokenReceive, 
 
     @Override
     public void onProviderDisabled(String provider) {
+
+    }
+
+
+    @Override
+    public void updateNetworkStatus(int result) {
+        Log.e(TAG, "updateNetworkStatus: " + result);
+        if (result == 0) {
+            if(dialog.isShowing()){
+                showConnectionError();
+                dialog.dismiss();
+            }
+        } else {
+            if(progressBar.popDialog.isShowing()){
+                progressBar.hideProgress();
+
+            }
+            generatePushToken();
+            connectionDialog.dismiss();
+
+        }
 
     }
 }

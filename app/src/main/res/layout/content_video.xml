@@ -19,6 +19,7 @@
         android:layout_gravity="bottom|start"/>
 
     <com.twilio.video.VideoView
+        android:visibility="gone"
         android:id="@+id/primary_video_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,6 +42,7 @@
         android:layout_gravity="bottom">
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/video_status_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

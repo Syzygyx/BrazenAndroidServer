@@ -12,6 +12,13 @@
 
     <include layout="@layout/content_video"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_gravity="center_horizontal"
+        android:text="checking connection..."/>
     <LinearLayout
         android:visibility="invisible"
         android:layout_width="wrap_content"
